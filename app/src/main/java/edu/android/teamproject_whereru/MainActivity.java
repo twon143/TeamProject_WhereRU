@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         btnLogTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+                Intent intentTest = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intentTest);
             }
         });
     }
