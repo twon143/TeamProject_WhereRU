@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private TextView textView;
     private static final int REQ_CODE = 100;
     List<String> list;
-
+    public LoginActivity() {}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
