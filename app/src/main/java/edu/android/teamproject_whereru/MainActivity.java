@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
     private Button btnLogTest;
+    private Button btnMapDisplay;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentTest = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intentTest);
+            }
+        });
+
+        btnMapDisplay = findViewById(R.id.btnMapDisplay);
+        btnMapDisplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                startActivity(intent);
             }
         });
     }
