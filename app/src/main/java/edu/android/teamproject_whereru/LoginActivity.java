@@ -35,6 +35,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private TextView textView;
     private static final int REQ_CODE = 100;
     List<String> list;
+    private static final int GOOGLE_CODE = 100;
+
     public LoginActivity() {}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,17 +89,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "구글 계정 인증 실패", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(LoginActivity.this, "구글 로그인 인증 성공", Toast.LENGTH_SHORT).show();
-                            // TODO: 로그인 성공시 MainActivity로 이동하도록 코드 작성(추후)
                             FirebaseUser user = mAuth.getInstance().getCurrentUser();
                             if(user !=null) {
                                 String userName = user.getDisplayName();
                                 String userEmail = user.getEmail();
-                                // TODO: 유저의 기타정보도 필요하면 보내야함
                                 StringBuilder builder = new StringBuilder();
                                 builder.append(userName).append("\n").append(userEmail);
+                                String googleLoginedInfo = builder.toString();
                                 list = new ArrayList<>();
                                 list.add(builder.toString());
-
+                                // TODO: 로그인 성공시 로그인한 유저의 정보를 가지고 MainActivity로 이동하도록 코드 작성
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra(GOOGLE_CODE, googleLoginedInfo)
                             }
 
 
@@ -123,4 +126,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     // 회원가입 이벤트를 처리하는 onCLick()
     public void SignUp(View view) {
     }
+
+
 }

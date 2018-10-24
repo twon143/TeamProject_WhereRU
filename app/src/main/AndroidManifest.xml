@@ -25,7 +25,6 @@
         <activity android:name=".PostWriteActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".MapActivity"></activity>
         <activity android:name=".PostDetailActivity"></activity>
     </application>
 

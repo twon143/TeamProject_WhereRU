@@ -10,6 +10,4 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="map_example_name">네이버 맵 테스트</string>
-    <string name="client_id">HYnjPk6dG8m8JH8sK7tr</string>
 </resources>

@@ -53,14 +53,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnMapDisplay = findViewById(R.id.btnMapDisplay);
-        btnMapDisplay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
 
+    }
 }
