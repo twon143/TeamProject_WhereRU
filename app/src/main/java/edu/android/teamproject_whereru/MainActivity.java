@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 // 메인 액티비티
+// 모델, 컨트롤러 폴더 추가(MVC 분할)
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
