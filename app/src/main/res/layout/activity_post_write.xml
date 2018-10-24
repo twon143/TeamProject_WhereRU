@@ -1,9 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".PostWriteActivity">
 
-</android.support.constraint.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="제목입력"
+        android:inputType="text"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/imageWrite"
+        android:layout_gravity="center"
+        android:layout_width="360dp"
+        android:layout_height="250dp"
+        app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+
+    <EditText
+        android:id="@+id/editBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="내용입력"
+        android:inputType="text"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:onClick="postCancle"
+            android:id="@+id/btnCancle"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="취 소"
+            android:textSize="18sp" />
+
+        <Button
+            android:onClick="postResult"
+            android:id="@+id/btnResult"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="확 인"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
