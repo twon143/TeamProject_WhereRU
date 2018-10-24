@@ -40,8 +40,8 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:onClick="postCancle"
-            android:id="@+id/btnCancle"
+            android:onClick="postCancel"
+            android:id="@+id/btnCancel"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

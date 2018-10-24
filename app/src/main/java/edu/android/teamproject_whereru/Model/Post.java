@@ -16,6 +16,13 @@ public class Post {
 
     public Post(){}
 
+    // RecyclerView에 List로 보여주기 위해서 필요한 것들만 만듬
+    public Post(String image, String guestId, int recommendation) {
+        this.image = image;
+        this.guestId = guestId;
+        this.recommendation = recommendation;
+    }
+
     public Post(String postId, String title,
                 String content, int viewCount, int recommendation, String image, String guestId) {
         this.postId = postId;
