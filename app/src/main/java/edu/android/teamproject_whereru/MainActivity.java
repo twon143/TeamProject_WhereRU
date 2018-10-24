@@ -15,10 +15,11 @@ import android.widget.TextView;
 // firebase 인증에 필요한 라이브러리 추가
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private TextView textLogInfo;
     private Button btnLogTest;
     private Button btnMapDisplay;
 
+    // BottomNavigation 뷰 클릭에 대한 이벤트 처리
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -41,7 +42,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        // 구글 로그인한 정보를 메인액티비이에 전달함
+        textLogInfo = findViewById(R.id.textLogInfo);
+        Intent intent = getIntent();
+
+        String googleInfo = intent.getStringExtra(LoginActivity.GOOGLE_REQUEST_CODE);
+        textLogInfo.setText(googleInfo);
+
+
+        // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         btnLogTest = findViewById(R.id.btnLogTest);

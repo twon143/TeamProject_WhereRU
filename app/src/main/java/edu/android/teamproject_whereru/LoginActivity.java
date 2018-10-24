@@ -33,9 +33,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
     private TextView textView;
-    private static final int REQ_CODE = 100;
+    public static final int REQ_CODE = 100;
     List<String> list;
-    private static final int GOOGLE_CODE = 100;
+    public static final String GOOGLE_REQUEST_CODE = "google";
 
     public LoginActivity() {}
     @Override
@@ -100,7 +100,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 list.add(builder.toString());
                                 // TODO: 로그인 성공시 로그인한 유저의 정보를 가지고 MainActivity로 이동하도록 코드 작성
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra(GOOGLE_CODE, googleLoginedInfo)
+                                intent.putExtra(GOOGLE_REQUEST_CODE, googleLoginedInfo);
+                                startActivityForResult(intent, REQ_CODE);
                             }
 
 
@@ -113,6 +114,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 
     /**
      * @param view
