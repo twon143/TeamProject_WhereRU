@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     private TextView textView;
     public static final int REQ_CODE = 100;
+    private static final int RC_SIGN_IN = 1000;
     List<String> list;
     public static final String GOOGLE_REQUEST_CODE = "google";
 
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onClick(View v) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent,REQ_CODE);
+                startActivityForResult(signInIntent,RC_SIGN_IN);
             }
         });
 
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQ_CODE) {
+        if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 //구글 로그인 성공해서 파베에 인증
@@ -76,6 +77,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
             else{
                 //구글 로그인 실패
+                Toast.makeText(this, "로그인 인증 실패", Toast.LENGTH_SHORT).show();
             }
         }
     }
