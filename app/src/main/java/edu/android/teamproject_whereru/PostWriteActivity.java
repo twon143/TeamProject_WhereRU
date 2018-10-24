@@ -24,7 +24,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
     }
 
-    public void postCancle(View view) {
+    public void postCancel(View view) {
         // TODO : 취소버튼
 
     }
