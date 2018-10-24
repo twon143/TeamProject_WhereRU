@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 // 메인 액티비티
 // 모델, 컨트롤러 폴더 추가(MVC 분할)
-// firebase sdk, 라이브러리 및 인증에 필요한 라이브러리 추가
+// firebase 인증에 필요한 라이브러리 추가
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
