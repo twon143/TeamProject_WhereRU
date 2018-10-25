@@ -2,8 +2,10 @@ package edu.android.teamproject_whereru;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,9 +25,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.android.teamproject_whereru.Model.Guest;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private Button btnSignUp, btnLogin, btnGoogle_Login, btnFaceBook_Login;
@@ -36,7 +46,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public static final int REQ_CODE = 100;
     private static final int RC_SIGN_IN = 1000;
     List<String> list;
+    private static final String TAG = "teamproject_whereru";
     public static final String GOOGLE_REQUEST_CODE = "google";
+    private ChildEventListener childEventListener;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference mReference;
+    private static final String TBL_NAME = "guest";
+
 
     public LoginActivity() {}
     @Override
@@ -44,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("로그인");
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -52,6 +68,72 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
+
+        editId = findViewById(R.id.editId);
+        editPw = findViewById(R.id.editPw);
+
+
+
+        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                final String log_id = editId.getText().toString();
+//                Log.i(TAG, log_id); 입력한 아이디, 비번은 보임
+                String log_pw = editPw.getText().toString();
+                firebaseDatabase = FirebaseDatabase.getInstance();
+//                Log.i(TAG, firebaseDatabase.toString());
+                mReference = firebaseDatabase.getInstance().getReference(TBL_NAME).child(log_id);
+
+                childEventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        String id = dataSnapshot.getKey();
+                        if(id.equals("guestPw")) {
+                            String userData = dataSnapshot.getValue().toString();
+                            if(userData.equals(editPw.getText().toString())) {
+                                Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+
+                            } else {
+                                Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+//                        Log.i(TAG, "key값" + mReference.getKey());
+
+
+
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                };
+                mReference.addChildEventListener(childEventListener);
+            }
+        });
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -65,6 +147,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
 
     }
+
+//    private void login(String log_id, String log_pw) {
+//        if(dataSnapshot.hasChild("log_id")) {
+//            Guest guest = dataSnapshot.getValue(Guest.class);
+//
+//
+//        }
+//    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

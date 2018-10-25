@@ -65,7 +65,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/editId"
+            android:id="@+id/editSid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -99,7 +99,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/editPw"
+            android:id="@+id/editSpw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

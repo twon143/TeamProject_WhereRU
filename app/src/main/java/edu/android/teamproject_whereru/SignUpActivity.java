@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mReference;
+    private ChildEventListener childEventListener;
 
     @Override
     protected void onStart() {
@@ -41,9 +43,9 @@ public class SignUpActivity extends AppCompatActivity {
         setTitle("회원가입");
 
 
-        final EditText editPw = findViewById(R.id.editPw);
+        final EditText editPw = findViewById(R.id.editSpw);
         EditText editCheckPw = findViewById(R.id.editCheckPw);
-        final EditText editId = findViewById(R.id.editId);
+        final EditText editId = findViewById(R.id.editSid);
         final EditText editName = findViewById(R.id.editName);
         final EditText editPhone = findViewById(R.id.editPhone);
         final EditText editEmail = findViewById(R.id.editEmail);
@@ -82,17 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_SHORT).show();
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
 
     }
 }
