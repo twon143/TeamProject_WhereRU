@@ -130,6 +130,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     // 회원가입 이벤트를 처리하는 onCLick()
     public void SignUp(View view) {
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 
 

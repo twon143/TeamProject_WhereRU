@@ -42,10 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textLogInfo = findViewById(R.id.textLogInfo);
-        Intent intent = getIntent();
-        String msg = intent.getStringExtra(LoginActivity.GOOGLE_REQUEST_CODE);
-        textLogInfo.setText(msg);
+
 
 
 
