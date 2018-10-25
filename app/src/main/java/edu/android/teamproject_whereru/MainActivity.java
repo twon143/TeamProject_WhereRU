@@ -42,12 +42,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 구글 로그인한 정보를 메인액티비이에 전달함
-        textLogInfo = findViewById(R.id.textLogInfo);
-        Intent intent = getIntent();
 
-        String googleInfo = intent.getStringExtra(LoginActivity.GOOGLE_REQUEST_CODE);
-        textLogInfo.setText(googleInfo);
+
+
 
 
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
