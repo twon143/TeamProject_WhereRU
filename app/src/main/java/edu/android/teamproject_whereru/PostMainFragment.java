@@ -11,6 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
+
+import edu.android.teamproject_whereru.Model.Post;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +38,6 @@ public class PostMainFragment extends Fragment {
                 textGuestName = itemView.findViewById(R.id.textGuestName);
                 textLikeCount = itemView.findViewById(R.id.textLikeCount);
                 recyclerView = itemView.findViewById(R.id.recyclerView);
-
             }
         }
 
@@ -70,6 +77,12 @@ public class PostMainFragment extends Fragment {
         }
     }
 
+    private PostAdapter adapter;
+    private List<Post> posts;
+
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    private ChildEventListener childEventListener;
 
 
     public PostMainFragment() {
@@ -82,6 +95,7 @@ public class PostMainFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
+
 
 
 
