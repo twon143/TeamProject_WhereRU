@@ -3,6 +3,7 @@ package edu.android.teamproject_whereru;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import edu.android.teamproject_whereru.Model.Guest;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -25,10 +29,18 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btnSignUp;
 
     private static final String TBL_GUEST = "guest";
+    private static final String TAG = "teamproject_whereru";
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mReference;
     private ChildEventListener childEventListener;
+
+    public static final Pattern VALID_ID_REGEX = Pattern.compile("^[a-zA-z]{1}[a-zA-z0-9]*$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern VALID_NAME = Pattern.compile("^[가-힣]{2,4}$", Pattern.CASE_INSENSITIVE);
+
+    public static final Pattern VALID_PHONE_REGEX = Pattern.compile("^010-[0-9]{4}-[0-9]{4}$", Pattern.CASE_INSENSITIVE);
 
     @Override
     protected void onStart() {
@@ -52,6 +64,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         textCheckPw = findViewById(R.id.textCheckPw);
 
+
+
+
         btnSignUp = findViewById(R.id.btnSignUp);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +84,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    // 비밀번호 유효성 검사
+    // 유효성 검사
+
 
 
     // 취소버튼 onClick();
@@ -77,6 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void signUp(String id, String name, String pw, String phone, String email) {
+
         mReference = FirebaseDatabase.getInstance().getReference();
 
         Guest guest = new Guest(name, pw, phone, email);
@@ -85,6 +102,29 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_SHORT).show();
 
 
-
     }
+    // 아이디에 대한 패턴검사
+    public static boolean validateId(String idStr) {
+        Matcher matcher = VALID_ID_REGEX.matcher(idStr);
+        return matcher.find();
+    }
+    // 이메일에 관한 패턴검사
+    public static boolean validateEmail(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
+
+    // 이름에 관한 패턴검사
+    public static boolean validateName(String nameStr) {
+        Matcher matcher = VALID_NAME.matcher(nameStr);
+        return matcher.find();
+    }
+
+    // 폰번호에 대한 패턴검사
+    public static boolean validatePhone(String phoneStr) {
+        Matcher matcher = VALID_PHONE_REGEX.matcher(phoneStr);
+        return matcher.find();
+    }
+
+
 }

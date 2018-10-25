@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     List<String> list;
     private static final String TAG = "teamproject_whereru";
     public static final String GOOGLE_REQUEST_CODE = "google";
+    private static final String FIREBASE_GUEST_PW = "guestPw";
     private ChildEventListener childEventListener;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mReference;
@@ -87,11 +88,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                Log.i(TAG, firebaseDatabase.toString());
                 mReference = firebaseDatabase.getInstance().getReference(TBL_NAME).child(log_id);
 
+
                 childEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         String id = dataSnapshot.getKey();
-                        if(id.equals("guestPw")) {
+                        if(id.equals(FIREBASE_GUEST_PW)) {
                             String userData = dataSnapshot.getValue().toString();
                             if(userData.equals(editPw.getText().toString())) {
                                 Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
