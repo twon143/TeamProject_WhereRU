@@ -14,11 +14,22 @@ public class Post {
     private String image;
     private String guestId;
 
+    private int imageTest;
+
     public Post(){}
 
+
+
     // RecyclerView에 List로 보여주기 위해서 필요한 것들만 만듬
+    // Test 생성자 dummydata
     public Post(String image, String guestId, int recommendation) {
         this.image = image;
+        this.guestId = guestId;
+        this.recommendation = recommendation;
+    }
+
+    public Post(int imageTest, String guestId, int recommendation) {
+        this.imageTest = imageTest;
         this.guestId = guestId;
         this.recommendation = recommendation;
     }
@@ -32,6 +43,14 @@ public class Post {
         this.recommendation = recommendation;
         this.image = image;
         this.guestId = guestId;
+    }
+
+    public int getImageTest() {
+        return imageTest;
+    }
+
+    public void setImageTest(int imageTest) {
+        this.imageTest = imageTest;
     }
 
     public String getPostId() {
