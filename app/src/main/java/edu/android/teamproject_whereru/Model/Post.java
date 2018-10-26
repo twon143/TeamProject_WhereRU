@@ -1,6 +1,8 @@
 package edu.android.teamproject_whereru.Model;
 
-public class Post {
+import java.io.Serializable;
+
+public class Post implements Serializable {
 
     private String postId;
     // 제목

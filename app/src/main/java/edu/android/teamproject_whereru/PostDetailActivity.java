@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.android.teamproject_whereru.Model.Comment;
+import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
 
@@ -75,16 +76,13 @@ public class PostDetailActivity extends AppCompatActivity {
         imageHeart = findViewById(R.id.imageHeart);
         editText = findViewById(R.id.editText);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.addItemDecoration(
-                new DividerItemDecoration(this, linearLayoutManager.getOrientation()));
-        recyclerView.setLayoutManager(linearLayoutManager);
+        Intent intent = getIntent();
 
-        List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("", "", "", ""));
+        Post post = (Post) intent.getSerializableExtra(MainActivity.KEY);
 
-
+        textWritre.setText(post.getGuestId());
+        imageView.setImageResource(post.getImageTest());
+        textContent.setText(String.valueOf(post.getContent()));
 
     }
 

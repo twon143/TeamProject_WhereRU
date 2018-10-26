@@ -32,8 +32,6 @@ import edu.android.teamproject_whereru.Model.Post;
  */
 public class PostMainFragment extends Fragment {
 
-    private static final String TAG = "why";
-
 
 
     class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -74,12 +72,20 @@ public class PostMainFragment extends Fragment {
             holder.textGuestName.setText(p.getGuestId());
             holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
+            // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
+            int imageTest = p.getImageTest();
+            String guestId = p.getGuestId();
+            int recommendation = p.getRecommendation();
+
+            final Post post = new Post(imageTest, guestId, recommendation);
+
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 여기서는 Detail 액티비티로 넘겨줘야함
                     Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
-
+                    // 콜백 메소드를 이용하여 모델클래스 저장
+                    callback.startDetailActivity(post);
                 }
             });
 
@@ -102,6 +108,14 @@ public class PostMainFragment extends Fragment {
     private DatabaseReference postreference;
     private ChildEventListener childEventListener;
 
+    private Post post;
+
+    public interface PostMainCallback {
+        void startDetailActivity(Post post);
+    }
+
+    private PostMainCallback callback;
+
 
     public PostMainFragment() {
         // Required empty public constructor
@@ -116,7 +130,15 @@ public class PostMainFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        if (context instanceof PostMainCallback) {
+            callback = (PostMainCallback) context;
+        }
+    }
 
+    @Override
+    public void onDetach() {
+        callback = null;
+        super.onDetach();
     }
 
     @Override
@@ -124,7 +146,6 @@ public class PostMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        Log.i(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
 
         return view;

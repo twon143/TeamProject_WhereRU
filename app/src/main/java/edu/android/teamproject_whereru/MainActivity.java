@@ -7,19 +7,28 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
+import edu.android.teamproject_whereru.Model.Post;
+
 // 메인 액티비티
 // 모델, 컨트롤러 폴더 추가(MVC 분할)
 // firebase 인증에 필요한 라이브러리 추가
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback{
 
     private TextView textLogInfo;
     private Button btnLogTest;
     private Button btnMapDisplay;
+
+    public static final String KEY = "detailActivity";
+
+    private static final String TAG = "why";
 
     // BottomNavigation 뷰 클릭에 대한 이벤트 처리
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -72,6 +81,20 @@ public class MainActivity extends AppCompatActivity {
             Fragment frag = PostMainFragment.newInstance();
             manager.beginTransaction().add(R.id.testFragment, frag).commit();
         }
+
+    }
+
+
+    @Override
+    public void startDetailActivity(Post post) {
+
+        Log.i(TAG, "startDetailActivity 실행");
+
+        Intent intent = new Intent(this, PostDetailActivity.class);
+
+        intent.putExtra(KEY, post);
+
+        startActivity(intent);
 
     }
 }
