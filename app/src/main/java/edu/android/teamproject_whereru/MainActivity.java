@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
 
     private TextView textGuestLoginTest;
-    private Button btnLogTest;
+    private Button btnLogTest, btnLogout;
     private Button btnMapDisplay;
     public static Guest guestList;
     public static final String KEY = "detailActivity";
@@ -65,25 +66,43 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnLogTest = findViewById(R.id.btnLogTest);
+        btnLogout = findViewById(R.id.btnLogout);
         // 로그인 테스트용
         textGuestLoginTest = findViewById(R.id.textGuestLoginTest);
         if(guestList == null) {
             textGuestLoginTest.setText("로그인 하면 정보가 보입니다");
+            btnLogout.setEnabled(false);
         }
         else {
             textGuestLoginTest.setText(guestList.toString());
+            btnLogout.setEnabled(true);
         }
+
+
 
 
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        btnLogTest = findViewById(R.id.btnLogTest);
+
         btnLogTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentTest = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intentTest);
+            }
+        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(guestList != null) {
+                    guestList = null;
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "로그인하세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
