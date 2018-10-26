@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         setContentView(R.layout.activity_main);
 
 
-
-
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -81,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             Fragment frag = PostMainFragment.newInstance();
             manager.beginTransaction().add(R.id.testFragment, frag).commit();
         }
-
     }
 
 
@@ -95,6 +92,5 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         intent.putExtra(KEY, post);
 
         startActivity(intent);
-
     }
 }
