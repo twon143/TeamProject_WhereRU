@@ -1,9 +1,10 @@
 package edu.android.teamproject_whereru;
 
-import android.support.annotation.NonNull;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,11 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,7 +23,7 @@ import edu.android.teamproject_whereru.Model.Guest;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText editPw, editCheckPw, editName, editId, editEmail, editPhone;
-    private TextView textCheckId, textCheckPw;
+    private TextView textName, textId, textPw, textCheckPw, textEmail, textPhoneNumber, textIdResilt, textPwResult;
     private Button btnSignUp;
 
     private static final String TBL_GUEST = "guest";
@@ -55,14 +53,66 @@ public class SignUpActivity extends AppCompatActivity {
         setTitle("회원가입");
 
 
-        final EditText editPw = findViewById(R.id.editSpw);
-        EditText editCheckPw = findViewById(R.id.editCheckPw);
-        final EditText editId = findViewById(R.id.editSid);
+        final EditText editPw = findViewById(R.id.editPw);
+        final EditText editCheckPw = findViewById(R.id.editCheckPw);
+        final EditText editId = findViewById(R.id.editId);
         final EditText editName = findViewById(R.id.editName);
         final EditText editPhone = findViewById(R.id.editPhone);
         final EditText editEmail = findViewById(R.id.editEmail);
 
         textCheckPw = findViewById(R.id.textCheckPw);
+        textPwResult = findViewById(R.id.textPwResult);
+        textIdResilt = findViewById(R.id.textIdResult);
+
+        editId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(editId.getText().length() < 6 || editId.getText().length() > 12) {
+                    textIdResilt.setText("아이디는 최소 6자리이상 12자리 이하로 입력");
+                    textIdResilt.setTextColor(Color.RED);
+                }
+                else if(validateId(editId.getText().toString()) == false) {
+                    textIdResilt.setText("아이디는 영어 소문자로만 입력");
+                }
+                else {
+                    textIdResilt.setText("사용가능한 아이디입니다");
+                    textIdResilt.setTextColor(Color.GREEN);
+                }
+            }
+        });
+
+      editCheckPw.addTextChangedListener(new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+          }
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+          }
+
+          @Override
+          public void afterTextChanged(Editable s) {
+                if(!editCheckPw.getText().equals(editPw)) {
+                    textPwResult.setText("비밀번호가 일치하지 않습니다");
+                    textPwResult.setTextColor(Color.RED);
+                } else {
+                    textPwResult.setText("비밀번호가 일치합니다!");
+                    textPwResult.setTextColor(Color.GREEN);
+                }
+          }
+      });
 
 
 
@@ -100,7 +150,6 @@ public class SignUpActivity extends AppCompatActivity {
         mReference.child(TBL_GUEST).child(id).setValue(guest);
 
         Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_SHORT).show();
-
 
     }
     // 아이디에 대한 패턴검사

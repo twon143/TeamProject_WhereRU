@@ -65,7 +65,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/editSid"
+            android:id="@+id/editId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -86,7 +86,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCheckId">
+        app:layout_constraintTop_toBottomOf="@+id/textIdResult">
 
         <TextView
             android:id="@+id/textPw"
@@ -99,7 +99,7 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/editSpw"
+            android:id="@+id/editPw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -117,7 +117,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/textCheckPw"
+        app:layout_constraintBottom_toTopOf="@+id/textPwResult"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
@@ -153,7 +153,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCheckPw">
+        app:layout_constraintTop_toBottomOf="@+id/textPwResult">
 
         <TextView
             android:id="@+id/textPhoneNumber"
@@ -209,7 +209,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
     <TextView
-        android:id="@+id/textCheckId"
+        android:id="@+id/textIdResult"
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
@@ -223,7 +223,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <TextView
-        android:id="@+id/textCheckPw"
+        android:id="@+id/textPwResult"
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
