@@ -13,22 +13,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 
+import edu.android.teamproject_whereru.Model.Guest;
 import edu.android.teamproject_whereru.Model.Post;
 
 // 메인 액티비티
 // 모델, 컨트롤러 폴더 추가(MVC 분할)
 // firebase 인증에 필요한 라이브러리 추가
-public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback{
+public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback {
 
-    private TextView textLogInfo;
+
+
+    private TextView textGuestLoginTest;
     private Button btnLogTest;
     private Button btnMapDisplay;
-
+    public static Guest guestList;
     public static final String KEY = "detailActivity";
-
+    private String id;
     private static final String TAG = "why";
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 
     // BottomNavigation 뷰 클릭에 대한 이벤트 처리
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -52,6 +65,14 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 로그인 테스트용
+        textGuestLoginTest = findViewById(R.id.textGuestLoginTest);
+        if(guestList == null) {
+            textGuestLoginTest.setText("로그인 하면 정보가 보입니다");
+        }
+        else {
+            textGuestLoginTest.setText(guestList.toString());
+        }
 
 
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
@@ -93,4 +114,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         startActivity(intent);
     }
+
+
 }

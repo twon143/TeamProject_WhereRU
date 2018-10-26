@@ -2,7 +2,8 @@ package edu.android.teamproject_whereru.Model;
 
 public class Guest {
 
-    private String guestId;
+    private String guestId; // primary key
+    private String guestName;
     private String guestPw;
     private String phoneNo;
     private String guestEmail;
@@ -10,11 +11,19 @@ public class Guest {
 
     public Guest(){}
 
-    public Guest(String guestId, String guestPw, String phoneNo, String guestEmail) {
-        this.guestId = guestId;
+    public Guest(String guestName, String guestPw, String phoneNo, String guestEmail) {
+        this.guestName = guestName;
         this.guestPw = guestPw;
         this.phoneNo = phoneNo;
         this.guestEmail = guestEmail;
+    }
+
+    public String getGuestName() {
+        return guestName;
+    }
+
+    public void setGuestName(String guestName) {
+        this.guestName = guestName;
     }
 
     public String getGuestId() {

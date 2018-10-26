@@ -63,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
         textCheckPw = findViewById(R.id.textCheckPw);
         textPwResult = findViewById(R.id.textPwResult);
         textIdResilt = findViewById(R.id.textIdResult);
+        btnSignUp.setEnabled(false);
 
         editId.addTextChangedListener(new TextWatcher() {
             @Override
@@ -110,6 +111,26 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     textPwResult.setText("비밀번호가 일치합니다!");
                     textPwResult.setTextColor(Color.GREEN);
+                }
+          }
+      });
+
+      editPw.addTextChangedListener(new TextWatcher() {
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+          }
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+          }
+
+          @Override
+          public void afterTextChanged(Editable s) {
+                if(editPw.length() < 8 || editPw.length() >12) {
+                    textPwResult.setText("비밀번호는 8자리 이상 12자리 이하로만 입력");
+                    textPwResult.setTextColor(Color.RED);
                 }
           }
       });
