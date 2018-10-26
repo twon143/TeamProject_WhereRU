@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -59,6 +59,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    // Community 테스트 메소드
+    public void startPostFragment(View view) {
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment fragment = manager.findFragmentById(R.id.testFragment);
+
+        if (fragment == null) {
+            Fragment frag = PostMainFragment.newInstance();
+            manager.beginTransaction().add(R.id.testFragment, frag).commit();
+        }
 
     }
 }

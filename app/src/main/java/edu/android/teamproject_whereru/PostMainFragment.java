@@ -8,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -20,9 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
 
+import edu.android.teamproject_whereru.Controller.PostDao;
 import edu.android.teamproject_whereru.Model.Post;
 
 
@@ -30,6 +31,10 @@ import edu.android.teamproject_whereru.Model.Post;
  * A simple {@link Fragment} subclass.
  */
 public class PostMainFragment extends Fragment {
+
+    private static final String TAG = "why";
+
+
 
     class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -58,17 +63,22 @@ public class PostMainFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
             PostViewHolder holder = (PostViewHolder) viewHolder;
 
             // 저장되어있는 Post 모델클래스의 생성자를 불러와서
             // image, 작성자이름, 좋아요 카운트
+            final Post p = postList.getPostList().get(position);
+            
+            holder.imageView.setImageResource(p.getImageTest());
+            holder.textGuestName.setText(p.getGuestId());
+            holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 여기서는 Detail 액티비티로 넘겨줘야함
-
+                    Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -80,12 +90,12 @@ public class PostMainFragment extends Fragment {
             // PostDao 클래스 만들고 나서 ArrayList에 저장되어있는 갯수 꺼내고
             // Firebase에 저장되어 있는 객체들 리스트 만큼
 
-            return 0;
+            return postList.getPostList().size();
         }
     }
 
     private PostAdapter adapter;
-    private List<Post> posts;
+    private PostDao postList;
     private RecyclerView recyclerView;
 
     private FirebaseDatabase database;
@@ -95,6 +105,11 @@ public class PostMainFragment extends Fragment {
 
     public PostMainFragment() {
         // Required empty public constructor
+    }
+
+    public static PostMainFragment newInstance() {
+        PostMainFragment instance = new PostMainFragment();
+        return instance;
     }
 
     @Override
@@ -109,6 +124,7 @@ public class PostMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        Log.i(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
 
         return view;
@@ -119,7 +135,7 @@ public class PostMainFragment extends Fragment {
         super.onStart();
         View view = getView();
 
-        posts = new ArrayList<>();
+        postList = PostDao.getInstance();
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
@@ -136,6 +152,11 @@ public class PostMainFragment extends Fragment {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                Post p = dataSnapshot.getValue(Post.class);
+//
+//                String id = dataSnapshot.getKey();
+//                p.setGuestId(id);
 
             }
 
