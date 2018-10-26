@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".PostDetailActivity">
 
     <TextView
@@ -26,7 +26,7 @@
             android:id="@+id/textWriter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:text="작성자"
             android:textSize="20sp" />
 
@@ -47,21 +47,22 @@
             android:text="시간"
             android:textSize="20sp" />
 
-        <TextView
-            android:onClick="IlikeIt"
-            android:id="@+id/textRecommendation"
+        <ImageView
+            android:id="@+id/imageHeart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text="좋아요"
-            android:textSize="20sp" />
+            android:layout_weight="0.5"
+            android:onClick="changeImage"
+            app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_margin="20dp"
+        android:layout_height="200dp"
+        android:layout_margin="8dp"
         app:srcCompat="@android:drawable/ic_menu_report_image" />
 
     <TextView
@@ -70,15 +71,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:text="작성글"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/textComment"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_comment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="댓글"
-        android:textSize="20sp"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -90,18 +89,18 @@
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.35"
             android:layout_margin="4dp"
+            android:layout_weight="0.35"
             android:hint="댓글을 입력하세요."
             android:inputType="text" />
 
         <Button
-            android:onClick="commentRegist"
             android:id="@+id/btnRegist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="1"
+            android:onClick="commentRegist"
             android:text="입력" />
     </LinearLayout>
 

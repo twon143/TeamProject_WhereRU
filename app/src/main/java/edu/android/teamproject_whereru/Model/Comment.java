@@ -1,6 +1,8 @@
 package edu.android.teamproject_whereru.Model;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable {
 
     private String commentId;
     private String postId;
