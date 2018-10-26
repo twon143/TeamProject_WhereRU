@@ -60,6 +60,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private ImageView imageView, imageHeart;
     private EditText editText;
 
+    private Comment comment;
+
     int i = 0;
 
     @Override
@@ -83,6 +85,12 @@ public class PostDetailActivity extends AppCompatActivity {
         textWritre.setText(post.getGuestId());
         imageView.setImageResource(post.getImageTest());
         textContent.setText(String.valueOf(post.getContent()));
+
+        String guestId = post.getGuestId();
+        String commentId = textComment.getText().toString();
+
+        comment = new Comment(guestId, commentId);
+        
 
     }
 

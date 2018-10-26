@@ -11,6 +11,11 @@ public class Comment implements Serializable {
 
     public Comment() {}
 
+    public Comment(String guestId, String content) {
+        this.guestId = guestId;
+        this.content = content;
+    }
+
     public Comment(String commentId, String postId, String guestId, String content) {
         this.commentId = commentId;
         this.postId = postId;
