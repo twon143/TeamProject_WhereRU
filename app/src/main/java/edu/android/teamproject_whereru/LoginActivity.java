@@ -86,30 +86,45 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 String log_pw = editPw.getText().toString();
                 firebaseDatabase = FirebaseDatabase.getInstance();
 //                Log.i(TAG, firebaseDatabase.toString());
-                mReference = firebaseDatabase.getInstance().getReference(TBL_NAME).child(log_id);
+                mReference = firebaseDatabase.getInstance().getReference(TBL_NAME);
+                // ku8230, ku82301, ku82302
+                // mReferece 참조할 위치를 나타냄 child를 추가하면 세부항목으로 들어감
+
 
 
                 childEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        String id = dataSnapshot.getKey();
-                        if(id.equals(FIREBASE_GUEST_PW)) {
-                            String userData = dataSnapshot.getValue().toString();
+                        String userIds = dataSnapshot.getKey();
+//                        Log.i(TAG, userIds); ku8230, ku82301, ku82302
+                        if(userIds.equals(log_id)) {
+                            String userData = dataSnapshot.child(FIREBASE_GUEST_PW).getValue().toString();
                             if(userData.equals(editPw.getText().toString())) {
-                                Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
-
-                            } else {
-                                Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
                             }
 
+                        } else {
+                            Toast.makeText(LoginActivity.this, "잘못된 아이디나 비밀번호 입력!", Toast.LENGTH_LONG).show();
                         }
-//                        Log.i(TAG, "key값" + mReference.getKey());
 
 
 
+//                        if (id.equals(FIREBASE_GUEST_PW)) {
+//                            String userData = dataSnapshot.getValue().toString();
+//                            if (userData.equals(editPw.getText().toString())) {
+//                                Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                startActivity(intent);
+//                                finish();
+//
+//                            } else {
+//                                Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                        }
                     }
 
                     @Override
@@ -129,12 +144,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 };
                 mReference.addChildEventListener(childEventListener);
+
+
             }
+
+
         });
+
+
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -203,6 +223,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }
                     }
                 });
+
     }
 
     @Override
