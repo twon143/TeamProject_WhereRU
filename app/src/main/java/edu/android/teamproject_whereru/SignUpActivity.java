@@ -1,5 +1,6 @@
 package edu.android.teamproject_whereru;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -172,6 +173,10 @@ public class SignUpActivity extends AppCompatActivity {
         mReference.child(TBL_GUEST).child(id).setValue(guest);
 
         Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
 
     }
     // 아이디에 대한 패턴검사
