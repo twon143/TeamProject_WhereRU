@@ -1,6 +1,7 @@
 package edu.android.teamproject_whereru;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 
@@ -36,11 +38,19 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     public static final String KEY = "detailActivity";
     private String id;
     private static final String TAG = "why";
+    private static final String TAG2 = "teamproject_whereru";
     private FirebaseDatabase database;
     private DatabaseReference reference;
+
+
+    private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
+    private static final String GUEST_DATA = "guestData";
     @Override
     protected void onStart() {
         super.onStart();
+
+
+
 
     }
 
@@ -66,6 +76,21 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
+        Log.i(TAG2, "SharedPre: " + sharedPreferences.toString());
+        if(sharedPreferences == null) {
+
+        } else {
+            Gson gson = new Gson();
+            Log.i(TAG2, "Main sharedPrefernces:  " + sharedPreferences.toString());
+            String guestData = sharedPreferences.getString(SAVED_GUEST_DATA, "");
+            Log.i(TAG2, "Main GuestData:  " + guestData);
+            // 변환
+            guestList = gson.fromJson(guestData, Guest.class);
+
+        }
+
         btnLogTest = findViewById(R.id.btnLogTest);
         btnLogout = findViewById(R.id.btnLogout);
         // 로그인 테스트용
@@ -76,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         }
         else {
             textGuestLoginTest.setText(guestList.toString());
+            btnLogTest.setEnabled(false);
             btnLogout.setEnabled(true);
         }
 
@@ -98,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             public void onClick(View v) {
                 if(guestList != null) {
                     guestList = null;
+                    SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.commit();
+
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 } else {
