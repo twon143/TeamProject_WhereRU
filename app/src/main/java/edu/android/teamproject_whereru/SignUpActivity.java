@@ -63,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
         textCheckPw = findViewById(R.id.textCheckPw);
         textPwResult = findViewById(R.id.textPwResult);
         textIdResilt = findViewById(R.id.textIdResult);
-        btnSignUp.setEnabled(false);
+
 
         editId.addTextChangedListener(new TextWatcher() {
             @Override
@@ -139,6 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         btnSignUp = findViewById(R.id.btnSignUp);
+        btnSignUp.setEnabled(false);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
