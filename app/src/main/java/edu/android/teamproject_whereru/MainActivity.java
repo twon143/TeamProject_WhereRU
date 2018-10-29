@@ -252,4 +252,11 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     }
 
 
+    public void startWrite(View view) {
+
+        Intent intent = new Intent(this, PostWriteActivity.class);
+
+        startActivity(intent);
+
+    }
 }
