@@ -106,6 +106,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 mReference = firebaseDatabase.getInstance().getReference(TBL_NAME);
                 // ku8230, ku82301, ku82302
                 // mReferece 참조할 위치를 나타냄 child를 추가하면 세부항목으로 들어감
+                Log.i(TAG, "Main: " + MainActivity.guestList.toString());
                 if(MainActivity.guestList == null) {
 
 
@@ -137,6 +138,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     startActivity(intent);
                                     finish();
+
 
                                 }
 

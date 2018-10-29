@@ -11,8 +11,8 @@ public class Comment implements Serializable {
 
     public Comment() {}
 
-    public Comment(String guestId, String content) {
-        this.guestId = guestId;
+    public Comment(String commentId, String content) {
+        this.commentId = commentId;
         this.content = content;
     }
 
@@ -59,8 +59,6 @@ public class Comment implements Serializable {
     public String toString() {
         return "Comment{" +
                 "commentId='" + commentId + '\'' +
-                ", postId='" + postId + '\'' +
-                ", guestId='" + guestId + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }

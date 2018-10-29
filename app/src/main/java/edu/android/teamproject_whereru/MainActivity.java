@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         } else {
             Gson gson = new Gson();
-            Log.i(TAG2, "Main sharedPrefernces:  " + sharedPreferences.toString());
+
             String guestData = sharedPreferences.getString(SAVED_GUEST_DATA, "");
-            Log.i(TAG2, "Main GuestData:  " + guestData);
+
             // 변환
             guestList = gson.fromJson(guestData, Guest.class);
 
@@ -162,6 +162,12 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         intent.putExtra(KEY, post);
 
+        startActivity(intent);
+    }
+
+
+    public void testHunsik(View view) {
+        Intent intent = new Intent(this, PostDetailActivity.class);
         startActivity(intent);
     }
 
