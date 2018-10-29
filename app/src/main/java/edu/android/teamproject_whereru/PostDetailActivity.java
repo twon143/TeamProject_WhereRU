@@ -23,10 +23,12 @@ import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 
 import edu.android.teamproject_whereru.Controller.PostDetailDao;
 import edu.android.teamproject_whereru.Model.Comment;
+import edu.android.teamproject_whereru.Model.Guest;
 import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
@@ -39,8 +41,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
             public PostDetailViewHolder(@NonNull View itemView) {
                 super(itemView);
-                text_id = (TextView) itemView.findViewById(R.id.text_id);
-                text_comment = (TextView) itemView.findViewById(R.id.text_comment);
+                text_id = itemView.findViewById(R.id.text_id);
+                text_comment = itemView.findViewById(R.id.text_comment);
 
             }
         } // end class PostDetailViewHolder
@@ -63,15 +65,16 @@ public class PostDetailActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
 
             PostDetailViewHolder holder = (PostDetailViewHolder) viewHolder;
-            final Comment c =  dao.getCommentList().get(position);
+            Comment c =  dao.getCommentList().get(position);
             Log.i(TAG, "here " + text_id.toString());
             Log.i(TAG, "here: "  + c.getCommentId());
             Log.i(TAG, "holder: " + holder.toString());
-            holder.text_id.setText(commentId);
-            // 작성한 댓글 아이디
-            holder.text_comment.setText(content);
-            // 작성한 댓글 Body
 
+            holder.text_id.setText(c.getCommentId());
+            // 작성한 댓글 아이디
+            holder.text_comment.setText(c.getContent());
+            // 작성한 댓글 Body
+            
         }
 
         @Override
@@ -90,18 +93,18 @@ public class PostDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView_comment;
     private LinearLayoutManager linearLayoutManager;
 
-    private TextView textTitle, textWritre, textDate, textTime, textContent,
+    private TextView textTitle, textWritre, textDate, textViews, textContent, textLike,
                      text_comment, text_id;
 
     private ImageView imageView, imageHeart;
     private EditText editText;
-    public static  String commentId = "2";
-    public static String  content;
+    public static String commentId ="2";
 
-
+    private PostDetailAdapter adapter;
 
 
     int i = 0;
+    int g = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,11 +117,12 @@ public class PostDetailActivity extends AppCompatActivity {
         textTitle = findViewById(R.id.textTitle);
         textWritre = findViewById(R.id.textWriter);
         textDate = findViewById(R.id.textDate);
-        textTime = findViewById(R.id.textTime);
+        textViews = findViewById(R.id.textViews);
         textContent = findViewById(R.id.textContent);
         imageView = findViewById(R.id.imageView);
         imageHeart = findViewById(R.id.imageHeart);
         editText = findViewById(R.id.editText);
+        textLike = findViewById(R.id.textLike);
         dao = PostDetailDao.getInstance();
 
 
@@ -132,45 +136,50 @@ public class PostDetailActivity extends AppCompatActivity {
         imageView.setImageResource(post.getImageTest());
         textContent.setText(String.valueOf(post.getContent()));
 
+        imageHeart.setImageResource(R.drawable.h1);
+
+        recyclerView_comment = findViewById(R.id.recyclerView_comment);
+        recyclerView_comment.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this));
+
+        adapter = new PostDetailAdapter();
+        recyclerView_comment.setAdapter(adapter);
+
+        recyclerView_comment.setHasFixedSize(true);
+
+
         Button btnRegist = findViewById(R.id.btnRegist);
         btnRegist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+//                Intent intent = new Intent(PostDetailActivity.this, PostDetailActivity.class);
 
 
-
-                content = editText.getText().toString();
+               String content = editText.getText().toString();
 
                Comment comment = new Comment(commentId, content);
 
-
-//        intent.putExtra(KEY1, comment);
-
+//               intent.putExtra(KEY1, comment);
 
 
-
-                recyclerView_comment = findViewById(R.id.recyclerView_comment);
 
                 view = getLayoutInflater().inflate(R.layout.comment_item, null, false);
                 text_id = view.findViewById(R.id.text_id);
                 text_comment = view.findViewById(R.id.text_comment);
-                TextView textGuestName = view.findViewById(R.id.textGuestName);
-                Log.i(TAG, "text_id: " + text_id);
-                Log.i(TAG, "guestName" + textGuestName);
+
                 text_id.setText(comment.getCommentId());
-                // null 값이 뜬다네 commentId 로그찍어바
                 text_comment.setText(comment.getContent());
 
 
-                recyclerView_comment.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this));
+                int result = dao.insert(comment);
 
-                PostDetailAdapter adapter = new PostDetailAdapter();
-                recyclerView_comment.setAdapter(adapter);
-
-                recyclerView_comment.setHasFixedSize(true);
+                //adapter.notifyItemInserted(0);
+                if(result == 1) {
+                    initRecyclerView();
+                }
             }
         });
+
 
 
 
@@ -178,16 +187,23 @@ public class PostDetailActivity extends AppCompatActivity {
 
     // PostWriteActivity에서 작성자, 날짜, 시간, 작성글을 받아와야 함
 
-
+    private void initRecyclerView() {
+        adapter.notifyDataSetChanged();
+        recyclerView_comment.invalidate();
+    }
 
     public void changeImage(View view) {
-        Intent intent = new Intent(this, PostWriteActivity.class);
+        Intent intent = new Intent(this, PostMainFragment.class);
         i = 1 - i;
 
         if (i == 0) {
             imageHeart.setImageResource(R.drawable.h1);
+            Toast.makeText(this, "좋아요 취소", Toast.LENGTH_LONG).show();
+
         } else {
             imageHeart.setImageResource(R.drawable.h2);
+            Toast.makeText(this, "좋아요", Toast.LENGTH_LONG).show();
+
         }
         intent.putExtra(KEY2, i);
     }

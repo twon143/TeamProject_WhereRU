@@ -12,17 +12,13 @@ public class PostDetailDao {
     private List<Comment> commentList;
 
     private static final String TAG = "teamproject";
+
     private PostDetailDao() {
         commentList = new ArrayList<>();
-        makeDummyData();
+
+
     }
 
-    private void makeDummyData() {
-        Log.i(TAG, "commentId:  " + PostDetailActivity.commentId);
-        commentList.add(new Comment("1", "제발"));
-        commentList.add(new Comment("2", "성공"));
-        commentList.add(new Comment("3", "가즈아"));
-    }
 
     public  static PostDetailDao getInstance() {
         if (instance == null) {
@@ -30,9 +26,20 @@ public class PostDetailDao {
         }
         return instance;
     }
+
     public List<Comment> getCommentList() {
 
         return commentList;
+    }
+
+    public int insert(Comment comment) {
+        int result = 1;
+
+
+
+        commentList.add(comment);
+
+        return result;
     }
 }
 

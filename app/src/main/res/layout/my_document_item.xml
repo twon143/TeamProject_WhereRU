@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textTitle_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="제목"
+        android:textSize="36sp"/>
+
+    <TextView
+        android:id="@+id/textDate_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:text="날짜"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/textViews_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="조회수"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/textLike_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="좋아요"
+        android:textSize="18sp"/>
+</LinearLayout>

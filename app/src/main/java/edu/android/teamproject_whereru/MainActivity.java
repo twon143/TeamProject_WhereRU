@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         } else if (id == R.id.nav_mydocument) {
 
+
         } else if (id == R.id.nav_memberchange) {
 
         } else if (id == R.id.nav_logout) {
