@@ -2,10 +2,13 @@ package edu.android.teamproject_whereru;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,9 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,14 +33,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     private EditText editPw, editCheckPw, editName, editId, editEmail, editPhone;
     private TextView textName, textId, textPw, textCheckPw, textEmail, textPhoneNumber, textIdResilt, textPwResult;
-    private Button btnSignUp;
+    private Button btnSignUp, btnCheckId;
 
     private static final String TBL_GUEST = "guest";
     private static final String TAG = "teamproject_whereru";
-
+    private ChildEventListener childEventListener;
+    private List<String> list = new ArrayList<>();
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mReference;
-    private ChildEventListener childEventListener;
 
     public static final Pattern VALID_ID_REGEX = Pattern.compile("^[a-zA-z]{1}[a-zA-z0-9]*$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -40,6 +48,9 @@ public class SignUpActivity extends AppCompatActivity {
     public static final Pattern VALID_NAME = Pattern.compile("^[가-힣]{2,4}$", Pattern.CASE_INSENSITIVE);
 
     public static final Pattern VALID_PHONE_REGEX = Pattern.compile("^010-[0-9]{4}-[0-9]{4}$", Pattern.CASE_INSENSITIVE);
+
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     @Override
     protected void onStart() {
@@ -54,6 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
         setTitle("회원가입");
 
 
+
         final EditText editPw = findViewById(R.id.editPw);
         final EditText editCheckPw = findViewById(R.id.editCheckPw);
         final EditText editId = findViewById(R.id.editId);
@@ -64,6 +76,8 @@ public class SignUpActivity extends AppCompatActivity {
         textCheckPw = findViewById(R.id.textCheckPw);
         textPwResult = findViewById(R.id.textPwResult);
         textIdResilt = findViewById(R.id.textIdResult);
+        btnCheckId = findViewById(R.id.btnCheckId);
+        btnCheckId.setEnabled(false);
 
 
         editId.addTextChangedListener(new TextWatcher() {
@@ -87,8 +101,24 @@ public class SignUpActivity extends AppCompatActivity {
                     textIdResilt.setText("아이디는 영어 소문자로만 입력");
                 }
                 else {
-                    textIdResilt.setText("사용가능한 아이디입니다");
-                    textIdResilt.setTextColor(Color.GREEN);
+                    textIdResilt.setText("아이디 중복체크를 해주세요");
+                    btnCheckId.setEnabled(true);
+                    btnCheckId.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final String id = editId.getText().toString();
+
+                            mReference = FirebaseDatabase.getInstance().getReference(TBL_GUEST);
+
+
+
+
+                        }
+                    });
+
+
+
+
                 }
             }
         });
@@ -109,8 +139,9 @@ public class SignUpActivity extends AppCompatActivity {
                 if(!editCheckPw.getText().equals(editPw)) {
                     textPwResult.setText("비밀번호가 일치하지 않습니다");
                     textPwResult.setTextColor(Color.RED);
-                } else {
-                    textPwResult.setText("비밀번호가 일치합니다!");
+                }
+                else if(editCheckPw.getText().equals(editPw)) {
+                    textPwResult.setText("비밀번호가 일치합니다");
                     textPwResult.setTextColor(Color.GREEN);
                 }
           }
@@ -157,12 +188,15 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    // 유효성 검사
 
 
 
-    // 취소버튼 onClick();
+
+    // 취소버튼 onClick(); 로그인화면으로 돌아감
     public void Cancel(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void signUp(String id, String name, String pw, String phone, String email) {

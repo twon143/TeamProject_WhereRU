@@ -106,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 mReference = firebaseDatabase.getInstance().getReference(TBL_NAME);
                 // ku8230, ku82301, ku82302
                 // mReferece 참조할 위치를 나타냄 child를 추가하면 세부항목으로 들어감
-                Log.i(TAG, "Main: " + MainActivity.guestList.toString());
                 if(MainActivity.guestList == null) {
 
 
@@ -288,11 +287,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void onSaveGuestData() {
         gson = new Gson();
         String guestToGson = gson.toJson(MainActivity.guestList, Guest.class);
-        Log.i(TAG, "GuestToGson:  " + guestToGson);
         SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
-        Log.i(TAG, "sharePreferences  " + sharedPreferences.toString());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Log.i(TAG, "Editor: " + editor.toString());
         editor.putString(SAVED_GUEST_DATA, guestToGson);
         editor.commit();
     }
