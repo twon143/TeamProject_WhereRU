@@ -136,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 if(guestList == null) {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "로그인하세요", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -211,17 +213,14 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     @Override
     public void startDetailActivity(Post post) {
 
+        Log.i(TAG, "startDetailActivity 실행");
+
         Intent intent = new Intent(this, PostDetailActivity.class);
 
         intent.putExtra(START_DETAIL_ACTIVITY, post);
 
         startActivity(intent);
+    }
 
     }
 
-//    public void userLogin(View view) {
-//
-//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//        startActivity(intent);
-//    }
-}
