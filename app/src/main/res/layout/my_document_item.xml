@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textTitle_"
+        android:id="@+id/textTitle_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -13,7 +13,7 @@
         android:textSize="36sp"/>
 
     <TextView
-        android:id="@+id/textDate_"
+        android:id="@+id/textDate_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.4"
@@ -21,7 +21,7 @@
         android:textSize="18sp"/>
 
     <TextView
-        android:id="@+id/textViews_"
+        android:id="@+id/textViews_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
@@ -29,7 +29,7 @@
         android:textSize="18sp"/>
 
     <TextView
-        android:id="@+id/textLike_"
+        android:id="@+id/textLike_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"

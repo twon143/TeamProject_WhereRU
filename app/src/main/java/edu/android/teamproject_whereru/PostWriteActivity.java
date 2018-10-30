@@ -83,8 +83,10 @@ public class PostWriteActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+    }
 
             }
+
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
