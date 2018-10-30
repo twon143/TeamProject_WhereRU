@@ -37,7 +37,8 @@ import edu.android.teamproject_whereru.Model.Post;
 // 모델, 컨트롤러 폴더 추가(MVC 분할)
 // firebase 인증에 필요한 라이브러리 추가
 
-public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements
+        PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String START_DETAIL_ACTIVITY = "detailActivity";
 
@@ -139,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
         BottomNavigationView navigation = findViewById(R.id.navigation_botton);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
+
     }
 
     @Override
@@ -228,4 +232,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     }
 
+//     글쓰기 FlotingButton
+    public void startWriteActivity(View view) {
+        Intent intent = new Intent(this, PostWriteActivity.class);
+        startActivity(intent);
+    }
 }
