@@ -1,4 +1,5 @@
 <resources>
+    <string name="facebook_app_id">260761684633520</string> <string name="fb_login_protocol_scheme">fb260761684633520</string>
     <string name="app_name">TeamProject_WhereRU</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

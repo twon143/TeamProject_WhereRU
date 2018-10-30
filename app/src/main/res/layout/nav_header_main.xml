@@ -14,7 +14,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <TextView
-        android:id="@+id/textLoginInfo"
+        android:id="@+id/textUserInfo"
         android:layout_width="match_parent"
         android:layout_height="100sp"
         android:text="로그인 하면 정보가 보입니다"
@@ -22,9 +22,10 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnMainLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="userLogin"
         android:text="로그인" />
 
 </LinearLayout>

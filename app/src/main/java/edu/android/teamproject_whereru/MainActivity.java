@@ -1,5 +1,6 @@
 package edu.android.teamproject_whereru;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -38,8 +40,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
 
 
-    private TextView textGuestLoginTest;
-    private Button btnLogTest, btnLogout;
+    private Button btnLogout, btnMainLogin;
+    private TextView textUserInfo;
+
     private Button btnMapDisplay;
     public static Guest guestList;
     public static final String KEY = "detailActivity";
@@ -49,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     private FirebaseDatabase database;
     private DatabaseReference reference;
     private boolean gps;
+    private LayoutInflater layoutInflater;
+    private View nav_header_view;
+    private NavigationView navigationView;
+
+
 
 
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
@@ -80,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         }
     };
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,19 +107,18 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             guestList = gson.fromJson(guestData, Guest.class);
 
         }
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        nav_header_view = navigationView.getHeaderView(R.layout.nav_header_main);
+        textUserInfo = nav_header_view.findViewById(R.id.textUserInfo);
+        btnMainLogin = nav_header_view.findViewById(R.id.btnMainLogin);
 
-        btnLogTest = findViewById(R.id.btnLogTest);
-        btnLogout = findViewById(R.id.btnLogout);
         // 로그인 테스트용
-        textGuestLoginTest = findViewById(R.id.textGuestLoginTest);
-        if(guestList == null) {
-            textGuestLoginTest.setText("로그인 하면 정보가 보입니다");
-            btnLogout.setEnabled(false);
+        if(guestList != null) {
+            textUserInfo.setText(guestList.toString());
+            btnMainLogin.setEnabled(false);
         }
         else {
-            textGuestLoginTest.setText(guestList.toString());
-            btnLogTest.setEnabled(false);
-            btnLogout.setEnabled(true);
+
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -138,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -147,30 +154,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation_botton);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        btnLogTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentTest = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intentTest);
-            }
-        });
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(guestList != null) {
-                    guestList = null;
-                    SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.commit();
 
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this, "로그인하세요", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
 
     }
@@ -204,6 +188,18 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         } else if (id == R.id.nav_memberchange) {
 
         } else if (id == R.id.nav_logout) {
+            if(guestList == null) {
+                Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
+            }
+            else if(guestList != null) {
+                guestList = null;
+                SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                Toast.makeText(this, "로그아웃 성공!", Toast.LENGTH_SHORT).show();
+                textUserInfo.setText("로그인 하면 정보가 보입니다");
+            }
 
         }
 
@@ -238,4 +234,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     }
 
 
+    public void userLogin(View view) {
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
 }
