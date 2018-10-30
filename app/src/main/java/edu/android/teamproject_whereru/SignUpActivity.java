@@ -100,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
                 else if(validateId(editId.getText().toString()) == false) {
                     textIdResilt.setText("아이디는 영어 소문자로만 입력");
 
-                    
+
                 }
                 else {
                     textIdResilt.setText("아이디 중복체크를 해주세요");
