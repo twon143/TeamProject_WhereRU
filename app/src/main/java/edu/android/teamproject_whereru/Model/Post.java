@@ -24,10 +24,9 @@ public class Post implements Serializable {
 
     // RecyclerView에 List로 보여주기 위해서 필요한 것들만 만듬
     // Test 생성자 dummydata
-    public Post(String image, String guestId, int recommendation) {
-        this.image = image;
+    public Post(String guestId, String content) {
         this.guestId = guestId;
-        this.recommendation = recommendation;
+        this.content = content;
     }
 
     public Post(int imageTest, String guestId, int recommendation) {

@@ -22,9 +22,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import edu.android.teamproject_whereru.Model.Post;
 
 public class PostWriteActivity extends AppCompatActivity {
 
@@ -37,6 +44,12 @@ public class PostWriteActivity extends AppCompatActivity {
     private EditText editTitle, editBody;
     private ImageView imageWrite;
     private TextView writeGuestName, writeToday;
+
+    private FirebaseDatabase database;
+    private DatabaseReference writeReference;
+    private ChildEventListener childEventListener;
+
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +71,39 @@ public class PostWriteActivity extends AppCompatActivity {
 
         writeToday.setText(today);
 
+        database = FirebaseDatabase.getInstance();
+        writeReference = database.getReference().child("포스트");
+
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG, "파일 추가 완료");
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
 
     }
 
-    public void postCancel(View view) {
-        // TODO : 취소버튼
-
-    }
-
-    public void postResult(View view) {
-        // TODO : 확인버튼
-        String title = editTitle.getText().toString();
-        String body = editBody.getText().toString();
-
-
-
-    }
 
     // 사용자 권한 허용하기위해 Permission 결과를 되돌려받음
     @Override
@@ -186,4 +216,21 @@ public class PostWriteActivity extends AppCompatActivity {
         }
         return cursor.getString(index);
     }
+
+    public void postCancel(View view) {
+        // TODO : 취소버튼
+
+    }
+
+    public void postResult(View view) {
+        // TODO : 확인버튼
+        String title = editTitle.getText().toString();
+        String content = editBody.getText().toString();
+
+        Post p = new Post(title, content);
+
+        writeReference.child("포스트1").child(null).setValue(p);
+
+    }
+
 }

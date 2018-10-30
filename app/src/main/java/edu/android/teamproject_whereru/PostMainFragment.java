@@ -32,8 +32,6 @@ import edu.android.teamproject_whereru.Model.Post;
  */
 public class PostMainFragment extends Fragment {
 
-
-
     class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         class PostViewHolder extends RecyclerView.ViewHolder {
