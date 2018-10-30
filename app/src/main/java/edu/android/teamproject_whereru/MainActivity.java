@@ -128,8 +128,17 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             textUserInfo.setText(guestList.toString());
             btnMainLogin.setEnabled(false);
         } else {
-
+            btnMainLogin.setEnabled(true);
         }
+        btnMainLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(guestList == null) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -175,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 editor.clear();
                 editor.commit();
                 Toast.makeText(this, "로그아웃 성공!", Toast.LENGTH_SHORT).show();
+                btnMainLogin.setEnabled(true);
                 textUserInfo.setText("로그인 하면 정보가 보입니다");
             }
 
@@ -209,9 +219,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     }
 
-    public void userLogin(View view) {
-
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-    }
+//    public void userLogin(View view) {
+//
+//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(intent);
+//    }
 }
