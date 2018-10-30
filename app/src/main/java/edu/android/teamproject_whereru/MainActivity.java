@@ -107,19 +107,10 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             guestList = gson.fromJson(guestData, Guest.class);
 
         }
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        nav_header_view = navigationView.getHeaderView(R.layout.nav_header_main);
-        textUserInfo = nav_header_view.findViewById(R.id.textUserInfo);
-        btnMainLogin = nav_header_view.findViewById(R.id.btnMainLogin);
+
 
         // 로그인 테스트용
-        if(guestList != null) {
-            textUserInfo.setText(guestList.toString());
-            btnMainLogin.setEnabled(false);
-        }
-        else {
 
-        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -145,7 +136,17 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        nav_header_view = navigationView.getHeaderView(0);
+        textUserInfo = nav_header_view.findViewById(R.id.textUserInfo);
+        btnMainLogin = nav_header_view.findViewById(R.id.btnMainLogin);
+        if(guestList != null) {
+            textUserInfo.setText(guestList.toString());
+            btnMainLogin.setEnabled(false);
+        }
+        else {
 
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
 

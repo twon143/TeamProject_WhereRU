@@ -291,6 +291,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SAVED_GUEST_DATA, guestToGson);
         editor.commit();
+
+
     }
 
 
