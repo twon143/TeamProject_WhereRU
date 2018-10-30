@@ -1,11 +1,11 @@
 <resources>
     <string name="facebook_app_id">260761684633520</string> <string name="fb_login_protocol_scheme">fb260761684633520</string>
     <string name="app_name">TeamProject_WhereRU</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">홈</string>
     <string name="title_location">위치</string>
     <string name="title_community">커뮤니티</string>
+    <string name="title_service">서비스</string>
+
 
 
     <!-- TODO: Remove or change this placeholder text -->

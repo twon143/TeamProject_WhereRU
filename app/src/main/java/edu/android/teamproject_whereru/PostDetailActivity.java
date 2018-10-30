@@ -130,7 +130,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        Post post = (Post) intent.getSerializableExtra(MainActivity.KEY);
+        Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
 
         textWritre.setText(post.getGuestId());
         imageView.setImageResource(post.getImageTest());

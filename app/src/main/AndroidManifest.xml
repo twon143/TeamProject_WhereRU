@@ -28,8 +28,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".PostWriteActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
         <activity android:name=".PostDetailActivity" />
         <activity android:name=".MyDocumentList"></activity>
 

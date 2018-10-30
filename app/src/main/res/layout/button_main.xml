@@ -19,7 +19,7 @@
         app:menu="@menu/bottombar_menu" />
 
     <FrameLayout
-        android:id="@+id/testFragment"
+        android:id="@+id/mainFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -28,6 +28,8 @@
         app:layout_constraintBottom_toTopOf="@+id/navigation_botton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
         app:layout_constraintStart_toStartOf="parent">
 
     </FrameLayout>

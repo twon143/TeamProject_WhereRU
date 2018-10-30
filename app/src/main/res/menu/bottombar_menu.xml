@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menuitem_bottombar_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home"
+        />
+
+    <item
         android:id="@+id/menuitem_bottombar_location"
         android:icon="@drawable/ic_baseline_language_24px"
         android:title="@string/title_location"
@@ -19,7 +25,7 @@
     <item
         android:id="@+id/menuitem_bottombar_service"
         android:icon="@drawable/ic_baseline_subject_24px"
-        android:title="서비스"
+        android:title="@string/title_service"
         />
 
 
