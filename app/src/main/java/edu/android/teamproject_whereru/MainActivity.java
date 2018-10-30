@@ -5,9 +5,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +34,7 @@ import edu.android.teamproject_whereru.Model.Post;
 // 메인 액티비티
 // 모델, 컨트롤러 폴더 추가(MVC 분할)
 // firebase 인증에 필요한 라이브러리 추가
-public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback {
+public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
 
 
 
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     private static final String TAG2 = "teamproject_whereru";
     private FirebaseDatabase database;
     private DatabaseReference reference;
+    private boolean gps;
 
 
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
@@ -105,6 +113,33 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             btnLogout.setEnabled(true);
         }
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(gps == false){
+                    Snackbar.make(view, "GPS가 켜졌습니다", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                    gps = true;
+                }else{
+                    Snackbar.make(view, "GPS가 꺼졌습니다", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                    gps = false;
+                }
+            }
+        });
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 
 
@@ -138,6 +173,43 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+
+
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_gps) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gpsinfo) {
+
+        } else if (id == R.id.nav_mydocument) {
+
+        } else if (id == R.id.nav_memberchange) {
+
+        } else if (id == R.id.nav_logout) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     // Community 테스트 메소드
