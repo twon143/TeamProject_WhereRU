@@ -41,13 +41,11 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     public static final String START_DETAIL_ACTIVITY = "detailActivity";
 
-
     private Button btnMainLogin;
     private TextView textUserInfo;
 
     private Button btnMapDisplay;
     public static Guest guestList;
-
 
     private static final String TAG = "why";
     private static final String TAG2 = "teamproject_whereru";
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     private boolean gps;
 
     private View nav_header_view;
-
 
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
     private static final String GUEST_DATA = "guestData";
@@ -68,17 +65,18 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menuitem_bottombar_home:
+                    startHomeFragment();
                     return true;
                 case R.id.menuitem_bottombar_location:
                     return true;
                 case R.id.menuitem_bottombar_community:
-                    if (guestList != null) {
+                    /*if (guestList != null) {*/
                         startPostFragment();
                         return true;
-                    } else {
+                    /*} else {
                         Toast.makeText(MainActivity.this, "로그인 후 사용가능합니다", Toast.LENGTH_SHORT).show();
                         return false;
-                    }
+                    }*/
                 case R.id.menuitem_bottombar_service:
                     return true;
             }
@@ -93,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        startHomeFragment();
+
         SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
         Log.i(TAG2, "SharedPre: " + sharedPreferences.toString());
         if (sharedPreferences == null) {
@@ -104,16 +104,10 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             Log.i(TAG2, "Main GuestData:  " + guestData);
             // 변환
             guestList = gson.fromJson(guestData, Guest.class);
-
         }
 
-
-        // 로그인 테스트용
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -136,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 if(guestList == null) {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(MainActivity.this, "로그인하세요", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -145,22 +137,19 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
 
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation_botton);
+        BottomNavigationView navigation = findViewById(R.id.navigation_botton);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -192,35 +181,56 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    // Community 테스트 메소드
-    public void startPostFragment() {
+    // Community PostFragment 실행
+    private void startPostFragment() {
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment fragment = manager.findFragmentById(R.id.mainFragment);
+
+        if (fragment != null) {
+            Fragment frag = PostMainFragment.newInstance();
+            manager.beginTransaction().replace(R.id.mainFragment, frag).commit();
+        }
+
+    }
+
+    // HomeFragment
+    private void startHomeFragment() {
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.mainFragment);
 
         if (fragment == null) {
-            Fragment frag = PostMainFragment.newInstance();
+            Fragment frag = HomeFragment.newInstance();
             manager.beginTransaction().add(R.id.mainFragment, frag).commit();
+        } else {
+            Fragment frag = HomeFragment.newInstance();
+            manager.beginTransaction().replace(R.id.mainFragment, frag).commit();
         }
+
+
     }
 
 
     @Override
     public void startDetailActivity(Post post) {
 
-        Log.i(TAG, "startDetailActivity 실행");
-
         Intent intent = new Intent(this, PostDetailActivity.class);
 
         intent.putExtra(START_DETAIL_ACTIVITY, post);
 
         startActivity(intent);
-    }
 
     }
 
+//    public void userLogin(View view) {
+//
+//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(intent);
+//    }
+}
