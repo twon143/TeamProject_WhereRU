@@ -83,7 +83,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-    }
+            }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
@@ -106,132 +106,132 @@ public class PostWriteActivity extends AppCompatActivity {
     }
 
 
-    // 사용자 권한 허용하기위해 Permission 결과를 되돌려받음
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+        // 사용자 권한 허용하기위해 Permission 결과를 되돌려받음
+        @Override
+        public void onRequestPermissionsResult ( int requestCode,
+        @NonNull String[] permissions,
+        @NonNull int[] grantResults){
 
-        Log.i(TAG, "PerMission 실행");
+            Log.i(TAG, "PerMission 실행");
 
-        switch (requestCode) {
-            case REQUEST_PERMISSION_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 동의한 경우
-                    Intent intent = new Intent(Intent.ACTION_PICK);
+            switch (requestCode) {
+                case REQUEST_PERMISSION_CODE:
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // 동의한 경우
+                        Intent intent = new Intent(Intent.ACTION_PICK);
 
-                    intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                    intent.setType("image/*");
+                        intent.setType("image/*");
 
-                    startActivityForResult(intent, GALLERY_CODE);
-                } else {
-                    Toast.makeText(this, "기능 사용을 위해선 동의가 필요합니다", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-    }
-
-    public void addPhoto(View view) {
-        // TODO : 사진 추가 버튼 암시적 인텐트로 갤러리 화면 열기
-
-        // 권한 허용부터시작
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                REQUEST_PERMISSION_CODE);
-
-        Log.i(TAG, "액티비티 실행");
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.i(TAG, resultCode + ": " + RESULT_OK);
-
-        if (resultCode == RESULT_OK) {
-            Log.i(TAG, "결과값 돌아오는거 실행");
-
-            sendPicture(data.getData());
-        }
-    }
-
-    // 이미지 뷰에 비트맵 넣기
-    private void sendPicture(Uri imgUri) {
-
-        Log.i(TAG, "sendPicture 실행");
-
-        String imagePath = getRealPathFromURI(imgUri);
-        ExifInterface exif = null;
-
-        try {
-            exif = new ExifInterface(imagePath);
-        } catch (Exception e) {
-            e.printStackTrace();
+                        startActivityForResult(intent, GALLERY_CODE);
+                    } else {
+                        Toast.makeText(this, "기능 사용을 위해선 동의가 필요합니다", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+            }
         }
 
-        int exifOrientation =
-                exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-        int exifDegree = exifOrientationToDegree(exifOrientation);
+        public void addPhoto (View view){
+            // TODO : 사진 추가 버튼 암시적 인텐트로 갤러리 화면 열기
 
-        // 경로를 통해 비트맵으로 전환
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        imageWrite.setImageBitmap(rotate(bitmap, exifDegree));
+            // 권한 허용부터시작
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION_CODE);
 
-    }
-
-    // 사진 회전값 처리
-    private int exifOrientationToDegree(int exifOrientation) {
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            return 90;
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            return 180;
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            return 270;
+            Log.i(TAG, "액티비티 실행");
         }
-        return 0;
-    }
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
 
-    // 사진 정방향대로 회전하기
-    private Bitmap rotate(Bitmap src, float degree) {
+            Log.i(TAG, resultCode + ": " + RESULT_OK);
 
-        Matrix matrix = new Matrix();
+            if (resultCode == RESULT_OK) {
+                Log.i(TAG, "결과값 돌아오는거 실행");
 
-        // 회전각도 셋팅
-        matrix.postRotate(degree);
-
-        // 이미지와 Matrix 를 셋팅해서 BitMap 객체 생성
-        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-    }
-
-    // 사진에 저장된 절대 경로값을 가져오는 메소드
-    private String getRealPathFromURI(Uri contentUri) {
-
-        int index = 0;
-        String[] proj = {MediaStore.Images.Media.DATA};
-
-        Cursor cursor =
-                getContentResolver().query(contentUri, proj, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                sendPicture(data.getData());
+            }
         }
-        return cursor.getString(index);
+
+        // 이미지 뷰에 비트맵 넣기
+        private void sendPicture (Uri imgUri){
+
+            Log.i(TAG, "sendPicture 실행");
+
+            String imagePath = getRealPathFromURI(imgUri);
+            ExifInterface exif = null;
+
+            try {
+                exif = new ExifInterface(imagePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            int exifOrientation =
+                    exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int exifDegree = exifOrientationToDegree(exifOrientation);
+
+            // 경로를 통해 비트맵으로 전환
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            imageWrite.setImageBitmap(rotate(bitmap, exifDegree));
+
+        }
+
+        // 사진 회전값 처리
+        private int exifOrientationToDegree ( int exifOrientation){
+            if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                return 90;
+            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                return 180;
+            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                return 270;
+            }
+            return 0;
+        }
+
+        // 사진 정방향대로 회전하기
+        private Bitmap rotate (Bitmap src,float degree){
+
+            Matrix matrix = new Matrix();
+
+            // 회전각도 셋팅
+            matrix.postRotate(degree);
+
+            // 이미지와 Matrix 를 셋팅해서 BitMap 객체 생성
+            return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+        }
+
+        // 사진에 저장된 절대 경로값을 가져오는 메소드
+        private String getRealPathFromURI (Uri contentUri){
+
+            int index = 0;
+            String[] proj = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor =
+                    getContentResolver().query(contentUri, proj, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            }
+            return cursor.getString(index);
+        }
+
+        public void postCancel (View view){
+            // TODO : 취소버튼
+
+        }
+
+        public void postResult (View view){
+            // TODO : 확인버튼
+            String title = editTitle.getText().toString();
+            String content = editBody.getText().toString();
+
+            Post p = new Post(title, content);
+
+            writeReference.child("포스트1").child(null).setValue(p);
+
+        }
+
     }
-
-    public void postCancel(View view) {
-        // TODO : 취소버튼
-
-    }
-
-    public void postResult(View view) {
-        // TODO : 확인버튼
-        String title = editTitle.getText().toString();
-        String content = editBody.getText().toString();
-
-        Post p = new Post(title, content);
-
-        writeReference.child("포스트1").child(null).setValue(p);
-
-    }
-
-}
