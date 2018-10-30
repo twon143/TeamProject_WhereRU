@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
 
 
-    private Button btnLogout, btnMainLogin;
+    private Button btnMainLogin;
     private TextView textUserInfo;
 
     private Button btnMapDisplay;
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
+
                 case R.id.menuitem_bottombar_location:
                     return true;
                 case R.id.menuitem_bottombar_community:
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
