@@ -173,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         btnSignUp = findViewById(R.id.btnSignUp);
-        btnSignUp.setEnabled(false);
+        btnSignUp.setEnabled(true);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

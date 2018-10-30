@@ -93,7 +93,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView_comment;
     private LinearLayoutManager linearLayoutManager;
 
-    private TextView textTitle, textWritre, textDate, textViews, textContent, textLike,
+    private TextView textTitle, textWritre, textDate, textViews, textContent, textViewCount,
                      text_comment, text_id;
 
     private ImageView imageView, imageHeart;
@@ -101,7 +101,6 @@ public class PostDetailActivity extends AppCompatActivity {
     public static String commentId ="2";
 
     private PostDetailAdapter adapter;
-
 
     int i = 0;
     int g = 0;
@@ -122,7 +121,7 @@ public class PostDetailActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         imageHeart = findViewById(R.id.imageHeart);
         editText = findViewById(R.id.editText);
-        textLike = findViewById(R.id.textLike);
+        textViewCount = findViewById(R.id.textViewCount);
         dao = PostDetailDao.getInstance();
 
 

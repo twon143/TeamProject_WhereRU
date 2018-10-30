@@ -2,9 +2,11 @@ package edu.android.teamproject_whereru;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +39,14 @@ public class PostMainFragment extends Fragment {
 
         class PostViewHolder extends RecyclerView.ViewHolder {
             private ImageView imageView;
-            private TextView textGuestName, textLikeCount;
+            private TextView textGuestName, textViewCount, textLikeCount;
 
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.imageView);
                 textGuestName = itemView.findViewById(R.id.textGuestName);
+                textViewCount = itemView.findViewById(R.id.textViewCount);
                 textLikeCount = itemView.findViewById(R.id.textLikeCount);
 
             }
@@ -101,6 +105,7 @@ public class PostMainFragment extends Fragment {
     private PostAdapter adapter;
     private PostDao postList;
     private RecyclerView recyclerView;
+    private FloatingActionButton floatingActionButton;
 
     private FirebaseDatabase database;
     private DatabaseReference postreference;
@@ -111,6 +116,7 @@ public class PostMainFragment extends Fragment {
     public interface PostMainCallback {
         void startDetailActivity(Post post);
     }
+
 
     private PostMainCallback callback;
 
@@ -131,6 +137,7 @@ public class PostMainFragment extends Fragment {
         if (context instanceof PostMainCallback) {
             callback = (PostMainCallback) context;
         }
+
     }
 
     @Override
@@ -145,6 +152,7 @@ public class PostMainFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
+
 
         return view;
     }
