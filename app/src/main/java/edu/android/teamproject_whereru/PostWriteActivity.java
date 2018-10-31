@@ -22,12 +22,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -50,7 +58,12 @@ public class PostWriteActivity extends AppCompatActivity {
     private DatabaseReference writeReference;
     private ChildEventListener childEventListener;
 
-    private String userId;
+    private FirebaseStorage storage;
+
+    private String today;
+    private Bitmap bitmap;
+    private Uri imagUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +81,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
         SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
+        today = format.format(date);
         String dCreated = format.format(date);
         Post post = new Post(dCreated);
 
@@ -75,39 +89,11 @@ public class PostWriteActivity extends AppCompatActivity {
 
 
 
+
         database = FirebaseDatabase.getInstance();
         writeReference = database.getReference(TBL_NAME);
-        writeReference = database.getReference().child("포스트");
 
-
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG, "파일 추가 완료");
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-        };
+        storage = FirebaseStorage.getInstance();
 
     }
 
@@ -180,8 +166,12 @@ public class PostWriteActivity extends AppCompatActivity {
             int exifDegree = exifOrientationToDegree(exifOrientation);
 
             // 경로를 통해 비트맵으로 전환
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            bitmap = BitmapFactory.decodeFile(imagePath);
             imageWrite.setImageBitmap(rotate(bitmap, exifDegree));
+
+            // 갤러리에서 선택된 사진파일 멤버에 저장
+            imagUri = imgUri;
+
 
         }
 
@@ -236,7 +226,21 @@ public class PostWriteActivity extends AppCompatActivity {
             String id = String.valueOf(0);
             firebasePostAdd(id, title, content);
 
+            StorageReference storageRef =
+                    storage.getReferenceFromUrl(
+                            "gs://whereru-364b0.appspot.com").child("images/" + "aaa.png");
 
+            storageRef.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnCanceledListener(new OnCanceledListener() {
+                @Override
+                public void onCanceled() {
+                    Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void firebasePostAdd (String id, String title, String content) {
