@@ -18,6 +18,12 @@ public class Guest {
         this.guestEmail = guestEmail;
     }
 
+    public Guest(String phoneNo, String guestEmail, String guestPw) {
+        this.guestPw = guestPw;
+        this.phoneNo = phoneNo;
+        this.guestEmail = guestEmail;
+    }
+
     public String getGuestName() {
         return guestName;
     }

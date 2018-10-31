@@ -2,13 +2,10 @@ package edu.android.teamproject_whereru;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
         final EditText editCheckPw = findViewById(R.id.editCheckPw);
         final EditText editId = findViewById(R.id.editId);
         final EditText editName = findViewById(R.id.editName);
-        final EditText editPhone = findViewById(R.id.editPhone);
-        final EditText editEmail = findViewById(R.id.editEmail);
+        final EditText editPhone = findViewById(R.id.editChangePhone);
+        final EditText editEmail = findViewById(R.id.editUpdateEmail);
 
         textCheckPw = findViewById(R.id.textCheckPw);
         textPwResult = findViewById(R.id.textPwResult);

@@ -163,14 +163,30 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if (id == R.id.nav_gps) {
-            // Handle the camera action
+            // gps 등록
+            if(guestList == null) {
+                Toast.makeText(this, "먼저 로그인을 하세요", Toast.LENGTH_SHORT).show();
+            } else {
+
+            }
         } else if (id == R.id.nav_gpsinfo) {
 
         } else if (id == R.id.nav_mydocument) {
             startMyDocumentList();
 
         } else if (id == R.id.nav_memberchange) {
+            if(guestList == null) {
+                item.setEnabled(false);
+                Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
+            } else {
+                item.setEnabled(true);
+                FragmentManager manager = getSupportFragmentManager();
+                Fragment fragment = manager.findFragmentById(R.id.mainFragment);
+                if (fragment != null) {
+                    manager.beginTransaction().replace(R.id.mainFragment, new BlankFragment()).commit();
+                }
 
+            }
         } else if (id == R.id.nav_logout) {
             if (guestList == null) {
                 Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
@@ -185,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements
                 textUserInfo.setText("로그인 하면 정보가 보입니다");
             }
 
+        } else if(id==R.id.nav_animal){
+            //애니멀에 대한 이벤트
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
