@@ -52,13 +52,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     private Button btnSignUp, btnLogin, btnGoogle_Login, btnFaceBook_Login;
-    private EditText editId, editPw;
+    private EditText editLogId, editLogPw;
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
     private TextView textView;
     public static final int REQ_CODE = 100;
     private static final int RC_SIGN_IN = 1000;
-    List<String> list;
+    List<String> idList = new ArrayList<>();
+    List<String> pwList = new ArrayList<>();
+    private static final String UIDS = null;
     private static final String TAG = "teamproject_whereru";
     public static final String GOOGLE_REQUEST_CODE = "google";
     private static final String FIREBASE_GUEST_PW = "guestPw";
@@ -71,8 +73,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static final String GUEST_DATA = "guestData";
 
 
+    public LoginActivity() {
+    }
 
-    public LoginActivity() {}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,114 +87,67 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        editId = findViewById(R.id.editId);
-        editPw = findViewById(R.id.editPw);
-
-
+        editLogId = findViewById(R.id.editLogId);
+        editLogPw = findViewById(R.id.editLogPw);
 
         btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                final String log_id = editId.getText().toString();
-//                Log.i(TAG, log_id); 입력한 아이디, 비번은 보임
-                String log_pw = editPw.getText().toString();
+                final String log_id = editLogId.getText().toString();
+                final String log_pw = editLogPw.getText().toString();
                 firebaseDatabase = FirebaseDatabase.getInstance();
 //                Log.i(TAG, firebaseDatabase.toString());
-                mReference = firebaseDatabase.getInstance().getReference(TBL_NAME);
+                mReference = firebaseDatabase.getReference(TBL_NAME);
 
                 // ku8230, ku82301, ku82302
                 // mReferece 참조할 위치를 나타냄 child를 추가하면 세부항목으로 들어감
-                if(MainActivity.guestList == null) {
 
 
-                    childEventListener = new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                            String userIds = dataSnapshot.getKey();
-//                        Log.i(TAG, userIds); ku8230, ku82301, ku82302
-                            String x = dataSnapshot.getValue().toString();
-                            if (userIds.equals(log_id)) {
-                                String userData = dataSnapshot.child(FIREBASE_GUEST_PW).getValue().toString();
-                                if (userData.equals(editPw.getText().toString())) {
-                                    Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
-//                                Log.i(TAG, "log_id:  " + log_id + " X:  " + x);
-                                    MainActivity.guestList = dataSnapshot.getValue(Guest.class);
-                                    String id = log_id;
-                                    String userName = MainActivity.guestList.getGuestName();
-                                    String userPw = MainActivity.guestList.getGuestPw();
-                                    String userEmail = MainActivity.guestList.getGuestEmail();
-                                    String userPhoneNo = MainActivity.guestList.getPhoneNo();
-
-                                    MainActivity.guestList = new Guest(userName, userPw, userEmail, userPhoneNo);
-                                    MainActivity.guestList.setGuestId(log_id);
-                                    Log.i(TAG, MainActivity.guestList.toString());
-                                    onSaveGuestData();
-//                                callback.getGuestData(guestList, id);
-
-
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-
-                                }
-
-                            } else {
-                                Toast.makeText(LoginActivity.this, "잘못된 아이디나 비밀번호 입력!", Toast.LENGTH_LONG).show();
+                childEventListener = new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        if(dataSnapshot.getKey().equals(log_id)) {
+                            if(dataSnapshot.child(FIREBASE_GUEST_PW).getValue().toString().equals(log_pw)) {
+                                MainActivity.guestList = dataSnapshot.getValue(Guest.class);
+                                MainActivity.guestList.setGuestId(log_id);
+                                onSaveGuestData();
+                                Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
-
-
-//                        if (id.equals(FIREBASE_GUEST_PW)) {
-//                            String userData = dataSnapshot.getValue().toString();
-//                            if (userData.equals(editPw.getText().toString())) {
-//                                Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                startActivity(intent);
-//                                finish();
-//
-//                            } else {
-//                                Toast.makeText(LoginActivity.this, "로그인 실패", Toast.LENGTH_SHORT).show();
-//                            }
-//
-//                        }
+                            else {
+                                Toast.makeText(LoginActivity.this, "잘못된 비밀번호 입력!", Toast.LENGTH_SHORT).show();
+                            }
                         }
+                    } // end OnchildAdded()
 
-                        @Override
-                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                        }
-                    };
-                    mReference.addChildEventListener(childEventListener);
-                }
-
-
-            } // end onClick()
-
-
-        }); // end onCLickListner();
-
-
-
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    } // end onCancelled
+                }; // end childEventListner
+                mReference.addChildEventListener(childEventListener);
+            }
+        });
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -206,15 +162,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
 
     }
-
-//    private void login(String log_id, String log_pw) {
-//        if(dataSnapshot.hasChild("log_id")) {
-//            Guest guest = dataSnapshot.getValue(Guest.class);
-//
-//
-//        }
-//    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -248,9 +195,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 StringBuilder builder = new StringBuilder();
                                 builder.append(userName).append("\n").append(userEmail);
                                 String googleLoginedInfo = builder.toString();
-                                list = new ArrayList<>();
-                                list.add(builder.toString());
-                                // TODO: 로그인 성공시 로그인한 유저의 정보를 가지고 MainActivity로 이동하도록 코드 작성
+//                                list = new ArrayList<>();
+//                                list.add(builder.toString());
+//                                // TODO: 로그인 성공시 로그인한 유저의 정보를 가지고 MainActivity로 이동하도록 코드 작성
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra(GOOGLE_REQUEST_CODE, googleLoginedInfo);
                                 startActivityForResult(intent, REQ_CODE);

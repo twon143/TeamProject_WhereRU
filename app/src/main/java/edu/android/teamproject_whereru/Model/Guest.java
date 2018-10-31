@@ -68,6 +68,7 @@ public class Guest {
     public String toString() {
         return "Guest{" +
                 "guestId='" + guestId + '\'' +
+                ", guestName='" + guestName + '\'' +
                 ", guestPw='" + guestPw + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
                 ", guestEmail='" + guestEmail + '\'' +

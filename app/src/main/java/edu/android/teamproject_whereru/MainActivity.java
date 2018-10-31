@@ -37,8 +37,7 @@ import edu.android.teamproject_whereru.Model.Post;
 // 모델, 컨트롤러 폴더 추가(MVC 분할)
 // firebase 인증에 필요한 라이브러리 추가
 
-public class MainActivity extends AppCompatActivity implements
-        PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String START_DETAIL_ACTIVITY = "detailActivity";
     public static final String START_MYDOCUMENTLIST_ACTIVITY = "myDocumentListActivity";
@@ -96,14 +95,11 @@ public class MainActivity extends AppCompatActivity implements
         startHomeFragment();
 
         SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
-        Log.i(TAG2, "SharedPre: " + sharedPreferences.toString());
         if (sharedPreferences == null) {
 
         } else {
             Gson gson = new Gson();
-            Log.i(TAG2, "Main sharedPrefernces:  " + sharedPreferences.toString());
             String guestData = sharedPreferences.getString(SAVED_GUEST_DATA, "");
-            Log.i(TAG2, "Main GuestData:  " + guestData);
             // 변환
             guestList = gson.fromJson(guestData, Guest.class);
         }
@@ -121,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements
         textUserInfo = nav_header_view.findViewById(R.id.textUserInfo);
         btnMainLogin = nav_header_view.findViewById(R.id.btnMainLogin);
         if (guestList != null) {
-            textUserInfo.setText(guestList.toString());
+            textUserInfo.setText(guestList.getGuestName() + "\t" + "님 환영합니다!");
             btnMainLogin.setEnabled(false);
         } else {
             btnMainLogin.setEnabled(true);
