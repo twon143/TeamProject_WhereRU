@@ -113,6 +113,7 @@ public class PostMainFragment extends Fragment {
 
     private Post post;
 
+
     public interface PostMainCallback {
         void startDetailActivity(Post post);
     }
@@ -168,7 +169,7 @@ public class PostMainFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         database = FirebaseDatabase.getInstance();
-        postreference = database.getReference().child(""); // 저장되어있는 이름 꺼내기
+        postreference = database.getReference(); // 저장되어있는 이름 꺼내기
 
 
         adapter = new PostAdapter();

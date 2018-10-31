@@ -36,6 +36,7 @@ import edu.android.teamproject_whereru.Model.Post;
 public class PostWriteActivity extends AppCompatActivity {
 
     private static final String TAG = "photo";
+    private static final String TBL_NAME = "post";
 
     private static final int GALLERY_CODE = 111;
 
@@ -72,36 +73,7 @@ public class PostWriteActivity extends AppCompatActivity {
         writeToday.setText(today);
 
         database = FirebaseDatabase.getInstance();
-        writeReference = database.getReference().child("포스트");
-
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i(TAG, "파일 추가 완료");
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-        };
+        writeReference = database.getReference(TBL_NAME);
 
     }
 
@@ -227,10 +199,22 @@ public class PostWriteActivity extends AppCompatActivity {
             // TODO : 확인버튼
             String title = editTitle.getText().toString();
             String content = editBody.getText().toString();
+            String id = String.valueOf(0);
+            firebasePostAdd(id, title, content);
+
+
+        }
+
+        public void firebasePostAdd (String id, String title, String content) {
 
             Post p = new Post(title, content);
+            p.setPostId(id);
 
-            writeReference.child("포스트1").child(null).setValue(p);
+            writeReference.child(id).setValue(p);
+
+            int index = Integer.parseInt(id);
+            index++;
+            p.setPostId(String.valueOf(index));
 
         }
 
