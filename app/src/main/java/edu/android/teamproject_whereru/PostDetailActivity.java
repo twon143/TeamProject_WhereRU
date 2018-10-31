@@ -1,34 +1,22 @@
 package edu.android.teamproject_whereru;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.List;
-
 import edu.android.teamproject_whereru.Controller.PostDetailDao;
 import edu.android.teamproject_whereru.Model.Comment;
-import edu.android.teamproject_whereru.Model.Guest;
 import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
@@ -66,9 +54,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
             PostDetailViewHolder holder = (PostDetailViewHolder) viewHolder;
             Comment c =  dao.getCommentList().get(position);
-            Log.i(TAG, "here " + text_id.toString());
-            Log.i(TAG, "here: "  + c.getCommentId());
-            Log.i(TAG, "holder: " + holder.toString());
 
             holder.text_id.setText(c.getCommentId());
             // 작성한 댓글 아이디
@@ -101,6 +86,8 @@ public class PostDetailActivity extends AppCompatActivity {
     public static String commentId ="2";
 
     private PostDetailAdapter adapter;
+
+
 
     int i = 0;
     int g = 0;
@@ -135,6 +122,8 @@ public class PostDetailActivity extends AppCompatActivity {
         imageView.setImageResource(post.getImageTest());
         textContent.setText(String.valueOf(post.getContent()));
 
+
+
         imageHeart.setImageResource(R.drawable.h1);
 
         recyclerView_comment = findViewById(R.id.recyclerView_comment);
@@ -155,8 +144,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
                String content = editText.getText().toString();
+               editText.setText("");
 
                Comment comment = new Comment(commentId, content);
+               Post dCreated = new Post();
 
 //               intent.putExtra(KEY1, comment);
 
@@ -168,6 +159,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
                 text_id.setText(comment.getCommentId());
                 text_comment.setText(comment.getContent());
+                textDate.setText(dCreated.getdCreated());
 
 
                 int result = dao.insert(comment);
@@ -186,6 +178,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     // PostWriteActivity에서 작성자, 날짜, 시간, 작성글을 받아와야 함
 
+
     private void initRecyclerView() {
         adapter.notifyDataSetChanged();
         recyclerView_comment.invalidate();
@@ -194,15 +187,19 @@ public class PostDetailActivity extends AppCompatActivity {
     public void changeImage(View view) {
         Intent intent = new Intent(this, PostMainFragment.class);
         i = 1 - i;
+        Post post = new Post();
+        int recommendation = post.getRecommendation();
 
         if (i == 0) {
             imageHeart.setImageResource(R.drawable.h1);
             Toast.makeText(this, "좋아요 취소", Toast.LENGTH_LONG).show();
+            recommendation--;
+
 
         } else {
             imageHeart.setImageResource(R.drawable.h2);
             Toast.makeText(this, "좋아요", Toast.LENGTH_LONG).show();
-
+            recommendation++;
         }
         intent.putExtra(KEY2, i);
     }

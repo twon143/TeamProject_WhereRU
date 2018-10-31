@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements
         PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String START_DETAIL_ACTIVITY = "detailActivity";
+    public static final String START_MYDOCUMENTLIST_ACTIVITY = "myDocumentListActivity";
 
     private Button btnMainLogin;
     private TextView textUserInfo;
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements
         } else if (id == R.id.nav_gpsinfo) {
 
         } else if (id == R.id.nav_mydocument) {
+            startMyDocumentList();
 
         } else if (id == R.id.nav_memberchange) {
 
@@ -188,6 +190,17 @@ public class MainActivity extends AppCompatActivity implements
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void startMyDocumentList() {
+        Post post = new Post();
+        Intent intent = new Intent(this, MyDocumentList.class);
+        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getTitle());
+        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getdCreated());
+        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getViewCount());
+        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getRecommendation());
+
+        startActivity(intent);
     }
 
     // Community PostFragment 실행
