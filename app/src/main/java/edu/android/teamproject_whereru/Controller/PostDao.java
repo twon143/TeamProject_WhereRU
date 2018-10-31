@@ -32,6 +32,8 @@ public class PostDao {
     public static PostDao getInstance() {
         if (instance == null) {
             instance = new PostDao();
+
+
         }
         return instance;
     }

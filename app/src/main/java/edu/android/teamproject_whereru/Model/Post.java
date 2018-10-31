@@ -16,9 +16,25 @@ public class Post implements Serializable {
     private String image;
     private String guestId;
 
+    // 날짜
+    private String dCreated;
+
+    public Post(String dCreated) {
+        this.dCreated = dCreated;
+    }
+
+    public String getdCreated() {
+        return dCreated;
+    }
+
+    public void setdCreated(String dCreated) {
+        this.dCreated = dCreated;
+    }
+
     private int imageTest;
 
     public Post(){}
+
 
 
 

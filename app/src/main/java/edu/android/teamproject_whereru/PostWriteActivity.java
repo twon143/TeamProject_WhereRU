@@ -68,12 +68,46 @@ public class PostWriteActivity extends AppCompatActivity {
 
         SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
-        String today = format.format(date);
+        String dCreated = format.format(date);
+        Post post = new Post(dCreated);
 
-        writeToday.setText(today);
+       writeToday.setText(post.getdCreated());
+
+
 
         database = FirebaseDatabase.getInstance();
         writeReference = database.getReference(TBL_NAME);
+        writeReference = database.getReference().child("포스트");
+
+
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i(TAG, "파일 추가 완료");
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        };
 
     }
 

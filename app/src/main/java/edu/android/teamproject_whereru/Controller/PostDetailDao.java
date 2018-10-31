@@ -23,6 +23,8 @@ public class PostDetailDao {
     public  static PostDetailDao getInstance() {
         if (instance == null) {
             instance = new PostDetailDao();
+            //firebase
+
         }
         return instance;
     }
