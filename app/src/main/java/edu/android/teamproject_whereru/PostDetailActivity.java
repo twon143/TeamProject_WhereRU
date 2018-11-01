@@ -72,6 +72,7 @@ public class PostDetailActivity extends AppCompatActivity {
         editText.setText("");
 
 
+        
     }
     class CommentListAdapter extends ArrayAdapter<Comment> {
 
@@ -127,7 +128,7 @@ public class PostDetailActivity extends AppCompatActivity {
         listView_comment.setAdapter(adapter);
 
 
-        
+
 
         childEventListener = new ChildEventListener() {
             @Override
