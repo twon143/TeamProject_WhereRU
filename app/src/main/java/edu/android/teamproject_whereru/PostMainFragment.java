@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -86,10 +87,14 @@ public class PostMainFragment extends Fragment {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    holder.imageView.setImageURI(uri);
+                    Glide.with(getActivity()).load(uri).into(holder.imageView);
+//                    holder.imageView.setImageURI(uri);
                     Log.i("aaa", "uri : " + uri);
                 }
             });
+
+//            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+//            Glide.with(getActivity()).load("gs://whereru-364b0.appspot.com").into(holder.imageView);
 
             ChildEventListener child = new ChildEventListener() {
                 @Override
@@ -100,9 +105,6 @@ public class PostMainFragment extends Fragment {
                     post.setPostKey(id);
                     String image = post.getImage();
                     down(image);
-
-
-
 
                     holder.textGuestName.setText(post.getGuestId());
                     // 날짜처리
