@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     private Button btnMainLogin;
     private TextView textUserInfo;
-    public  List<String> postNumberList = new ArrayList<>();
+    public  static List<String> postNumberList;
     private Button btnMapDisplay;
     public static Guest guestList;
     private static final String TAG = "why";
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     private boolean gps;
 
     private View nav_header_view;
-    public static String postNumber;
 
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
     private static final String GUEST_DATA = "guestData";
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        postNumberList = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -274,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 postNumberList.add(dataSnapshot.getKey());
-                Log.i(TAG, postNumberList.toString());
             }
 
             @Override

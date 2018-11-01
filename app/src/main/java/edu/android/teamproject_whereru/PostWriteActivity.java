@@ -66,7 +66,7 @@ public class PostWriteActivity extends AppCompatActivity {
     private String today;
     private Bitmap bitmap;
     private Uri imagUri;
-
+    private String postNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,6 @@ public class PostWriteActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.editTitle);
         editBody = findViewById(R.id.editBody);
         imageWrite = findViewById(R.id.imageWrite);
-
         writeGuestName = findViewById(R.id.writeGuestName);
         writeToday = findViewById(R.id.writeToday);
 
@@ -223,10 +222,11 @@ public class PostWriteActivity extends AppCompatActivity {
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
         String image = guestId + ".png" + " " + today;
-
-        Log.i(TAG, "posdtNumber값 : " + MainActivity.postNumber);
-
-        writeCount++;
+        for(String postNumber : MainActivity.postNumberList) {
+                this.postNumbers = postNumber;
+        }
+        int integer_postNumbers = Integer.parseInt(postNumbers);
+        integer_postNumbers++;
         
         Post p = new Post(guestId, today, title, image, content);
 
@@ -246,7 +246,7 @@ public class PostWriteActivity extends AppCompatActivity {
                 Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
-        writeReference.child(String.valueOf(writeCount)).setValue(p);
+        writeReference.child(String.valueOf(integer_postNumbers)).setValue(p);
     }
 
 
