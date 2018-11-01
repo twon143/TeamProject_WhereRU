@@ -127,6 +127,7 @@ public class PostDetailActivity extends AppCompatActivity {
         listView_comment.setAdapter(adapter);
 
 
+        
 
         childEventListener = new ChildEventListener() {
             @Override
