@@ -310,9 +310,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(guestList != null) {
-            ProfileDialog profileDialog = new ProfileDialog(this);
-
-            profileDialog.callFunction();
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         }
         else {
             Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();

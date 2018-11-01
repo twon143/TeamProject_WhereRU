@@ -48,6 +48,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="사진 변경"
+        android:onClick="changeProfile"
         android:background="#696969"
         android:textSize="20sp"
         android:textColor="@color/com_facebook_button_background_color_focused"
@@ -171,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="number" />
+            android:inputType="text" />
 
     </LinearLayout>
 

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.module.AppGlideModule;
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.SuccessContinuation;
@@ -34,7 +35,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -154,7 +156,6 @@ public class PostWriteActivity extends AppCompatActivity {
 
     // 이미지 뷰에 비트맵 넣기
     private void sendPicture(Uri imgUri) {
-
         Log.i(TAG, "sendPicture 실행");
 
         String imagePath = getRealPathFromURI(imgUri);
@@ -195,7 +196,6 @@ public class PostWriteActivity extends AppCompatActivity {
 
     // 사진 정방향대로 회전하기
     private Bitmap rotate(Bitmap src, float degree) {
-
         Matrix matrix = new Matrix();
 
         // 회전각도 셋팅
@@ -207,7 +207,6 @@ public class PostWriteActivity extends AppCompatActivity {
 
     // 사진에 저장된 절대 경로값을 가져오는 메소드
     private String getRealPathFromURI(Uri contentUri) {
-
         int index = 0;
         String[] proj = {MediaStore.Images.Media.DATA};
 

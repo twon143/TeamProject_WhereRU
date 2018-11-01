@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 
 
 import edu.android.teamproject_whereru.Controller.PostDao;
+import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Post;
 
 
@@ -80,9 +81,13 @@ public class PostMainFragment extends Fragment {
             PostWriteActivity image = new PostWriteActivity();
             final String mainImage = image.getImage();
 
+
             DatabaseReference postReference = database.getReference(TBL_POST);
             StorageReference storageReference =
                     storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ mainImage);
+//            GlideApp.with(getActivity())
+//                    .load(storage)
+//                    .into(holder.imageView);
 
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -142,7 +147,6 @@ public class PostMainFragment extends Fragment {
                     DatabaseReference postReference = database.getReference(TBL_POST);
                     StorageReference storageReference =
                             storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ main);
-
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
