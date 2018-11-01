@@ -23,8 +23,8 @@ public class PostDao {
         };
 
         for (int i = 0; i< 100; i++) {
-            Post p = new Post(imageIds[i % imageIds.length], "GuestId"+i, i);
-            postList.add(p);
+//            Post p = new Post(imageIds[i % imageIds.length], "GuestId"+i, i);
+//            postList.add(p);
         }
 
     }

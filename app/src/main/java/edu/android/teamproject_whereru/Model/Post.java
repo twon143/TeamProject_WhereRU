@@ -4,39 +4,22 @@ import java.io.Serializable;
 
 public class Post implements Serializable {
 
-    private String postId;
+    // 작성자 아이디
+    private String guestId;
+    // 날짜
+    private String today;
     // 제목
     private String title;
+    // 사진
+    private String image;
     // 내용
     private String content;
     // 뷰 숫자
     private int viewCount;
     // 추천수
     private int recommendation;
-    private String image;
-    private String guestId;
-
-    // 날짜
-    private String dCreated;
-
-    public Post(String dCreated) {
-        this.dCreated = dCreated;
-    }
-
-    public String getdCreated() {
-        return dCreated;
-    }
-
-    public void setdCreated(String dCreated) {
-        this.dCreated = dCreated;
-    }
-
-    private int imageTest;
 
     public Post(){}
-
-
-
 
     // RecyclerView에 List로 보여주기 위해서 필요한 것들만 만듬
     // Test 생성자 dummydata
@@ -45,37 +28,39 @@ public class Post implements Serializable {
         this.content = content;
     }
 
-    public Post(int imageTest, String guestId, int recommendation) {
-        this.imageTest = imageTest;
+    // 글쓰기 생성자 전용
+    public Post(String guestId, String today, String title, String image, String content) {
         this.guestId = guestId;
-        this.recommendation = recommendation;
-    }
-
-    public Post(String postId, String title,
-                String content, int viewCount, int recommendation, String image, String guestId) {
-        this.postId = postId;
+        this.today = today;
         this.title = title;
+        this.image = image;
+        this.content = content;
+    }
+    // PostMainFragment에 쓸 생성자
+    public Post(String guestId, String today, String title, String image, String content, int viewCount, int recommendation) {
+        this.guestId = guestId;
+        this.today = today;
+        this.title = title;
+        this.image = image;
         this.content = content;
         this.viewCount = viewCount;
         this.recommendation = recommendation;
-        this.image = image;
+    }
+
+    public String getGuestId() {
+        return guestId;
+    }
+
+    public void setGuestId(String guestId) {
         this.guestId = guestId;
     }
 
-    public int getImageTest() {
-        return imageTest;
+    public String getToday() {
+        return today;
     }
 
-    public void setImageTest(int imageTest) {
-        this.imageTest = imageTest;
-    }
-
-    public String getPostId() {
-        return postId;
-    }
-
-    public void setPostId(String postId) {
-        this.postId = postId;
+    public void setToday(String today) {
+        this.today = today;
     }
 
     public String getTitle() {
@@ -84,6 +69,14 @@ public class Post implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getContent() {
@@ -110,33 +103,16 @@ public class Post implements Serializable {
         this.recommendation = recommendation;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getGuestId() {
-        return guestId;
-    }
-
-    public void setGuestId(String guestId) {
-        this.guestId = guestId;
-    }
-
     @Override
     public String toString() {
         return "Post{" +
-                "postId='" + postId + '\'' +
+                "guestId='" + guestId + '\'' +
+                ", today='" + today + '\'' +
                 ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
                 ", content='" + content + '\'' +
                 ", viewCount=" + viewCount +
                 ", recommendation=" + recommendation +
-                ", image='" + image + '\'' +
-                ", guestId='" + guestId + '\'' +
                 '}';
     }
-
 }

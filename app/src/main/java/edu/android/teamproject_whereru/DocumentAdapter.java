@@ -56,7 +56,7 @@ public class DocumentAdapter extends BaseAdapter {
         /* 각 위젯에 세팅된 아이템을 뿌려준다 */
 
         textTitle_1.setText(post.getTitle());
-        textDate_1.setText(post.getdCreated());
+//        textDate_1.setText(post.getdCreated());
         textViews_1.setText(post.getViewCount());
         textLike_1.setText(post.getRecommendation());
 
@@ -71,7 +71,7 @@ public class DocumentAdapter extends BaseAdapter {
 
         /* post에 아이템을 seting한다 */
         post.setTitle(Title_1);
-        post.setdCreated(Date_1);
+//        post.setdCreated(Date_1);
         post.setViewCount(Views_1);
         post.setRecommendation(Like_1);
 

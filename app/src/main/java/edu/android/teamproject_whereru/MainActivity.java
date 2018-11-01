@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         Post post = new Post();
         Intent intent = new Intent(this, MyDocumentList.class);
         intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getTitle());
-        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getdCreated());
+
         intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getViewCount());
         intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getRecommendation());
 

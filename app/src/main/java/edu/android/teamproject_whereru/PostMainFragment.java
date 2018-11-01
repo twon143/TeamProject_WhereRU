@@ -70,16 +70,16 @@ public class PostMainFragment extends Fragment {
             // image, 작성자이름, 좋아요 카운트
             final Post p = postList.getPostList().get(position);
             
-            holder.imageView.setImageResource(p.getImageTest());
+//            holder.imageView.setImageResource(p.getImageTest());
             holder.textGuestName.setText(p.getGuestId());
             holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
             // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
-            int imageTest = p.getImageTest();
+//            int imageTest = p.getImageTest();
             String guestId = p.getGuestId();
             int recommendation = p.getRecommendation();
 
-            final Post post = new Post(imageTest, guestId, recommendation);
+//            final Post post = new Post(imageTest, guestId, recommendation);
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

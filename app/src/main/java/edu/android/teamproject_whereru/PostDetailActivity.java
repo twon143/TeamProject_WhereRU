@@ -119,7 +119,7 @@ public class PostDetailActivity extends AppCompatActivity {
         Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
 
         textWritre.setText(post.getGuestId());
-        imageView.setImageResource(post.getImageTest());
+//        imageView.setImageResource(post.getImageTest());
         textContent.setText(String.valueOf(post.getContent()));
 
 
@@ -159,7 +159,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
                 text_id.setText(comment.getCommentId());
                 text_comment.setText(comment.getContent());
-                textDate.setText(dCreated.getdCreated());
+//                textDate.setText(dCreated.getdCreated());
 
 
                 int result = dao.insert(comment);
