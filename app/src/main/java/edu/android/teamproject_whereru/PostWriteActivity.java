@@ -72,6 +72,7 @@ public class PostWriteActivity extends AppCompatActivity {
         return image;
     }
 
+    private String postNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,6 +228,12 @@ public class PostWriteActivity extends AppCompatActivity {
         String guestId = MainActivity.guestList.getGuestId();
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
+        String image = guestId + ".png" + " " + today;
+        for(String postNumber : MainActivity.postNumberList) {
+                this.postNumbers = postNumber;
+        }
+        int integer_postNumbers = Integer.parseInt(postNumbers);
+        integer_postNumbers++;
         image = guestId + ".png" + " " + today;
 
         for(String postNumber : MainActivity.postNumberList) {
@@ -234,7 +241,7 @@ public class PostWriteActivity extends AppCompatActivity {
         }
 
         writeCount++;
-        
+
         Post p = new Post(null, guestId, today, title, image, content);
 
         StorageReference storageRef =
@@ -253,6 +260,7 @@ public class PostWriteActivity extends AppCompatActivity {
                 Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
+        writeReference.child(String.valueOf(integer_postNumbers)).setValue(p);
         writeReference.push().setValue(p);
     }
 

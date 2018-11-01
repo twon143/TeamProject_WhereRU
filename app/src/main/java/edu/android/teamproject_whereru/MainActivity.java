@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        postNumberList = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         postNumberList = new ArrayList<>();
