@@ -108,6 +108,7 @@ public class PostMainFragment extends Fragment {
                     post = dataSnapshot.getValue(Post.class);
                     String id = dataSnapshot.getKey();
                     post.setPostKey(id);
+                    
                     String image = post.getImage();
                     down(image);
 
