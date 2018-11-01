@@ -1,194 +1,205 @@
 package edu.android.teamproject_whereru;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import edu.android.teamproject_whereru.Controller.PostDetailDao;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.android.teamproject_whereru.Model.Comment;
 import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
 
-    class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final String KEY2 = "image_key";
 
-        class PostDetailViewHolder extends RecyclerView.ViewHolder {
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private ChildEventListener childEventListener;
 
-            private TextView text_id, text_comment;
+    private TextView textTitle, textWriter, textDate, textViews, textContent,
+                     text_id, text_comment, textWritrer;
 
-            public PostDetailViewHolder(@NonNull View itemView) {
-                super(itemView);
-                text_id = itemView.findViewById(R.id.text_id);
-                text_comment = itemView.findViewById(R.id.text_comment);
+    private EditText editText;
 
-            }
-        } // end class PostDetailViewHolder
+    private ImageView imageHeart, imageView;
+
+    private ListView listView_comment;
+
+    private List<Comment> messages;
+
+    private CommentListAdapter adapter;
+
+    private static final String TBL_POST_DETAIL = "post_detail";
+
+    // 좋아요 카운트
+    private int recommendation;
+
+    // 로그인한 사용자 아이디
+    private String userName;
+    private int i = 0;
+
+    // 버튼 클릭시 Firebase에 저장
+    public void btnRegist(View view) {
+        String text = editText.getText().toString();
+        userName = MainActivity.guestList.getGuestId();
+
+        Log.i("test", "UserName : " + userName);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        Comment comment = new Comment(userName, text);
+        databaseReference.child(TBL_POST_DETAIL).child(userName).setValue(comment);
+
+        editText.setText("");
+
+
+        
+    }
+    class CommentListAdapter extends ArrayAdapter<Comment> {
+
+
+        public CommentListAdapter(@NonNull Context context, int resource, @NonNull List<Comment> objects) {
+            super(context, resource, objects);
+        }
 
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        public View getView(int position, @Nullable View convertView,@NonNull ViewGroup parent) {
 
-            LayoutInflater inflater = LayoutInflater.from(PostDetailActivity.this);
+            if (convertView == null) {
+                LayoutInflater inflater = LayoutInflater.from(PostDetailActivity.this);
+                convertView = inflater.inflate(R.layout.comment_item,
+                        parent, false);
+            }
+            TextView text_id = convertView.findViewById(R.id.text_id);
+            TextView text_comment = convertView.findViewById(R.id.text_comment);
 
-            View itemView = inflater.inflate(R.layout.comment_item, viewGroup, false);
+            Comment comment = getItem(position);
+            Log.i("test", "getItem : " + getItem(position));
+            Log.i("test", "comment : " + comment.toString());
+            Log.i("test", "CommentID : " + comment.getCommentId());
 
-            PostDetailViewHolder holder = new PostDetailViewHolder(itemView);
+            text_id.setText(MainActivity.guestList.getGuestId());
+            text_comment.setText(comment.getContent());
 
-
-            return holder;
+            return convertView;
         }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-
-            PostDetailViewHolder holder = (PostDetailViewHolder) viewHolder;
-            Comment c =  dao.getCommentList().get(position);
-
-            holder.text_id.setText(c.getCommentId());
-            // 작성한 댓글 아이디
-            holder.text_comment.setText(c.getContent());
-            // 작성한 댓글 Body
-            
-        }
-
-        @Override
-        public int getItemCount() {
-            return dao.getCommentList().size();
-        }
-    }
-    // 커뮤니티 확대시 보일화면
-    private static final String DLG_TAG = "dlg";
-    private static final String TAG = "teamproject";
-
-    public static final String KEY1 = "comment_key";
-    public static final String KEY2 = "image_key";
-    private View view;
-    private PostDetailDao dao;
-    private RecyclerView recyclerView_comment;
-    private LinearLayoutManager linearLayoutManager;
-
-    private TextView textTitle, textWritre, textDate, textViews, textContent, textViewCount,
-                     text_comment, text_id;
-
-    private ImageView imageView, imageHeart;
-    private EditText editText;
-    public static String commentId ="2";
-
-    private PostDetailAdapter adapter;
-
-
-
-    int i = 0;
-    int g = 0;
+    } // end class CommentListAdapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
 
-
         textTitle = findViewById(R.id.textTitle);
-        textWritre = findViewById(R.id.textWriter);
+        textWriter = findViewById(R.id.textWriter);
         textDate = findViewById(R.id.textDate);
         textViews = findViewById(R.id.textViews);
         textContent = findViewById(R.id.textContent);
-        imageView = findViewById(R.id.imageView);
-        imageHeart = findViewById(R.id.imageHeart);
+        text_id = findViewById(R.id.text_id);
+        text_comment = findViewById(R.id.text_comment);
         editText = findViewById(R.id.editText);
-        textViewCount = findViewById(R.id.textViewCount);
-        dao = PostDetailDao.getInstance();
+        imageHeart = findViewById(R.id.imageHeart);
+        imageView = findViewById(R.id.imageView);
+
+        listView_comment = findViewById(R.id.listView_comment);
+
+        messages = new ArrayList<>();
+        adapter = new CommentListAdapter(this, R.layout.comment_item, messages);
+        listView_comment.setAdapter(adapter);
 
 
 
+
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Comment comment = dataSnapshot.getValue(Comment.class);
+                String id = dataSnapshot.getKey();
+                comment.setCommentId(id);
+
+                adapter.add(comment);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String changedId = dataSnapshot.getKey();
+                Comment changedC = dataSnapshot.getValue(Comment.class);
+
+                Comment orginal = findMessageById(changedId);
+                orginal.setCommentId(changedC.getCommentId());
+                orginal.setContent(changedC.getContent());
+                adapter.notifyDataSetChanged();
+
+                // 댓글 저장한것을 다시 불러옴
+                databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL);
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String removedId = dataSnapshot.getKey();
+                Comment comment = findMessageById(removedId);
+                adapter.remove(comment);
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        databaseReference.addChildEventListener(childEventListener);
 
         Intent intent = getIntent();
 
-        Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
+        final Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
 
-        textWritre.setText(post.getGuestId());
+
+//        textWritrer.setText(post.getGuestId());
 //        imageView.setImageResource(post.getImageTest());
         textContent.setText(String.valueOf(post.getContent()));
-
-
-
         imageHeart.setImageResource(R.drawable.h1);
-
-        recyclerView_comment = findViewById(R.id.recyclerView_comment);
-        recyclerView_comment.setLayoutManager(new LinearLayoutManager(PostDetailActivity.this));
-
-        adapter = new PostDetailAdapter();
-        recyclerView_comment.setAdapter(adapter);
-
-        recyclerView_comment.setHasFixedSize(true);
-
-
-        Button btnRegist = findViewById(R.id.btnRegist);
-        btnRegist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-//                Intent intent = new Intent(PostDetailActivity.this, PostDetailActivity.class);
-
-
-               String content = editText.getText().toString();
-               editText.setText("");
-
-               Comment comment = new Comment(commentId, content);
-               Post dCreated = new Post();
-
-//               intent.putExtra(KEY1, comment);
-
-
-
-                view = getLayoutInflater().inflate(R.layout.comment_item, null, false);
-                text_id = view.findViewById(R.id.text_id);
-                text_comment = view.findViewById(R.id.text_comment);
-
-                text_id.setText(comment.getCommentId());
-                text_comment.setText(comment.getContent());
-//                textDate.setText(dCreated.getdCreated());
-
-
-                int result = dao.insert(comment);
-
-                //adapter.notifyItemInserted(0);
-                if(result == 1) {
-                    initRecyclerView();
-                }
-            }
-        });
-
-
-
 
     }
 
-    // PostWriteActivity에서 작성자, 날짜, 시간, 작성글을 받아와야 함
-
-
-    private void initRecyclerView() {
-        adapter.notifyDataSetChanged();
-        recyclerView_comment.invalidate();
+    private Comment findMessageById(String changedId) {
+        for (Comment c : messages) {
+            if (changedId.equals(c.getCommentId())) {
+                return c;
+            }
+        }
+        return null;
     }
 
     public void changeImage(View view) {
         Intent intent = new Intent(this, PostMainFragment.class);
         i = 1 - i;
         Post post = new Post();
-        int recommendation = post.getRecommendation();
+        recommendation = post.getRecommendation();
 
         if (i == 0) {
             imageHeart.setImageResource(R.drawable.h1);
@@ -203,8 +214,11 @@ public class PostDetailActivity extends AppCompatActivity {
         }
         intent.putExtra(KEY2, i);
     }
-    
 }
+
+
+
+
 
 
 
