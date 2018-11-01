@@ -3,6 +3,7 @@ package edu.android.teamproject_whereru;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,11 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import edu.android.teamproject_whereru.Controller.PostDao;
@@ -63,21 +67,100 @@ public class PostMainFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-            PostViewHolder holder = (PostViewHolder) viewHolder;
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
+            final PostViewHolder holder = (PostViewHolder) viewHolder;
 
             // 저장되어있는 Post 모델클래스의 생성자를 불러와서
             // image, 작성자이름, 좋아요 카운트
-            final Post p = postList.getPostList().get(position);
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+
+            PostWriteActivity image = new PostWriteActivity();
+            final String mainImage = image.getImage();
+
+            DatabaseReference postReference = database.getReference(TBL_POST);
+            StorageReference storageReference =
+                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ mainImage);
+
+            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    holder.imageView.setImageURI(uri);
+                    Log.i("aaa", "uri : " + uri);
+                }
+            });
+
+            ChildEventListener child = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    //Log.i("aaa", "childAdded 실행");
+                    post = dataSnapshot.getValue(Post.class);
+                    String id = dataSnapshot.getKey();
+                    post.setPostKey(id);
+                    String image = post.getImage();
+                    down(image);
+
+
+                    holder.textGuestName.setText(post.getGuestId());
+                    // 날짜처리
+                    holder.textViewCount.setText(String.valueOf(post.getViewCount()));
+                    holder.textLikeCount.setText(String.valueOf(post.getRecommendation()));
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+
+                private void down (String main){
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+                    PostWriteActivity image = new PostWriteActivity();
+                    final String mainImage = image.getImage();
+
+                    DatabaseReference postReference = database.getReference(TBL_POST);
+                    StorageReference storageReference =
+                            storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ main);
+
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            holder.imageView.setImageURI(uri);
+                            Log.i("aaa", "uri : " + uri);
+                        }
+                    });
+                }
+
+            };
+            postReference.addChildEventListener(child);
+
+
+
+//            final Post p = postList.getPostList().get(position);
             
-//            holder.imageView.setImageResource(p.getImageTest());
-            holder.textGuestName.setText(p.getGuestId());
-            holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
+
 
             // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
 //            int imageTest = p.getImageTest();
-            String guestId = p.getGuestId();
-            int recommendation = p.getRecommendation();
+//            String guestId = p.getGuestId();
+//            int recommendation = p.getRecommendation();
 
 //            final Post post = new Post(imageTest, guestId, recommendation);
 
@@ -98,19 +181,24 @@ public class PostMainFragment extends Fragment {
             // PostDao 클래스 만들고 나서 ArrayList에 저장되어있는 갯수 꺼내고
             // Firebase에 저장되어 있는 객체들 리스트 만큼
 
-            return postList.getPostList().size();
+            return 3;
         }
+
+
     }
+
+
 
     private PostAdapter adapter;
     private PostDao postList;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
 
+    private static final String TBL_POST = "post";
+
     private FirebaseDatabase database;
     private DatabaseReference postreference;
     private ChildEventListener childEventListener;
-
     private Post post;
 
 
@@ -176,40 +264,6 @@ public class PostMainFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         recyclerView.setHasFixedSize(true);
-
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//                Post p = dataSnapshot.getValue(Post.class);
-//
-//                String id = dataSnapshot.getKey();
-//                p.setGuestId(id);
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-
-
 
     }
 }

@@ -60,12 +60,17 @@ public class PostWriteActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference writeReference;
     private ChildEventListener childEventListener;
-
+    private String PostNumber;
     private FirebaseStorage storage;
     private int writeCount;
     private String today;
     private Bitmap bitmap;
     private Uri imagUri;
+    private String image;
+
+    public String getImage(){
+        return image;
+    }
 
 
     @Override
@@ -222,13 +227,15 @@ public class PostWriteActivity extends AppCompatActivity {
         String guestId = MainActivity.guestList.getGuestId();
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
-        String image = guestId + ".png" + " " + today;
+        image = guestId + ".png" + " " + today;
 
-        Log.i(TAG, "posdtNumber값 : " + MainActivity.postNumber);
+        for(String postNumber : MainActivity.postNumberList) {
+            Log.i(TAG, "postNumber: " + postNumber);
+        }
 
         writeCount++;
         
-        Post p = new Post(guestId, today, title, image, content);
+        Post p = new Post(null, guestId, today, title, image, content);
 
         StorageReference storageRef =
                 storage.getReferenceFromUrl(
@@ -246,7 +253,7 @@ public class PostWriteActivity extends AppCompatActivity {
                 Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
-        writeReference.child(String.valueOf(writeCount)).setValue(p);
+        writeReference.push().setValue(p);
     }
 
 

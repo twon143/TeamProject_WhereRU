@@ -4,7 +4,16 @@ import java.io.Serializable;
 
 public class Post implements Serializable {
 
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
+    }
+
     // 작성자 아이디
+    private String postKey;
     private String guestId;
     // 날짜
     private String today;
@@ -29,7 +38,8 @@ public class Post implements Serializable {
     }
 
     // 글쓰기 생성자 전용
-    public Post(String guestId, String today, String title, String image, String content) {
+    public Post(String postKey , String guestId, String today, String title, String image, String content) {
+        this.postKey = postKey;
         this.guestId = guestId;
         this.today = today;
         this.title = title;
