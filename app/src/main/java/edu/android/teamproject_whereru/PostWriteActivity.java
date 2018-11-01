@@ -37,7 +37,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import edu.android.teamproject_whereru.Model.Guest;
 import edu.android.teamproject_whereru.Model.Post;
@@ -61,7 +63,6 @@ public class PostWriteActivity extends AppCompatActivity {
 
     private FirebaseStorage storage;
     private int writeCount;
-
     private String today;
     private Bitmap bitmap;
     private Uri imagUri;
@@ -222,6 +223,8 @@ public class PostWriteActivity extends AppCompatActivity {
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
         String image = guestId + ".png" + " " + today;
+
+        Log.i(TAG, "posdtNumber값 : " + MainActivity.postNumber);
 
         writeCount++;
         
