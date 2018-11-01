@@ -261,6 +261,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     }
 
+
+
 //     글쓰기 FlotingButton
     public void startWriteActivity(View view) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

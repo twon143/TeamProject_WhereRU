@@ -177,6 +177,8 @@ public class PostWriteActivity extends AppCompatActivity {
         // 갤러리에서 선택된 사진파일 멤버에 저장
         imagUri = imgUri;
 
+
+
     }
 
     // 사진 회전값 처리

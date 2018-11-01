@@ -102,6 +102,8 @@ public class PostMainFragment extends Fragment {
                     down(image);
 
 
+
+
                     holder.textGuestName.setText(post.getGuestId());
                     // 날짜처리
                     holder.textViewCount.setText(String.valueOf(post.getViewCount()));

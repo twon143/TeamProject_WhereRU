@@ -154,6 +154,8 @@ public class PostDetailActivity extends AppCompatActivity {
                 databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL);
             }
 
+
+
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String removedId = dataSnapshot.getKey();
