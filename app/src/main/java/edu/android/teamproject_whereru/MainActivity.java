@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     private Button btnMapDisplay;
     public static Guest guestList;
-
     private static final String TAG = "why";
     private static final String TAG2 = "teamproject_whereru";
 
@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -246,8 +247,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
 
     }
-
-
     @Override
     public void startDetailActivity(Post post) {
 
@@ -264,5 +263,23 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         Intent intent = new Intent(this, PostWriteActivity.class);
         startActivity(intent);
     }
+    // 프로필 버튼을 Toolbar에 추가함
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.myprofile_menu, menu);
+        return true;
+    }
+    // 아이콘 클릭에 대한 이벤트리스너(다이얼 로그띄움)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(guestList != null) {
+            ProfileDialog profileDialog = new ProfileDialog(this);
 
+            profileDialog.callFunction();
+        }
+        else {
+            Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
 }
