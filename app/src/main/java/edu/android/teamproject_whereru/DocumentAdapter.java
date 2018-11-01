@@ -2,11 +2,19 @@ package edu.android.teamproject_whereru;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -18,6 +26,8 @@ public class DocumentAdapter extends BaseAdapter {
     private ArrayList<Post> pItems = new ArrayList<>();
 
     TextView textTitle_1, textDate_1, textViews_1, textLike_1;
+
+
 
     @Override
     public int getCount() {
@@ -61,6 +71,8 @@ public class DocumentAdapter extends BaseAdapter {
         textLike_1.setText(post.getRecommendation());
 
         /* (위젯에 대한 이벤트리스너를 지정하고 싶다면 여기에 작성하면된다..)  */
+
+
 
         return convertView;
     }

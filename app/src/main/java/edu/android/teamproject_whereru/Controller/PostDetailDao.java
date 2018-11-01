@@ -1,15 +1,31 @@
 package edu.android.teamproject_whereru.Controller;
 
-import android.util.Log;
+
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 import edu.android.teamproject_whereru.Model.Comment;
-import edu.android.teamproject_whereru.PostDetailActivity;
+
 
 public class PostDetailDao {
     private static PostDetailDao instance = null;
     private List<Comment> commentList;
+
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private ChildEventListener childEventListener;
+
+
+
 
     private static final String TAG = "teamproject";
 
@@ -20,11 +36,10 @@ public class PostDetailDao {
     }
 
 
-    public  static PostDetailDao getInstance() {
+    public static PostDetailDao getInstance() {
         if (instance == null) {
             instance = new PostDetailDao();
             //firebase
-
         }
         return instance;
     }

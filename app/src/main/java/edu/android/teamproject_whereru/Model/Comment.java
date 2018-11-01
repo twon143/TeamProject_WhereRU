@@ -3,7 +3,7 @@ package edu.android.teamproject_whereru.Model;
 import java.io.Serializable;
 
 public class Comment implements Serializable {
-
+    private String commentNumber;
     private String commentId;
     private String postId;
     private String guestId;
@@ -16,8 +16,14 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-    public Comment(String commentId, String postId, String guestId, String content) {
+    public Comment(String commentNumber, String commentId, String content) {
+        this.commentNumber = commentNumber;
         this.commentId = commentId;
+        this.content = content;
+    }
+
+    public Comment(String commentId, String postId, String guestId, String content) {
+        this.commentId = commentId;  //
         this.postId = postId;
         this.guestId = guestId;
         this.content = content;

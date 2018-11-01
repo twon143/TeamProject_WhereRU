@@ -30,7 +30,6 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".PostWriteActivity" />
-        <activity android:name=".PostDetailActivity" />
         <activity android:name=".MyDocumentList" />
 
         <meta-data
@@ -53,6 +52,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".PostDetailActivity"></activity>
     </application>
 
 </manifest>
