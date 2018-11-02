@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     private static final String TAG2 = "teamproject_whereru";
     private static final String TBL_NAME = "post";
     private boolean gps;
+    private Post post;
 
+    private static final String TBL_POST = "post";
     private View nav_header_view;
 
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
@@ -87,6 +89,12 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             return false;
         }
     };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 
     @SuppressLint("ResourceType")
     @Override

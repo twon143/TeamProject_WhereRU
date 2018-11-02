@@ -116,6 +116,7 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "Post{" +
+                "key="+ postKey+'\''+
                 "guestId='" + guestId + '\'' +
                 ", today='" + today + '\'' +
                 ", title='" + title + '\'' +

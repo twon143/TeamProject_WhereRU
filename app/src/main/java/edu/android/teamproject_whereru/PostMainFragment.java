@@ -53,6 +53,7 @@ public class PostMainFragment extends Fragment {
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
+                Log.i("aaa", "PostViewHolder 시작");
                 imageView = itemView.findViewById(R.id.imageView);
                 textGuestName = itemView.findViewById(R.id.textGuestName);
                 textViewCount = itemView.findViewById(R.id.textViewCount);
@@ -64,6 +65,7 @@ public class PostMainFragment extends Fragment {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            Log.i("aaa", "onCreateViewHolder 시작");
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View itemView = inflater.inflate(R.layout.postmainitem, viewGroup, false);
             PostViewHolder holder = new PostViewHolder(itemView);
@@ -75,98 +77,38 @@ public class PostMainFragment extends Fragment {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
             final PostViewHolder holder = (PostViewHolder) viewHolder;
 
-            // 저장되어있는 Post 모델클래스의 생성자를 불러와서
-            // image, 작성자이름, 좋아요 카운트
+//            Post p = dao.getPostList().get(position);
+            Post p = postlists.get(position);
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            FirebaseStorage storage = FirebaseStorage.getInstance();
+            String image = p.getImage();
 
-//            PostWriteActivity image = new PostWriteActivity();
-//            final String mainImage = image.getImage();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            DatabaseReference postReference = database.getReference(TBL_POST);
-//            StorageReference storageReference =
-//                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ mainImage);
-////            GlideApp.with(getActivity())
-////                    .load(storage)
-////                    .into(holder.imageView);
-//
-//            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                @Override
-//                public void onSuccess(Uri uri) {
-//
-//                    GlideApp.with(getActivity()).load(uri).into(holder.imageView);
-////                    Glide.with(getActivity()).load(uri).into(holder.imageView);
-////                    holder.imageView.setImageURI(uri);
-//                    Log.i("aaa", "uri : " + uri);
-//                }
-//            });
-
-//            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-//            Glide.with(getActivity()).load("gs://whereru-364b0.appspot.com").into(holder.imageView);
-
-            ChildEventListener child = new ChildEventListener() {
+            StorageReference storageReference =
+                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ image);
+            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    //Log.i("aaa", "childAdded 실행");
-                    post = dataSnapshot.getValue(Post.class);
-                    String id = dataSnapshot.getKey();
-                    post.setPostKey(id);
-                    
-                    String image = post.getImage();
+                public void onSuccess(Uri uri) {
+//                            uriList.add(uri);
+                    GlideApp.with(getActivity()).load(uri).into(holder.imageView);
+//                            holder.imageView.setImageURI(uri);
+                    Log.i("aaa", "uri : " + uri);
+                }
+            });
 
-                    down(image);
-
-                    holder.textGuestName.setText(post.getGuestId());
+                    holder.textGuestName.setText(p.getGuestId());
                 // 날짜처리
-                    holder.textViewCount.setText(String.valueOf(post.getViewCount()));
-                    holder.textLikeCount.setText(String.valueOf(post.getRecommendation()));
-            }
+                    holder.textViewCount.setText(String.valueOf(p.getViewCount()));
+                    holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                }
 
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-
-                private void down (String main){
-//                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-
-                    
-//                    PostWriteActivity image = new PostWriteActivity();
-//                    final String mainImage = image.getImage();
 
 //                    DatabaseReference postReference = database.getReference(TBL_POST);
-                    StorageReference storageReference =
-                            storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ main);
-                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-//                            uriList.add(uri);
-                            GlideApp.with(getActivity()).load(uri).into(holder.imageView);
-//                            holder.imageView.setImageURI(uri);
-                            Log.i("aaa", "uri : " + uri);
-                        }
-                    });
-                }
 
-            };
-            postReference.addChildEventListener(child);
+
+
+
 //            final Post p = postList.getPostList().get(position);
 
             // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
@@ -190,12 +132,12 @@ public class PostMainFragment extends Fragment {
 
         @Override
         public int getItemCount() {
+            Log.i("aaa", "getItemCount 시작");
             // PostDao 클래스 만들고 나서 ArrayList에 저장되어있는 갯수 꺼내고
             // Firebase에 저장되어 있는 객체들 리스트 만큼
-
             // 이거 왜 안되냐고
 //            uriList.size();
-            return 10;
+            return postlists.size();
         }
 
 
@@ -203,18 +145,24 @@ public class PostMainFragment extends Fragment {
 
 
 
+    private FirebaseDatabase database;
+    private DatabaseReference postReference;
+    private ChildEventListener child;
+
+
     private PostAdapter adapter;
-    private PostDao postList;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
 
     private static final String TBL_POST = "post";
 
-    private FirebaseDatabase database;
-    private DatabaseReference postreference;
-    private ChildEventListener childEventListener;
+//    private FirebaseDatabase database;
+//    private DatabaseReference postreference;
+//    private ChildEventListener childEventListener;
     private Post post;
     private List<Uri> uriList;
+    private List<Post> postlists =  new ArrayList<>();
+
 
     public interface PostMainCallback {
         void startDetailActivity(Post post);
@@ -253,8 +201,51 @@ public class PostMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
+        database = FirebaseDatabase.getInstance();
+
+        postReference = database.getReference(TBL_POST);
+
+        child = new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i("aaa", "onChildAdded 시작");
+                //Log.i("aaa", "childAdded 실행");
+                post = dataSnapshot.getValue(Post.class);
+                String id = dataSnapshot.getKey();
+                post.setPostKey(id);
+                String image = post.getImage();
+                /* down(image); */
+
+                postlists.add(post);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        };
+        postReference.addChildEventListener(child);
 
 
         return view;
@@ -265,19 +256,18 @@ public class PostMainFragment extends Fragment {
         super.onStart();
         View view = getView();
 
-        postList = PostDao.getInstance();
-
         recyclerView = view.findViewById(R.id.recyclerView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        database = FirebaseDatabase.getInstance();
-        postreference = database.getReference(); // 저장되어있는 이름 꺼내기
+//        database = FirebaseDatabase.getInstance();
+//        postreference = database.getReference(); // 저장되어있는 이름 꺼내기
 
 
         adapter = new PostAdapter();
         recyclerView.setAdapter(adapter);
 
         recyclerView.setHasFixedSize(true);
+
 
     }
 }

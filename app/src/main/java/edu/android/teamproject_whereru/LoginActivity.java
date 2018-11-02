@@ -146,6 +146,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     } // end onCancelled
                 }; // end childEventListner
                 mReference.addChildEventListener(childEventListener);
+
             }
         });
 
