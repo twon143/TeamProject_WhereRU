@@ -31,6 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.android.teamproject_whereru.Controller.PostDao;
@@ -78,28 +79,28 @@ public class PostMainFragment extends Fragment {
             // image, 작성자이름, 좋아요 카운트
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            FirebaseStorage storage = FirebaseStorage.getInstance();
+//            FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            PostWriteActivity image = new PostWriteActivity();
-            final String mainImage = image.getImage();
+//            PostWriteActivity image = new PostWriteActivity();
+//            final String mainImage = image.getImage();
 
             DatabaseReference postReference = database.getReference(TBL_POST);
-            StorageReference storageReference =
-                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ mainImage);
-//            GlideApp.with(getActivity())
-//                    .load(storage)
-//                    .into(holder.imageView);
-
-            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-
-                    GlideApp.with(getActivity()).load(uri).into(holder.imageView);
-//                    Glide.with(getActivity()).load(uri).into(holder.imageView);
-//                    holder.imageView.setImageURI(uri);
-                    Log.i("aaa", "uri : " + uri);
-                }
-            });
+//            StorageReference storageReference =
+//                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ mainImage);
+////            GlideApp.with(getActivity())
+////                    .load(storage)
+////                    .into(holder.imageView);
+//
+//            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                @Override
+//                public void onSuccess(Uri uri) {
+//
+//                    GlideApp.with(getActivity()).load(uri).into(holder.imageView);
+////                    Glide.with(getActivity()).load(uri).into(holder.imageView);
+////                    holder.imageView.setImageURI(uri);
+//                    Log.i("aaa", "uri : " + uri);
+//                }
+//            });
 
 //            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 //            Glide.with(getActivity()).load("gs://whereru-364b0.appspot.com").into(holder.imageView);
@@ -113,6 +114,7 @@ public class PostMainFragment extends Fragment {
                     post.setPostKey(id);
                     
                     String image = post.getImage();
+
                     down(image);
 
                     holder.textGuestName.setText(post.getGuestId());
@@ -142,19 +144,21 @@ public class PostMainFragment extends Fragment {
                 }
 
                 private void down (String main){
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                    FirebaseDatabase database = FirebaseDatabase.getInstance();
                     FirebaseStorage storage = FirebaseStorage.getInstance();
 
-                    PostWriteActivity image = new PostWriteActivity();
-                    final String mainImage = image.getImage();
+//                    PostWriteActivity image = new PostWriteActivity();
+//                    final String mainImage = image.getImage();
 
-                    DatabaseReference postReference = database.getReference(TBL_POST);
+//                    DatabaseReference postReference = database.getReference(TBL_POST);
                     StorageReference storageReference =
                             storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ main);
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            holder.imageView.setImageURI(uri);
+//                            uriList.add(uri);
+                            GlideApp.with(getActivity()).load(uri).into(holder.imageView);
+//                            holder.imageView.setImageURI(uri);
                             Log.i("aaa", "uri : " + uri);
                         }
                     });
@@ -184,7 +188,6 @@ public class PostMainFragment extends Fragment {
         }
 
 
-        List<Uri> uriList = new PostWriteActivity().getUriList();
 
 
         @Override
@@ -192,7 +195,9 @@ public class PostMainFragment extends Fragment {
             // PostDao 클래스 만들고 나서 ArrayList에 저장되어있는 갯수 꺼내고
             // Firebase에 저장되어 있는 객체들 리스트 만큼
 
-            return 3;
+            // 이거 왜 안되냐고
+//            uriList.size();
+            return 10;
         }
 
 
@@ -211,7 +216,7 @@ public class PostMainFragment extends Fragment {
     private DatabaseReference postreference;
     private ChildEventListener childEventListener;
     private Post post;
-
+    private List<Uri> uriList;
 
     public interface PostMainCallback {
         void startDetailActivity(Post post);

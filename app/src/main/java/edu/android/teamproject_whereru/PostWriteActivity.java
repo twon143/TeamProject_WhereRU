@@ -69,12 +69,10 @@ public class PostWriteActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private Uri imagUri;
     private String image;
-    private List<Uri> uriList;
+
 
     // PostMainFragment에 RecyclerView List 갯수 저장 후 넘김
-    public List<Uri> getUriList(){
-        return uriList;
-    }
+
 
     public String getImage(){
         return image;
@@ -107,7 +105,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
 
-        uriList = new ArrayList<>();
+
 
     }
 
@@ -261,8 +259,6 @@ public class PostWriteActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
-                uriList.add(imagUri);
-                Log.i(TAG, "uriList : " + uriList.toString());
             }
         }).addOnCanceledListener(new OnCanceledListener() {
             @Override
