@@ -147,6 +147,7 @@ public class PostMainFragment extends Fragment {
 //                    FirebaseDatabase database = FirebaseDatabase.getInstance();
                     FirebaseStorage storage = FirebaseStorage.getInstance();
 
+                    
 //                    PostWriteActivity image = new PostWriteActivity();
 //                    final String mainImage = image.getImage();
 
