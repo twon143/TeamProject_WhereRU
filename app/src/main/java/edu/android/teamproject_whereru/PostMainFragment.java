@@ -118,10 +118,10 @@ public class PostMainFragment extends Fragment {
                     down(image);
 
                     holder.textGuestName.setText(post.getGuestId());
-                    // 날짜처리
+                // 날짜처리
                     holder.textViewCount.setText(String.valueOf(post.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(post.getRecommendation()));
-                }
+            }
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -186,9 +186,6 @@ public class PostMainFragment extends Fragment {
             });
 
         }
-
-
-
 
         @Override
         public int getItemCount() {

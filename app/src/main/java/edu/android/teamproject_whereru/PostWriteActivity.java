@@ -248,7 +248,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
 //        writeCount++;
 
-        Post p = new Post(null, guestId, today, title, image, content);
+
 
         StorageReference storageRef =
                 storage.getReferenceFromUrl(
@@ -268,6 +268,7 @@ public class PostWriteActivity extends AppCompatActivity {
         });
 //        writeReference.child(String.valueOf(integer_postNumbers)).setValue(p);
 
+        Post p = new Post(null, guestId, today, title, image, content);
         writeReference.push().setValue(p);
     }
 
