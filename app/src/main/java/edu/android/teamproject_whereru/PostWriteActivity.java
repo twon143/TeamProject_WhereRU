@@ -69,6 +69,12 @@ public class PostWriteActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private Uri imagUri;
     private String image;
+    private List<Uri> uriList;
+
+    // PostMainFragment에 RecyclerView List 갯수 저장 후 넘김
+    public List<Uri> getUriList(){
+        return uriList;
+    }
 
     public String getImage(){
         return image;
@@ -100,6 +106,8 @@ public class PostWriteActivity extends AppCompatActivity {
         writeReference = database.getReference(TBL_NAME);
 
         storage = FirebaseStorage.getInstance();
+
+        uriList = new ArrayList<>();
 
     }
 
@@ -179,7 +187,6 @@ public class PostWriteActivity extends AppCompatActivity {
         imagUri = imgUri;
 
 
-
     }
 
     // 사진 회전값 처리
@@ -230,18 +237,18 @@ public class PostWriteActivity extends AppCompatActivity {
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
         String image = guestId + ".png" + " " + today;
-        for(String postNumber : MainActivity.postNumberList) {
-                this.postNumbers = postNumber;
-        }
-        int integer_postNumbers = Integer.parseInt(postNumbers);
-        integer_postNumbers++;
-        image = guestId + ".png" + " " + today;
+//        for(String postNumber : MainActivity.postNumberList) {
+//            this.postNumbers = postNumber;
+//        }
+//        int integer_postNumbers = Integer.parseInt(postNumbers);
+//        integer_postNumbers++;
+//        image = guestId + ".png" + " " + today;
+//
+//        for(String postNumber : MainActivity.postNumberList) {
+//            Log.i(TAG, "postNumber: " + postNumber);
+//        }
 
-        for(String postNumber : MainActivity.postNumberList) {
-            Log.i(TAG, "postNumber: " + postNumber);
-        }
-
-        writeCount++;
+//        writeCount++;
 
         Post p = new Post(null, guestId, today, title, image, content);
 
@@ -254,6 +261,8 @@ public class PostWriteActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
+                uriList.add(imagUri);
+                Log.i(TAG, "uriList : " + uriList.toString());
             }
         }).addOnCanceledListener(new OnCanceledListener() {
             @Override
@@ -261,7 +270,8 @@ public class PostWriteActivity extends AppCompatActivity {
                 Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
-        writeReference.child(String.valueOf(integer_postNumbers)).setValue(p);
+//        writeReference.child(String.valueOf(integer_postNumbers)).setValue(p);
+
         writeReference.push().setValue(p);
     }
 

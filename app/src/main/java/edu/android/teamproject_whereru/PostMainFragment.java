@@ -31,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
+import java.util.List;
+
 import edu.android.teamproject_whereru.Controller.PostDao;
 import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Post;
@@ -81,7 +83,6 @@ public class PostMainFragment extends Fragment {
             PostWriteActivity image = new PostWriteActivity();
             final String mainImage = image.getImage();
 
-
             DatabaseReference postReference = database.getReference(TBL_POST);
             StorageReference storageReference =
                     storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ mainImage);
@@ -92,7 +93,9 @@ public class PostMainFragment extends Fragment {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    Glide.with(getActivity()).load(uri).into(holder.imageView);
+
+                    GlideApp.with(getActivity()).load(uri).into(holder.imageView);
+//                    Glide.with(getActivity()).load(uri).into(holder.imageView);
 //                    holder.imageView.setImageURI(uri);
                     Log.i("aaa", "uri : " + uri);
                 }
@@ -159,12 +162,7 @@ public class PostMainFragment extends Fragment {
 
             };
             postReference.addChildEventListener(child);
-
-
-
 //            final Post p = postList.getPostList().get(position);
-            
-
 
             // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
 //            int imageTest = p.getImageTest();
@@ -184,6 +182,10 @@ public class PostMainFragment extends Fragment {
             });
 
         }
+
+
+        List<Uri> uriList = new PostWriteActivity().getUriList();
+
 
         @Override
         public int getItemCount() {
