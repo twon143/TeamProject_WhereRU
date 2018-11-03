@@ -259,11 +259,11 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     }
     @Override
-    public void startDetailActivity(Post post) {
+    public void startDetailActivity(Post throwPost) {
 
         Intent intent = new Intent(this, PostDetailActivity.class);
 
-        intent.putExtra(START_DETAIL_ACTIVITY, post);
+        intent.putExtra(START_DETAIL_ACTIVITY, throwPost);
 
         startActivity(intent);
 

@@ -76,8 +76,6 @@ public class PostMainFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
             final PostViewHolder holder = (PostViewHolder) viewHolder;
-
-//            Post p = dao.getPostList().get(position);
             Post p = postlists.get(position);
 
             String image = p.getImage();
@@ -89,9 +87,7 @@ public class PostMainFragment extends Fragment {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-//                            uriList.add(uri);
                     GlideApp.with(getActivity()).load(uri).into(holder.imageView);
-//                            holder.imageView.setImageURI(uri);
                     Log.i("aaa", "uri : " + uri);
                 }
             });
@@ -100,14 +96,6 @@ public class PostMainFragment extends Fragment {
                 // 날짜처리
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
-
-
-
-
-//                    DatabaseReference postReference = database.getReference(TBL_POST);
-
-
-
 
 //            final Post p = postList.getPostList().get(position);
 
@@ -118,13 +106,24 @@ public class PostMainFragment extends Fragment {
 
 //            final Post post = new Post(imageTest, guestId, recommendation);
 
+            String guestId = p.getGuestId();
+            String day = p.getToday();
+            String title = p.getTitle();
+            String selectImage = p.getImage();
+            String content = p.getContent();
+            int viewCount = p.getViewCount();
+            int recommendation = p.getRecommendation();
+
+            final Post throwPost = new Post(guestId, day, title, selectImage, content, viewCount, recommendation);
+
+
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 여기서는 Detail 액티비티로 넘겨줘야함
                     Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
                     // 콜백 메소드를 이용하여 모델클래스 저장
-                    callback.startDetailActivity(post);
+                    callback.startDetailActivity(throwPost);
                 }
             });
 
@@ -151,6 +150,7 @@ public class PostMainFragment extends Fragment {
 
 
     private PostAdapter adapter;
+    private PostDao postList;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
 
@@ -165,7 +165,7 @@ public class PostMainFragment extends Fragment {
 
 
     public interface PostMainCallback {
-        void startDetailActivity(Post post);
+        void startDetailActivity(Post throwPost);
     }
 
 

@@ -178,13 +178,20 @@ public class PostDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        final Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
+        final Post throwPost = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
 
 
 //        textWritrer.setText(post.getGuestId());
 //        imageView.setImageResource(post.getImageTest());
-        textContent.setText(String.valueOf(post.getContent()));
+//        String guestId, String today, String title, String image, String content, int viewCount, int recommendation;
+
+        textWriter.setText(throwPost.getGuestId());
+        textTitle.setText(throwPost.getTitle());
+        // 날짜 출력
+        textViews.setText(String.valueOf(throwPost.getViewCount()));
         imageHeart.setImageResource(R.drawable.h1);
+        imageView.setImageResource(Integer.parseInt(throwPost.getImage()));
+        textContent.setText(throwPost.getContent());
 
     }
 

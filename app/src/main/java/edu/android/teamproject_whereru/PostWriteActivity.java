@@ -61,24 +61,10 @@ public class PostWriteActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference writeReference;
-    private ChildEventListener childEventListener;
-    private String PostNumber;
     private FirebaseStorage storage;
-    private int writeCount;
     private String today;
     private Bitmap bitmap;
     private Uri imagUri;
-    private String image;
-
-
-    // PostMainFragment에 RecyclerView List 갯수 저장 후 넘김
-
-
-    public String getImage(){
-        return image;
-    }
-
-    private String postNumbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +90,6 @@ public class PostWriteActivity extends AppCompatActivity {
         writeReference = database.getReference(TBL_NAME);
 
         storage = FirebaseStorage.getInstance();
-
-
-
     }
 
 
@@ -235,25 +218,11 @@ public class PostWriteActivity extends AppCompatActivity {
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
         String image = guestId + ".png" + " " + today;
-//        for(String postNumber : MainActivity.postNumberList) {
-//            this.postNumbers = postNumber;
-//        }
-//        int integer_postNumbers = Integer.parseInt(postNumbers);
-//        integer_postNumbers++;
-//        image = guestId + ".png" + " " + today;
-//
-//        for(String postNumber : MainActivity.postNumberList) {
-//            Log.i(TAG, "postNumber: " + postNumber);
-//        }
-
-//        writeCount++;
-
-
 
         StorageReference storageRef =
                 storage.getReferenceFromUrl(
                         "gs://whereru-364b0.appspot.com")
-                        .child("images/" + guestId + ".png" + " " + today);
+                        .child("images/" + image);
 
         storageRef.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -266,7 +235,6 @@ public class PostWriteActivity extends AppCompatActivity {
                 Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
             }
         });
-//        writeReference.child(String.valueOf(integer_postNumbers)).setValue(p);
 
         Post p = new Post(null, guestId, today, title, image, content);
         writeReference.push().setValue(p);
