@@ -209,6 +209,7 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     public void changeImage(View view) {
+
         Intent intent = new Intent(this, PostMainFragment.class);
         i = 1 - i;
         Post post = new Post();

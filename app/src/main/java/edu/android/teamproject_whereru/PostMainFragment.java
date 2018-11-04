@@ -3,8 +3,12 @@ package edu.android.teamproject_whereru;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -87,10 +91,11 @@ public class PostMainFragment extends Fragment {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
+                    myUri = uri;
                     GlideApp.with(getActivity()).load(uri).into(holder.imageView);
-                    Log.i("aaa", "uri : " + uri);
                 }
             });
+
 
                     holder.textGuestName.setText(p.getGuestId());
                 // 날짜처리
@@ -116,7 +121,6 @@ public class PostMainFragment extends Fragment {
 
             final Post throwPost = new Post(guestId, day, title, selectImage, content, viewCount, recommendation);
 
-
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,7 +135,6 @@ public class PostMainFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            Log.i("aaa", "getItemCount 시작");
             // PostDao 클래스 만들고 나서 ArrayList에 저장되어있는 갯수 꺼내고
             // Firebase에 저장되어 있는 객체들 리스트 만큼
             // 이거 왜 안되냐고
@@ -148,19 +151,16 @@ public class PostMainFragment extends Fragment {
     private DatabaseReference postReference;
     private ChildEventListener child;
 
-
     private PostAdapter adapter;
-    private PostDao postList;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
-
+    public static Uri myUri;
     private static final String TBL_POST = "post";
 
 //    private FirebaseDatabase database;
 //    private DatabaseReference postreference;
 //    private ChildEventListener childEventListener;
     private Post post;
-    private List<Uri> uriList;
     private List<Post> postlists =  new ArrayList<>();
 
 
@@ -210,12 +210,10 @@ public class PostMainFragment extends Fragment {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i("aaa", "onChildAdded 시작");
                 //Log.i("aaa", "childAdded 실행");
                 post = dataSnapshot.getValue(Post.class);
                 String id = dataSnapshot.getKey();
                 post.setPostKey(id);
-                String image = post.getImage();
                 /* down(image); */
 
                 postlists.add(post);
@@ -270,4 +268,5 @@ public class PostMainFragment extends Fragment {
 
 
     }
+
 }
