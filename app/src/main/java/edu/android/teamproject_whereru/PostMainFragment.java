@@ -57,7 +57,6 @@ public class PostMainFragment extends Fragment {
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
-                Log.i("aaa", "PostViewHolder 시작");
                 imageView = itemView.findViewById(R.id.imageView);
                 textGuestName = itemView.findViewById(R.id.textGuestName);
                 textViewCount = itemView.findViewById(R.id.textViewCount);
@@ -95,8 +94,6 @@ public class PostMainFragment extends Fragment {
                     GlideApp.with(getActivity()).load(uri).into(holder.imageView);
                 }
             });
-
-
                     holder.textGuestName.setText(p.getGuestId());
                 // 날짜처리
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));

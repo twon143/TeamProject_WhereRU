@@ -96,7 +96,7 @@ public class PostDetailActivity extends AppCompatActivity {
             TextView text_comment = convertView.findViewById(R.id.text_comment);
 
             Comment comment = getItem(position);
-            Log.i("test", "getItem : " + getItem(position));
+            Log.i("test", "getItem :  " + getItem(position));
             Log.i("test", "comment : " + comment.toString());
             Log.i("test", "CommentID : " + comment.getCommentId());
 
