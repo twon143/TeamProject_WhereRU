@@ -2,6 +2,8 @@ package edu.android.teamproject_whereru;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -130,51 +132,51 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
 
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Comment comment = dataSnapshot.getValue(Comment.class);
-                String id = dataSnapshot.getKey();
-                comment.setCommentId(id);
-
-                adapter.add(comment);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String changedId = dataSnapshot.getKey();
-                Comment changedC = dataSnapshot.getValue(Comment.class);
-
-                Comment orginal = findMessageById(changedId);
-                orginal.setCommentId(changedC.getCommentId());
-                orginal.setContent(changedC.getContent());
-                adapter.notifyDataSetChanged();
-
-                // 댓글 저장한것을 다시 불러옴
-                databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL);
-            }
-
-
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                String removedId = dataSnapshot.getKey();
-                Comment comment = findMessageById(removedId);
-                adapter.remove(comment);
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        databaseReference.addChildEventListener(childEventListener);
+//        childEventListener = new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                Comment comment = dataSnapshot.getValue(Comment.class);
+//                String id = dataSnapshot.getKey();
+//                comment.setCommentId(id);
+//
+//                adapter.add(comment);
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                String changedId = dataSnapshot.getKey();
+//                Comment changedC = dataSnapshot.getValue(Comment.class);
+//
+//                Comment orginal = findMessageById(changedId);
+//                orginal.setCommentId(changedC.getCommentId());
+//                orginal.setContent(changedC.getContent());
+//                adapter.notifyDataSetChanged();
+//
+//                // 댓글 저장한것을 다시 불러옴
+//                databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL);
+//            }
+//
+//
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//                String removedId = dataSnapshot.getKey();
+//                Comment comment = findMessageById(removedId);
+//                adapter.remove(comment);
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        };
+//        databaseReference.addChildEventListener(childEventListener);
 
         Intent intent = getIntent();
 
@@ -190,7 +192,9 @@ public class PostDetailActivity extends AppCompatActivity {
         // 날짜 출력
         textViews.setText(String.valueOf(throwPost.getViewCount()));
         imageHeart.setImageResource(R.drawable.h1);
-        imageView.setImageResource(Integer.parseInt(throwPost.getImage()));
+
+        Bitmap bitmap = BitmapFactory.decodeFile(throwPost.getImage());
+        imageView.setImageBitmap(bitmap);
         textContent.setText(throwPost.getContent());
 
     }
