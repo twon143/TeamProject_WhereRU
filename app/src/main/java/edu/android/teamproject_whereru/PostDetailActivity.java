@@ -144,10 +144,12 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
 
         adapter = new CommentListAdapter(this, R.layout.comment_item, messages);
+
         listView_comment.setAdapter(adapter);
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                 comment = dataSnapshot.getValue(Comment.class);
                 messages.add(comment);
                 adapter.notifyDataSetChanged();

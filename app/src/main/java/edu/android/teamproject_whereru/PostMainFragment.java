@@ -99,6 +99,7 @@ public class PostMainFragment extends Fragment {
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
             final String postKey = p.getPostKey();
+            
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
