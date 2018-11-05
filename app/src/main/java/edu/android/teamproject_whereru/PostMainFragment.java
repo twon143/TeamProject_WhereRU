@@ -36,7 +36,9 @@ import com.google.firebase.storage.StorageReference;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.android.teamproject_whereru.Controller.PostDao;
 import edu.android.teamproject_whereru.Model.GlideApp;
@@ -96,7 +98,7 @@ public class PostMainFragment extends Fragment {
                 // 날짜처리
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
-            String postKey = p.getPostKey();
+            final String postKey = p.getPostKey();
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
@@ -119,13 +121,23 @@ public class PostMainFragment extends Fragment {
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-//                    viewCount++;
-
                     // 여기서는 Detail 액티비티로 넘겨줘야함
                     Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
+                    Map<String,Object> taskMap = new HashMap<>();
+                    int temp = viewCount +1;
+                    String gId = throwPost.getGuestId();
+                    String d = throwPost.getToday();
+                    String t = throwPost.getTitle();
+                    String sImage = throwPost.getImage();
+                    String con = throwPost.getContent();
+                    int re = throwPost.getRecommendation();
+                    Post changePost = new Post(postKey,gId,d,t,sImage,con,temp,re);
+                    taskMap.put(postKey,changePost);
+                    postReference.updateChildren(taskMap);
                     // 콜백 메소드를 이용하여 모델클래스 저장
-                    callback.startDetailActivity(throwPost);
+                    callback.startDetailActivity(changePost);
+                    Log.i("ddd","DetailActivity ()");
+
                 }
             });
 
@@ -154,7 +166,7 @@ public class PostMainFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     public static Uri myUri;
     private static final String TBL_POST = "post";
-
+    private TextView textview;
 //    private FirebaseDatabase database;
 //    private DatabaseReference postreference;
 //    private ChildEventListener childEventListener;
@@ -210,7 +222,7 @@ public class PostMainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
         database = FirebaseDatabase.getInstance();
-
+        textview = view.findViewById(R.id.textViewCount);
         postReference = database.getReference(TBL_POST);
 
         child = new ChildEventListener() {

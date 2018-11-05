@@ -87,6 +87,9 @@ public class PostDetailActivity extends AppCompatActivity {
             TextView text_comment = convertView.findViewById(R.id.text_comment);
 
             Comment comment = getItem(position);
+            Log.i("test", "getItem :  " + getItem(position));
+            Log.i("test", "comment : " + comment.toString());
+            Log.i("test", "CommentID : " + comment.getCommentId());
 
             text_id.setText(comment.getCommentId());
             text_comment.setText(comment.getContent());
@@ -127,9 +130,10 @@ public class PostDetailActivity extends AppCompatActivity {
                 Toast.makeText(PostDetailActivity.this, "이미지 다운 성공", Toast.LENGTH_SHORT).show();
             }
         });
-        int i = throwPost.getViewCount();
-        i++;
-        throwPost.setViewCount(i);
+
+
+
+
         textWriter.setText(throwPost.getGuestId());
         textTitle.setText(throwPost.getTitle());
         textDate.setText(throwPost.getToday());
