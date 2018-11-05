@@ -1,5 +1,7 @@
 package edu.android.teamproject_whereru.Model;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 public class Post implements Serializable {
@@ -17,6 +19,7 @@ public class Post implements Serializable {
     private String guestId;
     // 날짜
     private String today;
+
     // 제목
     private String title;
     // 사진
@@ -56,6 +59,7 @@ public class Post implements Serializable {
         this.viewCount = viewCount;
         this.recommendation = recommendation;
     }
+
 
     public String getGuestId() {
         return guestId;

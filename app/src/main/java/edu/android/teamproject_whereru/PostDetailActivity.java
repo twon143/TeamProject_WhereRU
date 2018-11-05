@@ -101,7 +101,7 @@ public class PostDetailActivity extends AppCompatActivity {
             TextView text_comment = convertView.findViewById(R.id.text_comment);
 
             Comment comment = getItem(position);
-            Log.i("test", "getItem : " + getItem(position));
+            Log.i("test", "getItem :  " + getItem(position));
             Log.i("test", "comment : " + comment.toString());
             Log.i("test", "CommentID : " + comment.getCommentId());
 
@@ -227,6 +227,7 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     public void changeImage(View view) {
+
         Intent intent = new Intent(this, PostMainFragment.class);
         i = 1 - i;
         Post post = new Post();
