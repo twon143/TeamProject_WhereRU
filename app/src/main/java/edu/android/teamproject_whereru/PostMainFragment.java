@@ -79,6 +79,7 @@ public class PostMainFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
+            Log.i("ddd", "onBindViewHolder()");
             final PostViewHolder holder = (PostViewHolder) viewHolder;
             Post p = postlists.get(position);
 
@@ -98,8 +99,9 @@ public class PostMainFragment extends Fragment {
                 // 날짜처리
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
+
             final String postKey = p.getPostKey();
-            
+
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
@@ -179,6 +181,7 @@ public class PostMainFragment extends Fragment {
     String selectImage;
     String content;
     Post throwPost;
+
     int viewCount;
     int recommendation;
     private List<Post> postlists =  new ArrayList<>();
@@ -230,10 +233,11 @@ public class PostMainFragment extends Fragment {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //Log.i("aaa", "childAdded 실행");
+                Log.i("ddd", "childAdded 실행");
                 post = dataSnapshot.getValue(Post.class);
                 String id = dataSnapshot.getKey();
                 post.setPostKey(id);
+                Log.i("ddd",post.toString());
                 /* down(image); */
 
                 postlists.add(post);
@@ -244,10 +248,9 @@ public class PostMainFragment extends Fragment {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.i("ddd", "뷰카운트 바꾸기 실행");
-                String changeId = dataSnapshot.getKey();
-                Post changViewCount = dataSnapshot.getValue(Post.class);
-                Post original = findViewCountById(changeId);
-                original.setViewCount(changViewCount.getViewCount());
+                String key = dataSnapshot.getKey();
+                int position = findViewCountById(key);
+                postlists.get(position).setViewCount(postlists.get(position).getViewCount()+1);
                 adapter.notifyDataSetChanged();
 
             }
@@ -275,13 +278,14 @@ public class PostMainFragment extends Fragment {
         return view;
     }
 
-    private Post findViewCountById(String Id) {
+    private int findViewCountById(String Id) {
         for (Post p : postlists) {
             if (Id.equals(p.getPostKey())) {
-                return p;
+                int  index = postlists.indexOf(p);
+                return index;
             }
         }
-        return null;
+        return -1;
     }
 
     @Override
@@ -302,8 +306,6 @@ public class PostMainFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         recyclerView.setHasFixedSize(true);
-
-
     }
 
 
