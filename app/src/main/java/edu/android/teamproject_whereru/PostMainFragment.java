@@ -61,7 +61,6 @@ public class PostMainFragment extends Fragment {
                 textGuestName = itemView.findViewById(R.id.textGuestName);
                 textViewCount = itemView.findViewById(R.id.textViewCount);
                 textLikeCount = itemView.findViewById(R.id.textLikeCount);
-
             }
         }
 
@@ -90,7 +89,6 @@ public class PostMainFragment extends Fragment {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    myUri = uri;
                     GlideApp.with(getActivity()).load(uri).into(holder.imageView);
                 }
             });
@@ -99,30 +97,32 @@ public class PostMainFragment extends Fragment {
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
-//            final Post p = postList.getPostList().get(position);
-
-
-
-            // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
-//            int imageTest = p.getImageTest();
-//            String guestId = p.getGuestId();
-//            int recommendation = p.getRecommendation();
-
-//            final Post post = new Post(imageTest, guestId, recommendation);
 
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
             String selectImage = p.getImage();
             String content = p.getContent();
-            int viewCount = p.getViewCount();
-            int recommendation = p.getRecommendation();
+            viewCount = p.getViewCount();
+            recommendation = p.getRecommendation();
+
+//            guestId = p.getGuestId();
+//            day = p.getToday();
+//            title = p.getTitle();
+//            selectImage = p.getImage();
+//            content = p.getContent();
+//            viewCount = p.getViewCount();
+//            recommendation = p.getRecommendation();
 
             final Post throwPost = new Post(guestId, day, title, selectImage, content, viewCount, recommendation);
+
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+//                    viewCount++;
+
                     // 여기서는 Detail 액티비티로 넘겨줘야함
                     Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
                     // 콜백 메소드를 이용하여 모델클래스 저장
@@ -160,6 +160,16 @@ public class PostMainFragment extends Fragment {
 //    private DatabaseReference postreference;
 //    private ChildEventListener childEventListener;
     private Post post;
+
+    String guestId;
+    String day;
+    String title;
+    String selectImage;
+    String content;
+    Post throwPost;
+
+    int viewCount;
+    int recommendation;
     private List<Post> postlists =  new ArrayList<>();
 
 
@@ -222,6 +232,13 @@ public class PostMainFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.i("ddd", "뷰카운트 바꾸기 실행");
+                String changeId = dataSnapshot.getKey();
+                Post changViewCount = dataSnapshot.getValue(Post.class);
+
+                Post original = findViewCountById(changeId);
+                original.setViewCount(changViewCount.getViewCount());
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -246,6 +263,15 @@ public class PostMainFragment extends Fragment {
 
 
         return view;
+    }
+
+    private Post findViewCountById(String Id) {
+        for (Post p : postlists) {
+            if (Id.equals(p.getPostKey())) {
+                return p;
+            }
+        }
+        return null;
     }
 
     @Override

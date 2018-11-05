@@ -187,11 +187,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
         final Post throwPost = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
 
-
-//        textWritrer.setText(post.getGuestId());
-//        imageView.setImageResource(post.getImageTest());
-//        String guestId, String today, String title, String image, String content, int viewCount, int recommendation;
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         String selectImage = throwPost.getImage();
@@ -208,9 +203,15 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+        int i = throwPost.getViewCount();
+        i++;
+
+        throwPost.setViewCount(i);
+
+
         textWriter.setText(throwPost.getGuestId());
         textTitle.setText(throwPost.getTitle());
-        // 날짜 출력
+        textDate.setText(throwPost.getToday());
         textViews.setText(String.valueOf(throwPost.getViewCount()));
         imageHeart.setImageResource(R.drawable.h1);
         textContent.setText(throwPost.getContent());

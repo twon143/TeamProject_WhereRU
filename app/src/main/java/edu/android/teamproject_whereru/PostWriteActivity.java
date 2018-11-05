@@ -85,6 +85,7 @@ public class PostWriteActivity extends AppCompatActivity {
         today = format.format(date);
 
         writeGuestName.setText(MainActivity.guestList.getGuestId());
+        writeToday.setText(today);
 
         database = FirebaseDatabase.getInstance();
         writeReference = database.getReference(TBL_NAME);
