@@ -107,8 +107,8 @@ public class PostMainFragment extends Fragment {
             String title = p.getTitle();
             String selectImage = p.getImage();
             String content = p.getContent();
-            viewCount = p.getViewCount();
-            recommendation = p.getRecommendation();
+            final int viewCount = p.getViewCount();
+            int recommendation = p.getRecommendation();
 
 //            guestId = p.getGuestId();
 //            day = p.getToday();
@@ -148,10 +148,6 @@ public class PostMainFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            // PostDao 클래스 만들고 나서 ArrayList에 저장되어있는 갯수 꺼내고
-            // Firebase에 저장되어 있는 객체들 리스트 만큼
-            // 이거 왜 안되냐고
-//            uriList.size();
             return postlists.size();
         }
 
@@ -175,15 +171,6 @@ public class PostMainFragment extends Fragment {
 //    private ChildEventListener childEventListener;
     private Post post;
 
-    String guestId;
-    String day;
-    String title;
-    String selectImage;
-    String content;
-    Post throwPost;
-
-    int viewCount;
-    int recommendation;
     private List<Post> postlists =  new ArrayList<>();
 
 
@@ -226,7 +213,7 @@ public class PostMainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
         database = FirebaseDatabase.getInstance();
-        textview = view.findViewById(R.id.textViewCount);
+
         postReference = database.getReference(TBL_POST);
 
         child = new ChildEventListener() {
@@ -306,6 +293,8 @@ public class PostMainFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         recyclerView.setHasFixedSize(true);
+
+
     }
 
 

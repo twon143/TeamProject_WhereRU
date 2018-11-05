@@ -29,8 +29,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.android.teamproject_whereru.Model.Comment;
 import edu.android.teamproject_whereru.Model.GlideApp;
@@ -39,6 +42,8 @@ import edu.android.teamproject_whereru.Model.Post;
 public class PostDetailActivity extends AppCompatActivity {
 
     public static final String KEY2 = "image_key";
+
+    private static final String TAG = "tag";
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -59,6 +64,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private static final String TBL_POST_DETAIL = "post_detail";
     private static final String TBL_POST = "post";
+
     // 좋아요 카운트
     private int recommendation;
 
@@ -177,9 +183,8 @@ public class PostDetailActivity extends AppCompatActivity {
         };
         databaseReference.addChildEventListener(childEventListener);
 
-
-
     }
+
 
 
     public void changeImage(View view) {
