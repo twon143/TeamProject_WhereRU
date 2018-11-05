@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,16 +20,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.android.teamproject_whereru.Model.Comment;
+import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
@@ -187,14 +192,27 @@ public class PostDetailActivity extends AppCompatActivity {
 //        imageView.setImageResource(post.getImageTest());
 //        String guestId, String today, String title, String image, String content, int viewCount, int recommendation;
 
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        String selectImage = throwPost.getImage();
+
+        StorageReference storageReference =
+                storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
+                        .child("images/" + selectImage);
+
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                GlideApp.with(PostDetailActivity.this).load(uri).into(imageView);
+                Toast.makeText(PostDetailActivity.this, "이미지 다운 성공", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         textWriter.setText(throwPost.getGuestId());
         textTitle.setText(throwPost.getTitle());
         // 날짜 출력
         textViews.setText(String.valueOf(throwPost.getViewCount()));
         imageHeart.setImageResource(R.drawable.h1);
-
-        Bitmap bitmap = BitmapFactory.decodeFile(throwPost.getImage());
-        imageView.setImageBitmap(bitmap);
         textContent.setText(throwPost.getContent());
 
     }
