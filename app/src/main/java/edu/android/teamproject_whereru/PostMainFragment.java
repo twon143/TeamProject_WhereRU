@@ -254,8 +254,10 @@ public class PostMainFragment extends Fragment {
         View view = getView();
 
         recyclerView = view.findViewById(R.id.recyclerView);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 //        database = FirebaseDatabase.getInstance();
 //        postreference = database.getReference(); // 저장되어있는 이름 꺼내기
 
