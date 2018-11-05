@@ -96,7 +96,6 @@ public class PostMainFragment extends Fragment {
                 }
             });
                     holder.textGuestName.setText(p.getGuestId());
-                // 날짜처리
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
@@ -109,14 +108,6 @@ public class PostMainFragment extends Fragment {
             String content = p.getContent();
             final int viewCount = p.getViewCount();
             int recommendation = p.getRecommendation();
-
-//            guestId = p.getGuestId();
-//            day = p.getToday();
-//            title = p.getTitle();
-//            selectImage = p.getImage();
-//            content = p.getContent();
-//            viewCount = p.getViewCount();
-//            recommendation = p.getRecommendation();
 
             final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount, recommendation);
 
@@ -163,12 +154,8 @@ public class PostMainFragment extends Fragment {
     private PostAdapter adapter;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
-    public static Uri myUri;
     private static final String TBL_POST = "post";
-    private TextView textview;
-//    private FirebaseDatabase database;
-//    private DatabaseReference postreference;
-//    private ChildEventListener childEventListener;
+
     private Post post;
 
     private List<Post> postlists =  new ArrayList<>();
@@ -285,9 +272,6 @@ public class PostMainFragment extends Fragment {
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-//        database = FirebaseDatabase.getInstance();
-//        postreference = database.getReference(); // 저장되어있는 이름 꺼내기
-
 
         adapter = new PostAdapter();
         recyclerView.setAdapter(adapter);

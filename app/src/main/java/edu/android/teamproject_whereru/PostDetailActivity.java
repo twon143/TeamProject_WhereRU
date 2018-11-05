@@ -45,7 +45,6 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "tag";
 
-    private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
     private Comment comment;
@@ -137,9 +136,6 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
-
         textWriter.setText(throwPost.getGuestId());
         textTitle.setText(throwPost.getTitle());
         textDate.setText(throwPost.getToday());
@@ -184,8 +180,6 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseReference.addChildEventListener(childEventListener);
 
     }
-
-
 
     public void changeImage(View view) {
 

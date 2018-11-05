@@ -269,41 +269,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     }
 
-
-
 //     글쓰기 FlotingButton
     public void startWriteActivity(View view) {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference(TBL_NAME);
-        ChildEventListener child;
-        child = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                postNumberList.add(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        };
-        reference.addChildEventListener(child);
-
-
 
         Intent intent = new Intent(this, PostWriteActivity.class);
         startActivity(intent);
