@@ -2,13 +2,8 @@ package edu.android.teamproject_whereru;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,12 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,9 +29,10 @@ import com.google.firebase.storage.StorageReference;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import edu.android.teamproject_whereru.Controller.PostDao;
 import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Post;
 
@@ -97,7 +91,7 @@ public class PostMainFragment extends Fragment {
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
 
-
+            final String postKey = p.getPostKey();
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
@@ -114,19 +108,29 @@ public class PostMainFragment extends Fragment {
 //            viewCount = p.getViewCount();
 //            recommendation = p.getRecommendation();
 
-            final Post throwPost = new Post(guestId, day, title, selectImage, content, viewCount, recommendation);
+            final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount, recommendation);
 
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-//                    viewCount++;
-
                     // 여기서는 Detail 액티비티로 넘겨줘야함
                     Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
+                    Map<String,Object> taskMap = new HashMap<>();
+                    int temp = viewCount +1;
+                    String gId = throwPost.getGuestId();
+                    String d = throwPost.getToday();
+                    String t = throwPost.getTitle();
+                    String sImage = throwPost.getImage();
+                    String con = throwPost.getContent();
+                    int re = throwPost.getRecommendation();
+                    Post changePost = new Post(postKey,gId,d,t,sImage,con,temp,re);
+                    taskMap.put(postKey,changePost);
+                    postReference.updateChildren(taskMap);
                     // 콜백 메소드를 이용하여 모델클래스 저장
-                    callback.startDetailActivity(throwPost);
+                    callback.startDetailActivity(changePost);
+                    Log.i("ddd","DetailActivity ()");
+
                 }
             });
 
@@ -155,7 +159,7 @@ public class PostMainFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
     public static Uri myUri;
     private static final String TBL_POST = "post";
-
+    private TextView textview;
 //    private FirebaseDatabase database;
 //    private DatabaseReference postreference;
 //    private ChildEventListener childEventListener;
@@ -212,17 +216,18 @@ public class PostMainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
         database = FirebaseDatabase.getInstance();
-
+        textview = view.findViewById(R.id.textViewCount);
         postReference = database.getReference(TBL_POST);
 
         child = new ChildEventListener() {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //Log.i("aaa", "childAdded 실행");
+                Log.i("ddd", "childAdded 실행");
                 post = dataSnapshot.getValue(Post.class);
                 String id = dataSnapshot.getKey();
                 post.setPostKey(id);
+                Log.i("ddd",post.toString());
                 /* down(image); */
 
                 postlists.add(post);
@@ -233,11 +238,6 @@ public class PostMainFragment extends Fragment {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Log.i("ddd", "뷰카운트 바꾸기 실행");
-                String changeId = dataSnapshot.getKey();
-                Post changViewCount = dataSnapshot.getValue(Post.class);
-
-                Post original = findViewCountById(changeId);
-                original.setViewCount(changViewCount.getViewCount());
                 adapter.notifyDataSetChanged();
 
             }
