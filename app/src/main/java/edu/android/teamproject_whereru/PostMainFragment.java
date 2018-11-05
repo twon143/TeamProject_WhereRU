@@ -101,6 +101,8 @@ public class PostMainFragment extends Fragment {
 
 //            final Post p = postList.getPostList().get(position);
 
+
+
             // PostDetailActivity로 보내기 위해 post 모델클래스에 저장
 //            int imageTest = p.getImageTest();
 //            String guestId = p.getGuestId();
