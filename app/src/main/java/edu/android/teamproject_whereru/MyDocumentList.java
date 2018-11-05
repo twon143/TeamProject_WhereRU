@@ -72,7 +72,7 @@ public class MyDocumentList extends AppCompatActivity {
                 String title = dataSnapshot.getKey();
                 post.setTitle(title);
 
-                
+
             }
 
             @Override

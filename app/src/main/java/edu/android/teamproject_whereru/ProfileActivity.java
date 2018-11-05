@@ -18,8 +18,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import edu.android.teamproject_whereru.Model.Puppy;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -28,12 +42,30 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imagePuppy;
     private Bitmap bitmap;
     private Uri imagUri;
+    private EditText editPuppyName, editPuppyAge, editPuppyKind;
+    private CheckBox checkBoxWhetherNeutral;
+    private RadioButton radioBtnMan, radioBtnWoman;
+    private String puppyGender;
+    private FirebaseStorage storage;
+    private FirebaseDatabase database;
+    private DatabaseReference profileReference;
+    private static final String TBL_PROFILE = "profile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         imagePuppy = findViewById(R.id.imagePuppy);
+        editPuppyName = findViewById(R.id.editPuppyName);
+        editPuppyAge = findViewById(R.id.editPuppyAge);
+        editPuppyKind = findViewById(R.id.editPuppyKind);
+        checkBoxWhetherNeutral = findViewById(R.id.checkBoxWhetherNeutral);
+        radioBtnMan = findViewById(R.id.radioBtnMan);
+        radioBtnWoman = findViewById(R.id.radioBtnWoman);
+        storage = FirebaseStorage.getInstance();
+        database = FirebaseDatabase.getInstance();
+        profileReference = database.getReference(TBL_PROFILE);
+
     }
 
     public void changeProfile(View view) {
@@ -132,5 +164,38 @@ public class ProfileActivity extends AppCompatActivity {
             index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
         return cursor.getString(index);
+    }
+
+    public void savePuppyProfile(View view) {
+        String puppyName = editPuppyName.getText().toString();
+        String puppyAge = editPuppyAge.getText().toString();
+        String puppyKind = editPuppyKind.getText().toString();
+        boolean puppyWhetherNeutral = checkBoxWhetherNeutral.isChecked();
+        if(radioBtnMan.isChecked()) {
+            puppyGender = "남자";
+        }
+        else if(radioBtnWoman.isChecked()) {
+            puppyGender = "여자";
+        }
+        String KEY = MainActivity.guestList.getGuestId();
+        String puppyProfileImage = KEY + ".png";
+        StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
+                .child("profiles" + puppyProfileImage);
+        storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+            }
+        }).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                Toast.makeText(ProfileActivity.this, "사진 저장실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
+        profileReference.child(KEY).push().setValue(puppy);
+
+
     }
 }

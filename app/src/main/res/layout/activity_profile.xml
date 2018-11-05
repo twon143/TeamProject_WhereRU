@@ -204,6 +204,7 @@
         android:background="#696969"
         android:gravity="center"
         android:text="저장"
+        android:onClick="savePuppyProfile"
         android:textColor="@color/com_facebook_button_background_color_focused"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -232,6 +233,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"

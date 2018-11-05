@@ -7,10 +7,9 @@ public class Puppy {
     private String puppyAgeOfMonth;
     private String puppyKind;
     private String puppyProfileImage;
-    private String puppyWhetherNeutral;
+    private boolean puppyWhetherNeutral;
 
-    public Puppy(String guestId, String puppyName, String puppyGender, String puppyAgeOfMonth, String puppyKind, String puppyProfileImage, String puppyWhetherNeutral) {
-        this.guestId = guestId;
+    public Puppy(String puppyName, String puppyGender, String puppyAgeOfMonth, String puppyKind, String puppyProfileImage, boolean puppyWhetherNeutral) {
         this.puppyName = puppyName;
         this.puppyGender = puppyGender;
         this.puppyAgeOfMonth = puppyAgeOfMonth;
@@ -69,11 +68,11 @@ public class Puppy {
         this.puppyProfileImage = puppyProfileImage;
     }
 
-    public String getPuppyWhetherNeutral() {
+    public boolean getPuppyWhetherNeutral() {
         return puppyWhetherNeutral;
     }
 
-    public void setPuppyWhetherNeutral(String puppyWhetherNeutral) {
+    public void setPuppyWhetherNeutral(boolean puppyWhetherNeutral) {
         this.puppyWhetherNeutral = puppyWhetherNeutral;
     }
 

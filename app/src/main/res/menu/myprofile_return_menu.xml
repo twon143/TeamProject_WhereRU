@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
     <item
-        android:id="@+id/myProfile"
-        android:title="프로필"
-        android:icon="@drawable/ic_if_pets_3775229"
-        app:showAsAction="ifRoom|withText" />
+        android:id="@+id/returnToMain"
+        android:icon="@android:drawable/ic_menu_revert"
+        android:title="돌아가기"
+        app:showAsAction="ifRoom|withText"/>
 
 </menu>

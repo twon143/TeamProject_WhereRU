@@ -50,7 +50,8 @@ public class Post implements Serializable {
         this.content = content;
     }
     // PostMainFragment에 쓸 생성자
-    public Post(String guestId, String today, String title, String image, String content, int viewCount, int recommendation) {
+    public Post(String postKey, String guestId, String today, String title, String image, String content, int viewCount, int recommendation) {
+        this.postKey = postKey;
         this.guestId = guestId;
         this.today = today;
         this.title = title;

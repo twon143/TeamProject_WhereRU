@@ -43,12 +43,12 @@ public class PostDetailActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
-
+    private Comment comment;
     private TextView textTitle, textWriter, textDate, textViews, textContent,
                      text_id, text_comment, textWritrer;
 
     private EditText editText;
-
+    private Post detailPost;
     private ImageView imageHeart, imageView;
 
     private ListView listView_comment;
@@ -58,7 +58,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private CommentListAdapter adapter;
 
     private static final String TBL_POST_DETAIL = "post_detail";
-
+    private static final String TBL_POST = "post";
     // 좋아요 카운트
     private int recommendation;
 
@@ -66,21 +66,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private String userName;
     private int i = 0;
 
-    // 버튼 클릭시 Firebase에 저장
-    public void btnRegist(View view) {
-        String text = editText.getText().toString();
-        userName = MainActivity.guestList.getGuestId();
 
-        Log.i("test", "UserName : " + userName);
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        Comment comment = new Comment(userName, text);
-        databaseReference.child(TBL_POST_DETAIL).child(userName).setValue(comment);
-
-        editText.setText("");
-
-
-        
-    }
     class CommentListAdapter extends ArrayAdapter<Comment> {
 
 
@@ -101,11 +87,8 @@ public class PostDetailActivity extends AppCompatActivity {
             TextView text_comment = convertView.findViewById(R.id.text_comment);
 
             Comment comment = getItem(position);
-            Log.i("test", "getItem :  " + getItem(position));
-            Log.i("test", "comment : " + comment.toString());
-            Log.i("test", "CommentID : " + comment.getCommentId());
 
-            text_id.setText(MainActivity.guestList.getGuestId());
+            text_id.setText(comment.getCommentId());
             text_comment.setText(comment.getContent());
 
             return convertView;
@@ -116,7 +99,6 @@ public class PostDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
-
         textTitle = findViewById(R.id.textTitle);
         textWriter = findViewById(R.id.textWriter);
         textDate = findViewById(R.id.textDate);
@@ -127,74 +109,17 @@ public class PostDetailActivity extends AppCompatActivity {
         editText = findViewById(R.id.editText);
         imageHeart = findViewById(R.id.imageHeart);
         imageView = findViewById(R.id.imageView);
-
         listView_comment = findViewById(R.id.listView_comment);
-
         messages = new ArrayList<>();
-        adapter = new CommentListAdapter(this, R.layout.comment_item, messages);
-        listView_comment.setAdapter(adapter);
-
-
-
-
-//        childEventListener = new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                Comment comment = dataSnapshot.getValue(Comment.class);
-//                String id = dataSnapshot.getKey();
-//                comment.setCommentId(id);
-//
-//                adapter.add(comment);
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                String changedId = dataSnapshot.getKey();
-//                Comment changedC = dataSnapshot.getValue(Comment.class);
-//
-//                Comment orginal = findMessageById(changedId);
-//                orginal.setCommentId(changedC.getCommentId());
-//                orginal.setContent(changedC.getContent());
-//                adapter.notifyDataSetChanged();
-//
-//                // 댓글 저장한것을 다시 불러옴
-//                databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL);
-//            }
-//
-//
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//                String removedId = dataSnapshot.getKey();
-//                Comment comment = findMessageById(removedId);
-//                adapter.remove(comment);
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        };
-//        databaseReference.addChildEventListener(childEventListener);
 
         Intent intent = getIntent();
-
         final Post throwPost = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
-
+        detailPost = throwPost;
         FirebaseStorage storage = FirebaseStorage.getInstance();
-
         String selectImage = throwPost.getImage();
-
         StorageReference storageReference =
                 storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
                         .child("images/" + selectImage);
-
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -202,30 +127,54 @@ public class PostDetailActivity extends AppCompatActivity {
                 Toast.makeText(PostDetailActivity.this, "이미지 다운 성공", Toast.LENGTH_SHORT).show();
             }
         });
-
         int i = throwPost.getViewCount();
         i++;
-
         throwPost.setViewCount(i);
-
-
         textWriter.setText(throwPost.getGuestId());
         textTitle.setText(throwPost.getTitle());
         textDate.setText(throwPost.getToday());
         textViews.setText(String.valueOf(throwPost.getViewCount()));
         imageHeart.setImageResource(R.drawable.h1);
         textContent.setText(throwPost.getContent());
+        Log.i("aaa", detailPost.getPostKey());
+        databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
 
-    }
-
-    private Comment findMessageById(String changedId) {
-        for (Comment c : messages) {
-            if (changedId.equals(c.getCommentId())) {
-                return c;
+        adapter = new CommentListAdapter(this, R.layout.comment_item, messages);
+        listView_comment.setAdapter(adapter);
+        childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                comment = dataSnapshot.getValue(Comment.class);
+                messages.add(comment);
+                adapter.notifyDataSetChanged();
             }
-        }
-        return null;
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        databaseReference.addChildEventListener(childEventListener);
+
+
+
     }
+
 
     public void changeImage(View view) {
 
@@ -246,6 +195,20 @@ public class PostDetailActivity extends AppCompatActivity {
             recommendation++;
         }
         intent.putExtra(KEY2, i);
+    }
+
+    // 버튼 클릭시 Firebase에 저장
+    public void btnRegist(View view) {
+        String text = editText.getText().toString();
+        userName = MainActivity.guestList.getGuestId();
+        Log.i("test", "UserName : " + userName);
+        databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
+        final Comment comment = new Comment(userName, text);
+        databaseReference.push().setValue(comment);
+
+
+
+
     }
 }
 

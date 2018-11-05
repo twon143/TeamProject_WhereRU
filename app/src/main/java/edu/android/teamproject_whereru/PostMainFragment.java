@@ -96,8 +96,7 @@ public class PostMainFragment extends Fragment {
                 // 날짜처리
                     holder.textViewCount.setText(String.valueOf(p.getViewCount()));
                     holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
-
-
+            String postKey = p.getPostKey();
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
@@ -114,7 +113,7 @@ public class PostMainFragment extends Fragment {
 //            viewCount = p.getViewCount();
 //            recommendation = p.getRecommendation();
 
-            final Post throwPost = new Post(guestId, day, title, selectImage, content, viewCount, recommendation);
+            final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount, recommendation);
 
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +166,6 @@ public class PostMainFragment extends Fragment {
     String selectImage;
     String content;
     Post throwPost;
-
     int viewCount;
     int recommendation;
     private List<Post> postlists =  new ArrayList<>();
@@ -235,7 +233,6 @@ public class PostMainFragment extends Fragment {
                 Log.i("ddd", "뷰카운트 바꾸기 실행");
                 String changeId = dataSnapshot.getKey();
                 Post changViewCount = dataSnapshot.getValue(Post.class);
-
                 Post original = findViewCountById(changeId);
                 original.setViewCount(changViewCount.getViewCount());
                 adapter.notifyDataSetChanged();
@@ -295,5 +292,7 @@ public class PostMainFragment extends Fragment {
 
 
     }
+
+
 
 }
