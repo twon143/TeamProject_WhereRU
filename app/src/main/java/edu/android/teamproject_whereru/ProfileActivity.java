@@ -2,6 +2,8 @@ package edu.android.teamproject_whereru;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.printservice.PrintService;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -56,8 +59,8 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference profileReference, getProfileData;
     private static final String TBL_PROFILE = "profile";
-    private static final String MAN = "man";
-    private static final String WOMAN = "woman";
+    private static final String MAN = "남자";
+    private static final String WOMAN = "여자";
     private ChildEventListener child;
     private Puppy puppy;
 
@@ -98,10 +101,14 @@ public class ProfileActivity extends AppCompatActivity {
                     editPuppyAge.setText(puppy.getPuppyAgeOfMonth());
                     editPuppyKind.setText(puppy.getPuppyKind());
                     checkBoxWhetherNeutral.setChecked(puppy.getPuppyWhetherNeutral());
-                    if(puppy.getPuppyGender().equals(MAN)) {
+                    if(puppy.getPuppyGender() == null) {
+                        radioBtnWoman.setChecked(false);
+                        radioBtnMan.setChecked(false);
+                    }
+                    else if(puppy.getPuppyGender().equals(MAN)) {
                         radioBtnMan.setChecked(true);
                     }
-                    else {
+                    else if(puppy.getPuppyGender().equals(WOMAN)) {
                         radioBtnWoman.setChecked(true);
                     }
 
@@ -236,15 +243,34 @@ public class ProfileActivity extends AppCompatActivity {
         String puppyAge = editPuppyAge.getText().toString();
         String puppyKind = editPuppyKind.getText().toString();
         boolean puppyWhetherNeutral = checkBoxWhetherNeutral.isChecked();
+        if(puppyName == "") {
+            puppy.setPuppyName("");
+        }
+        if(puppyAge == "") {
+            puppy.setPuppyAgeOfMonth("");
+        }
+        if(puppyKind == "") {
+            puppy.setPuppyKind("");
+        }
+
+        if(radioBtnMan.isChecked() == false && radioBtnWoman.isChecked() == false ) {
+            puppy.setPuppyGender(null);
+        }
+        if(imagUri == null) {
+            puppy.setPuppyProfileImage(null);
+        }
+
+
         if(radioBtnMan.isChecked()) {
             puppyGender = MAN;
         }
         else if(radioBtnWoman.isChecked()) {
             puppyGender = WOMAN;
         }
+
         String KEY = MainActivity.guestList.getGuestId();
         String puppyProfileImage = KEY + ".png";
-        if(puppy.getPuppyProfileImage() == null || imagUri != null) {
+        if(imagUri != null) {
             StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
                     .child("profiles/" + puppyProfileImage);
             storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -261,13 +287,24 @@ public class ProfileActivity extends AppCompatActivity {
 
         }
 
-        Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
-        profileReference.child(KEY).setValue(puppy);
-        Toast.makeText(this, "저장성공!", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MainActivity.class);
+                Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
+//            profileReference.child(KEY).setValue(puppy);
+//            Toast.makeText(this, "저장성공!", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+                register(puppy);
+
+
+
+
+    }
+
+    public void register(Puppy puppy) {
+        profileReference.child(MainActivity.guestList.getGuestId()).setValue(puppy);
+        Toast.makeText(ProfileActivity.this, "저장성공!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
-
-
     }
 }

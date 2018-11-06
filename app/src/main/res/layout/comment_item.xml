@@ -12,6 +12,7 @@
         android:layout_weight="0.9"
         android:layout_margin="4dp"
         android:text="작성자"
+        android:onClick="showCommentProfile"
         android:textSize="24sp"/>
 
     <TextView
