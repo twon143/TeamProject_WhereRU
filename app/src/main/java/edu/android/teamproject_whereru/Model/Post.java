@@ -31,6 +31,7 @@ public class Post implements Serializable {
     // 추천수
     private int recommendation;
 
+
     public Post(){}
 
     // RecyclerView에 List로 보여주기 위해서 필요한 것들만 만듬
@@ -39,6 +40,8 @@ public class Post implements Serializable {
         this.guestId = guestId;
         this.content = content;
     }
+
+
 
     // 글쓰기 생성자 전용
     public Post(String postKey , String guestId, String today, String title, String image, String content) {

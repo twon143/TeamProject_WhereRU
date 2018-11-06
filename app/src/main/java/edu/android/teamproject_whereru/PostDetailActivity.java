@@ -49,7 +49,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private ChildEventListener childEventListener;
     private Comment comment;
     private TextView textTitle, textWriter, textDate, textViews, textContent,
-                     text_id, text_comment, textWritrer;
+            text_id, text_comment, textWritrer;
 
     private EditText editText;
     private Post detailPost;
@@ -60,16 +60,15 @@ public class PostDetailActivity extends AppCompatActivity {
     private List<Comment> messages;
 
     private CommentListAdapter adapter;
+    private boolean like;
+    private int picture;
 
     private static final String TBL_POST_DETAIL = "post_detail";
     private static final String TBL_POST = "post";
 
-    // 좋아요 카운트
-    private int recommendation;
 
     // 로그인한 사용자 아이디
     private String userName;
-    private int i = 0;
 
 
     class CommentListAdapter extends ArrayAdapter<Comment> {
@@ -81,7 +80,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView,@NonNull ViewGroup parent) {
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(PostDetailActivity.this);
@@ -142,6 +141,7 @@ public class PostDetailActivity extends AppCompatActivity {
         textViews.setText(String.valueOf(throwPost.getViewCount()));
         imageHeart.setImageResource(R.drawable.h1);
         textContent.setText(throwPost.getContent());
+
         Log.i("aaa", detailPost.getPostKey());
         databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
 
@@ -159,7 +159,8 @@ public class PostDetailActivity extends AppCompatActivity {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                Log.i(TAG, "ChildChange 호출");
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -183,23 +184,30 @@ public class PostDetailActivity extends AppCompatActivity {
 
     public void changeImage(View view) {
 
-        Intent intent = new Intent(this, PostMainFragment.class);
-        i = 1 - i;
-        Post post = new Post();
-        recommendation = post.getRecommendation();
+//        Intent intent = getIntent();
+//        Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
+//
+//        Map<String, Object> taskMap = new HashMap<>();
+//        String postKey = post.getPostKey();
 
-        if (i == 0) {
-            imageHeart.setImageResource(R.drawable.h1);
-            Toast.makeText(this, "좋아요 취소", Toast.LENGTH_LONG).show();
-            recommendation--;
+//        if (post.getPicture() == R.drawable.h2) {
+//            imageHeart.setImageResource(R.drawable.h1);
+//            post.setPicture(R.drawable.h1);
+//            Toast.makeText(this, "좋아요 취소", Toast.LENGTH_LONG).show();
+//            post.setRecommendation(post.getRecommendation() - 1);
+//        } else {
+//            imageHeart.setImageResource(R.drawable.h2);
+//            post.setPicture(R.drawable.h2);
+//            Toast.makeText(this, "좋아요", Toast.LENGTH_LONG).show();
+//            post.setRecommendation(post.getRecommendation() + 1);
+//        }
 
+//        taskMap.put(postKey, post);
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference recomenReference = database.getReference(TBL_POST);
+//        recomenReference.updateChildren(taskMap);
 
-        } else {
-            imageHeart.setImageResource(R.drawable.h2);
-            Toast.makeText(this, "좋아요", Toast.LENGTH_LONG).show();
-            recommendation++;
-        }
-        intent.putExtra(KEY2, i);
     }
 
     // 버튼 클릭시 Firebase에 저장
@@ -211,8 +219,6 @@ public class PostDetailActivity extends AppCompatActivity {
         final Comment comment = new Comment(userName, text);
         databaseReference.push().setValue(comment);
         editText.setText("");
-
-
 
 
     }

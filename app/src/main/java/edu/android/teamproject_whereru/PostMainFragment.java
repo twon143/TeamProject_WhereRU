@@ -109,6 +109,7 @@ public class PostMainFragment extends Fragment {
             final int viewCount = p.getViewCount();
             int recommendation = p.getRecommendation();
 
+
             final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount, recommendation);
 
 
@@ -225,6 +226,9 @@ public class PostMainFragment extends Fragment {
                 String key = dataSnapshot.getKey();
                 int position = findViewCountById(key);
                 postlists.get(position).setViewCount(postlists.get(position).getViewCount()+1);
+
+                postlists.get(position).setRecommendation(postlists.get(position).getRecommendation());
+
                 adapter.notifyDataSetChanged();
 
             }
