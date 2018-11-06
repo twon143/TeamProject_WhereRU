@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,12 +28,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Puppy;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -40,6 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int REQ_CODE = 10;
     private static final int GALLERY_CODE = 111;
     private ImageView imagePuppy;
+    private Button btnSave;
     private Bitmap bitmap;
     private Uri imagUri;
     private EditText editPuppyName, editPuppyAge, editPuppyKind;
@@ -48,23 +54,82 @@ public class ProfileActivity extends AppCompatActivity {
     private String puppyGender;
     private FirebaseStorage storage;
     private FirebaseDatabase database;
-    private DatabaseReference profileReference;
+    private DatabaseReference profileReference, getProfileData;
     private static final String TBL_PROFILE = "profile";
+    private static final String MAN = "man";
+    private static final String WOMAN = "woman";
+    private ChildEventListener child;
+    private Puppy puppy;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         imagePuppy = findViewById(R.id.imagePuppy);
         editPuppyName = findViewById(R.id.editPuppyName);
         editPuppyAge = findViewById(R.id.editPuppyAge);
         editPuppyKind = findViewById(R.id.editPuppyKind);
+        btnSave = findViewById(R.id.btnSavePuppyProfile);
         checkBoxWhetherNeutral = findViewById(R.id.checkBoxWhetherNeutral);
         radioBtnMan = findViewById(R.id.radioBtnMan);
         radioBtnWoman = findViewById(R.id.radioBtnWoman);
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
         profileReference = database.getReference(TBL_PROFILE);
+
+
+        child = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if(MainActivity.guestList.getGuestId().equals(dataSnapshot.getKey())) {
+                    btnSave.setText("변경");
+                    puppy = dataSnapshot.getValue(Puppy.class);
+                    String profileImages = puppy.getPuppyProfileImage();
+                    StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
+                            .child("profiles/" + profileImages);
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            GlideApp.with(ProfileActivity.this).load(uri).into(imagePuppy);
+
+                        }
+                    });
+                    editPuppyName.setText(puppy.getPuppyName());
+                    editPuppyAge.setText(puppy.getPuppyAgeOfMonth());
+                    editPuppyKind.setText(puppy.getPuppyKind());
+                    checkBoxWhetherNeutral.setChecked(puppy.getPuppyWhetherNeutral());
+                    if(puppy.getPuppyGender().equals(MAN)) {
+                        radioBtnMan.setChecked(true);
+                    }
+                    else {
+                        radioBtnWoman.setChecked(true);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        profileReference.addChildEventListener(child);
 
     }
 
@@ -172,29 +237,36 @@ public class ProfileActivity extends AppCompatActivity {
         String puppyKind = editPuppyKind.getText().toString();
         boolean puppyWhetherNeutral = checkBoxWhetherNeutral.isChecked();
         if(radioBtnMan.isChecked()) {
-            puppyGender = "남자";
+            puppyGender = MAN;
         }
         else if(radioBtnWoman.isChecked()) {
-            puppyGender = "여자";
+            puppyGender = WOMAN;
         }
         String KEY = MainActivity.guestList.getGuestId();
         String puppyProfileImage = KEY + ".png";
-        StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
-                .child("profiles" + puppyProfileImage);
-        storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        if(puppy.getPuppyProfileImage() == null || imagUri != null) {
+            StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
+                    .child("profiles/" + puppyProfileImage);
+            storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-            }
-        }).addOnCanceledListener(new OnCanceledListener() {
-            @Override
-            public void onCanceled() {
-                Toast.makeText(ProfileActivity.this, "사진 저장실패", Toast.LENGTH_SHORT).show();
-            }
-        });
+                }
+            }).addOnCanceledListener(new OnCanceledListener() {
+                @Override
+                public void onCanceled() {
+                    Toast.makeText(ProfileActivity.this, "사진 저장실패", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
 
         Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
-        profileReference.child(KEY).push().setValue(puppy);
+        profileReference.child(KEY).setValue(puppy);
+        Toast.makeText(this, "저장성공!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
 
 
     }

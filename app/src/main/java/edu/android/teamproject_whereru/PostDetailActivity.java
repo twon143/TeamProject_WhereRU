@@ -210,6 +210,7 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
         final Comment comment = new Comment(userName, text);
         databaseReference.push().setValue(comment);
+        editText.setText("");
 
 
 
