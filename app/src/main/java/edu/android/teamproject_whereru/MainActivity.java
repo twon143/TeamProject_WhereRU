@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                     startHomeFragment();
                     return true;
                 case R.id.menuitem_bottombar_location:
+                    Intent intent1 = new Intent(MainActivity.this, LocationActivity.class);
+                    startActivity(intent1);
                     return true;
                 case R.id.menuitem_bottombar_community:
                     /*if (guestList != null) {*/
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                         return false;
                     }*/
                 case R.id.menuitem_bottombar_service:
+                    Intent intent2 = new Intent(MainActivity.this, MapsActivity.class);
+                    startActivity(intent2);
                     return true;
             }
             return false;

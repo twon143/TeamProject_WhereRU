@@ -1,41 +1,31 @@
 package edu.android.teamproject_whereru.Model;
 
-public class Location {
+import java.io.Serializable;
 
-    private String locationId;
-    // type은 해당 장소의 타입
-    private String type;
+public class Location implements Serializable{
     private String name;
-    private double latitude;
-    private double longitude;
-    private String contact;
+    private String address;
+    private String status;
+    private String phone;
 
-    public Location() {}
+    public Location() {
+    }
 
-    public Location(String locationId, String type, String name,
-                    double latitude, double longitude, String contact) {
-        this.locationId = locationId;
-        this.type = type;
+    public Location(String name, String address, String status, String phone) {
         this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.contact = contact;
+        this.address = address;
+        this.status = status;
+        this.phone = phone;
     }
 
-    public String getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(String locationId) {
-        this.locationId = locationId;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public String toString() {
+        return "Location{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", status='" + status + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 
     public String getName() {
@@ -46,40 +36,28 @@ public class Location {
         this.name = name;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public String getStatus() {
+        return status;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getContact() {
-        return contact;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    @Override
-    public String toString() {
-        return "Location{" +
-                "locationId='" + locationId + '\'' +
-                ", type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", contact='" + contact + '\'' +
-                '}';
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
 }
