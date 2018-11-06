@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -75,8 +76,9 @@ import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, PlacesListener{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, PlacesListener {
 
+    private static final String NAVER_SEARCH = "https://m.search.naver.com/search.naver?query=";
     private static final int PLACE_PICKER_REQUEST = 1;
 
     private static final String TAG = "edu.android.maps";
@@ -876,6 +878,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // manager.
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(NAVER_SEARCH + marker.getTitle()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 
