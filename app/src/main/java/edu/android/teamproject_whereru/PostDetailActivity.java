@@ -40,50 +40,61 @@ import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
-
+    // 기타
     public static final String KEY2 = "image_key";
-
     private static final String TAG = "tag";
-
+    // Firebase
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
     private Comment comment;
-    private TextView textTitle, textWriter, textDate, textViews, textContent,
-            text_id, text_comment, textWritrer;
-
-    private EditText editText;
     private Post detailPost;
-    private ImageView imageHeart, imageView;
-    private ListView listView_comment;
-
-    private List<Comment> messages;
-
-    private CommentListAdapter adapter;
-    private boolean like;
-    private int picture;
-
+    // 테이블 이름
     private static final String TBL_POST_DETAIL = "post_detail";
     private static final String TBL_POST = "post";
+    private static final String TBL_PROFILE = "profile";
+    // UI들
+    private TextView textTitle, textWriter, textDate, textViews, textContent,
+            text_id, text_comment, textWritrer;
+    private EditText editText;
+    private ImageView imageHeart, imageView;
+    private ListView listView_comment;
+    private CommentListAdapter adapter;
+    // List<T>
+    private List<String> profileKeys;
+    private List<Comment> messages;
 
 
-    // 로그인한 사용자 아이디
+    private boolean like;
+    private int picture;
     private String userName;
-
+    private boolean hasProfileKey;
     public void showProfile(View view) {
         final String writerIds = detailPost.getGuestId();
         final String postIds = detailPost.getPostKey();
-        ProfileDialog profileDialog = new ProfileDialog(this);
-        profileDialog.callFunction(writerIds, postIds);
+        hasProfileKey = hasProfile(writerIds);
+        if(hasProfileKey == true) {
+            ProfileDialog profileDialog = new ProfileDialog(this);
+            profileDialog.callFunction(writerIds, postIds);
+        }
+        else {
+            Toast.makeText(PostDetailActivity.this, "프로필 정보가 없는 유저입니다", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void showCommentProfile(View view) {
         // 댓글쓴 사람 눌럿을때 프로필 보이기
         final String commentIds = comment.getCommentId();
         final String postIds = detailPost.getPostKey();
-        ProfileDialog profileDialog = new ProfileDialog(PostDetailActivity.this);
-        profileDialog.callFunction(commentIds, postIds);
+        hasProfileKey = hasProfile(commentIds);
+        if(hasProfileKey == true) {
+            ProfileDialog profileDialog = new ProfileDialog(this);
+            profileDialog.callFunction(commentIds, postIds);
+        }
+        else {
+            Toast.makeText(PostDetailActivity.this, "프로필 정보가 없는 유저입니다", Toast.LENGTH_SHORT).show();
+        }
     }
-
+    // 프로필 관련
 
     class CommentListAdapter extends ArrayAdapter<Comment> {
 
@@ -114,12 +125,14 @@ public class PostDetailActivity extends AppCompatActivity {
 
             return convertView;
         }
-    } // end class CommentListAdapter
+    }
+    // ListView Setting
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        getProfileKey();
         textTitle = findViewById(R.id.textTitle);
         textWriter = findViewById(R.id.textWriter);
         textDate = findViewById(R.id.textDate);
@@ -132,6 +145,8 @@ public class PostDetailActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         listView_comment = findViewById(R.id.listView_comment);
         messages = new ArrayList<>();
+        profileKeys = new ArrayList<>();
+    // 필요한 UI들 찾음
 
         Intent intent = getIntent();
         final Post throwPost = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
@@ -195,7 +210,7 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseReference.addChildEventListener(childEventListener);
 
     }
-
+ // 글에 관한 데이터설정, Adapter에 뿌려 ListView 구성함
     public void changeImage(View view) {
 
 //        Intent intent = getIntent();
@@ -235,6 +250,52 @@ public class PostDetailActivity extends AppCompatActivity {
         editText.setText("");
 
 
+    }
+    // 프로필 테이블의 KEY값을 리턴해주는메소드
+    public void getProfileKey() {
+        DatabaseReference dr = FirebaseDatabase.getInstance().getReference(TBL_PROFILE);
+        ChildEventListener child = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                profileKeys.add(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        dr.addChildEventListener(child);
+    }
+
+    public boolean hasProfile(String id) {
+        boolean hasProfile = false;
+        if(profileKeys != null) {
+            for (String profileKey : profileKeys) {
+                if (!profileKey.equals(detailPost.getGuestId())) {
+                    hasProfile = false;
+                } else if (profileKey.equals(detailPost.getGuestId())) {
+                    hasProfile = true;
+                }
+            }
+        }
+
+        return hasProfile;
     }
 
 }
