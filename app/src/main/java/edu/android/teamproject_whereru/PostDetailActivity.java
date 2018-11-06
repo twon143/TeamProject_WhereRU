@@ -54,7 +54,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private EditText editText;
     private Post detailPost;
     private ImageView imageHeart, imageView;
-
     private ListView listView_comment;
 
     private List<Comment> messages;
@@ -69,6 +68,21 @@ public class PostDetailActivity extends AppCompatActivity {
 
     // 로그인한 사용자 아이디
     private String userName;
+
+    public void showProfile(View view) {
+        final String writerIds = detailPost.getGuestId();
+        final String postIds = detailPost.getPostKey();
+        ProfileDialog profileDialog = new ProfileDialog(this);
+        profileDialog.callFunction(writerIds, postIds);
+    }
+
+    public void showCommentProfile(View view) {
+        // 댓글쓴 사람 눌럿을때 프로필 보이기
+        final String commentIds = comment.getCommentId();
+        final String postIds = detailPost.getPostKey();
+        ProfileDialog profileDialog = new ProfileDialog(PostDetailActivity.this);
+        profileDialog.callFunction(commentIds, postIds);
+    }
 
 
     class CommentListAdapter extends ArrayAdapter<Comment> {
@@ -135,6 +149,7 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
+
         textWriter.setText(throwPost.getGuestId());
         textTitle.setText(throwPost.getTitle());
         textDate.setText(throwPost.getToday());
@@ -146,7 +161,6 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
 
         adapter = new CommentListAdapter(this, R.layout.comment_item, messages);
-
         listView_comment.setAdapter(adapter);
         childEventListener = new ChildEventListener() {
             @Override
@@ -222,6 +236,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
 
     }
+
 }
 
 

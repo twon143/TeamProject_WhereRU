@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -75,8 +76,9 @@ import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, PlacesListener{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, PlacesListener {
 
+    private static final String NAVER_SEARCH = "https://m.search.naver.com/search.naver?query=";
     private static final int PLACE_PICKER_REQUEST = 1;
 
     private static final String TAG = "edu.android.maps";
@@ -252,8 +254,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnSearchBank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                progressBar.setVisibility(View.VISIBLE);
-                showPlaceInformation(currentPosition, PlaceType.BANK);
+                if (currentPosition == null) {
+                    Toast.makeText(MapsActivity.this, "Tracing Your Location..", Toast.LENGTH_SHORT).show();
+                } else {
+                    showPlaceInformation(currentPosition, PlaceType.BANK);
+                }
             }
         });
 
@@ -261,8 +266,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnSearchCafe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                progressBar.setVisibility(View.VISIBLE);
-                showPlaceInformation(currentPosition, PlaceType.CAFE);
+                if (currentPosition == null) {
+                    Toast.makeText(MapsActivity.this, "Tracing Your Location..", Toast.LENGTH_SHORT).show();
+                } else {
+                    showPlaceInformation(currentPosition, PlaceType.CAFE);
+                }
+
             }
         });
 
@@ -273,8 +282,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                /* ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo info = manager.getActiveNetworkInfo();*/
 
-                ParseUrlTask task = new ParseUrlTask();
-                task.execute("http://openapi.gangnam.go.kr:8088/534d55444474776f3734424d6b6b43/xml/GnAnimalHospital/1/60");
+                if (currentPosition == null) {
+                    Toast.makeText(MapsActivity.this, "Tracing Your Location..", Toast.LENGTH_SHORT).show();
+                } else {
+                    ParseUrlTask task = new ParseUrlTask();
+                    task.execute("http://openapi.gangnam.go.kr:8088/534d55444474776f3734424d6b6b43/xml/GnAnimalHospital/1/40");
+                }
 
             }
         });
@@ -322,7 +335,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 if (locationList.size() > 0) {
                     location = locationList.get(locationList.size() - 1);
-                    //location = locationList.get(0);
 
                     currentPosition
                             = new LatLng(location.getLatitude(), location.getLongitude());
@@ -516,18 +528,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d(TAG, "onMapReady :");
 
         mMap = googleMap;
-
-        /*try {
-            boolean success = mMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.map_style));
-            Log.d(TAG, "mMap setMapStyle()");
-            if (!success) {
-                Log.e(TAG, "Style parsing failed.");
-            }
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Can't find style. Error: ", e);
-        }*/
 
         //런타임 퍼미션 요청 대화상자나 GPS 활성 요청 대화상자 보이기전에
         //지도의 초기위치를 서울로 이동
@@ -751,7 +751,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onPlacesStart() {
-        progressBar.setVisibility(View.VISIBLE);
+
         setButtonEnabled(false);
     }
 
@@ -765,6 +765,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void run() {
 
                 mClusterManager.clearItems();
+                progressBar.setVisibility(View.VISIBLE);
 
                 for (noman.googleplaces.Place place : places) {
 
@@ -774,7 +775,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mClusterManager.addItem(new MyItem(latLng.latitude, latLng.longitude, place.getName(), markerSnippet));
 
                 }
-
 
                 Toast.makeText(MapsActivity.this, "loading complete", Toast.LENGTH_SHORT).show();
                 mClusterManager.cluster();
@@ -876,6 +876,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // manager.
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(NAVER_SEARCH + marker.getTitle()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 
