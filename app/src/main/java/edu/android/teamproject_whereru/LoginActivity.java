@@ -146,7 +146,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mAuth = FirebaseAuth.getInstance();
 
-
+//        btnGoogle_Login = findViewById(R.id.btnGoogle_Login);
+//        btnGoogle_Login.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//                startActivityForResult(signInIntent,RC_SIGN_IN);
+//            }
+//        });
 
     }
     @Override
