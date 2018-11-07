@@ -127,8 +127,7 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
                 else {
                     textIdResilt.setTextColor(Color.RED);
                     textIdResilt.setText("아이디 중복체크를 해주세요");
-                    btnCheckId.setEnabled(true);
-                    ID_STATUS = false;
+                    btnCheckId.setEnabled(true);;
                     mReference = FirebaseDatabase.getInstance().getReference(TBL_GUEST);
                     childEventListener = new ChildEventListener() {
                         @Override
@@ -162,7 +161,8 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
                     btnCheckId.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            compareData(list, id);
+                                compareData(list, id);
+
                         }
                     });
                 }
@@ -187,7 +187,7 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
                     textPwResult.setText("비밀번호는 8자리 이상 12자리 이하로만 입력");
                     textPwResult.setTextColor(Color.RED);
                 }
-                else {
+                else  {
                     PW_STATUS = true;
                     textPwResult.setText("사용가능한 비밀번호 입니다");
                     textPwResult.setTextColor(Color.GREEN);
@@ -256,7 +256,7 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
             @Override
             public void onClick(View v) {
                 if(NAME_STATUS == true && ID_STATUS == true && PW_STATUS == true && CHECK_PW_STATUS == true
-                        && EMAIL_STATUS == true && REQ_CODE == 1) {
+                        && EMAIL_STATUS == true) {
                     String id = editId.getText().toString();
                     String name = editName.getText().toString();
                     String pw = editPw.getText().toString();
@@ -298,15 +298,10 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
                 textIdResilt.setTextColor(Color.GREEN);
                 textIdResilt.setText("사용 가능한 아이디입니다");
             }
+
         }
     }
 
-    public void authPhoneNumber(View view) {
-        final String phoneNumber = editPhone.getText().toString();
-        PhoneAuthDialog authDialog = new PhoneAuthDialog(this);
-
-        authDialog.callFunction(phoneNumber);
-    }
 
     @Override
     public void requestCode(int requestCode) {
