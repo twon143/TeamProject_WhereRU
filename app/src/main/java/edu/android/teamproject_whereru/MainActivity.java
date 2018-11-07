@@ -330,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 activity.moveTaskToBack(true);
                 activity.finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
+
             }
         }
 

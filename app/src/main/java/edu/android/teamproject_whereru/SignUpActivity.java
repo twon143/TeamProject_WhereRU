@@ -296,6 +296,7 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
             else {
                 ID_STATUS = true;
                 textIdResilt.setTextColor(Color.GREEN);
+                
                 textIdResilt.setText("사용 가능한 아이디입니다");
             }
 

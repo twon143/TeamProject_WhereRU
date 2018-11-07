@@ -12,6 +12,7 @@ public class Guest {
     public Guest(){}
 
     public Guest(String guestName, String guestPw, String phoneNo, String guestEmail) {
+
         this.guestName = guestName;
         this.guestPw = guestPw;
         this.phoneNo = phoneNo;
