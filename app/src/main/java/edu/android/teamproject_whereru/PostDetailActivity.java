@@ -42,7 +42,6 @@ import edu.android.teamproject_whereru.Model.Post;
 
 public class PostDetailActivity extends AppCompatActivity {
     // 기타
-    public static final String KEY2 = "image_key";
     private static final String TAG = "tag";
     // Firebase
     private DatabaseReference databaseReference;
@@ -51,7 +50,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private Post detailPost;
     // 테이블 이름
     private static final String TBL_POST_DETAIL = "post_detail";
-    private static final String TBL_POST = "post";
     private static final String TBL_PROFILE = "profile";
     // UI들
     private TextView textTitle, textWriter, textDate, textViews, textContent,
@@ -65,8 +63,6 @@ public class PostDetailActivity extends AppCompatActivity {
     private List<Comment> messages;
 
 
-    private boolean like;
-    private int picture;
     private String userName;
     private boolean hasProfileKey;
     public void showProfile(View view) {
@@ -146,8 +142,18 @@ public class PostDetailActivity extends AppCompatActivity {
         listView_comment = findViewById(R.id.listView_comment);
         messages = new ArrayList<>();
         profileKeys = new ArrayList<>();
+
+        /*editText.setFocusable(false);
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setFocusable(true);
+            }
+        });*/
     // 필요한 UI들 찾음
 
+
+        // PostMainFragment 에서 클릭한 아이템을 PostDetailActivity 에서 화면 보여주기
         Intent intent = getIntent();
         final Post throwPost = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
         detailPost = throwPost;
@@ -160,7 +166,6 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 GlideApp.with(PostDetailActivity.this).load(uri).into(imageView);
-                Toast.makeText(PostDetailActivity.this, "이미지 다운 성공", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -211,13 +216,17 @@ public class PostDetailActivity extends AppCompatActivity {
 
     // 버튼 클릭시 Firebase에 저장
     public void btnRegist(View view) {
-        String text = editText.getText().toString();
-        userName = MainActivity.guestList.getGuestId();
-        Log.i("test", "UserName : " + userName);
-        databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
-        final Comment comment = new Comment(userName, text);
-        databaseReference.push().setValue(comment);
-        editText.setText("");
+        if (MainActivity.guestList != null) {
+            String text = editText.getText().toString();
+            userName = MainActivity.guestList.getGuestId();
+            Log.i("test", "UserName : " + userName);
+            databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
+            final Comment comment = new Comment(userName, text);
+            databaseReference.push().setValue(comment);
+            editText.setText("");
+        } else {
+            Toast.makeText(this, "로그인 후 사용 가능 합니다.", Toast.LENGTH_SHORT).show();
+        }
     }
     // 프로필 테이블의 KEY값을 리턴해주는메소드
     public void getProfileKey() {

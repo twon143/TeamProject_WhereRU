@@ -48,16 +48,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     private Button btnMainLogin;
     private TextView textUserInfo;
-    public  static List<String> postNumberList;
-    private Button btnMapDisplay;
+    public static List<String> postNumberList;
     public static Guest guestList;
-    private static final String TAG = "why";
-    private static final String TAG2 = "teamproject_whereru";
-    private static final String TBL_NAME = "post";
-    private boolean gps;
-    private Post post;
 
-    private static final String TBL_POST = "post";
     private View nav_header_view;
 
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
@@ -78,13 +71,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                     startActivity(intent1);
                     return true;
                 case R.id.menuitem_bottombar_community:
-                    /*if (guestList != null) {*/
-                        startPostFragment();
-                        return true;
-                    /*} else {
-                        Toast.makeText(MainActivity.this, "로그인 후 사용가능합니다", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }*/
+                    startPostFragment();
+                    return true;
                 case R.id.menuitem_bottombar_service:
                     Intent intent2 = new Intent(MainActivity.this, MapsActivity.class);
                     startActivity(intent2);
@@ -141,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         btnMainLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(guestList == null) {
+                if (guestList == null) {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -153,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         // BottomNavigation 뷰에 정의한 xml파일, String을 사용하여 구성함
         BottomNavigationView navigation = findViewById(R.id.navigation_botton);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
 
     }
@@ -176,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
         if (id == R.id.nav_gps) {
             // gps 등록
-            if(guestList == null) {
+            if (guestList == null) {
                 Toast.makeText(this, "먼저 로그인을 하세요", Toast.LENGTH_SHORT).show();
             } else {
 
@@ -185,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             startMyDocumentList();
 
         } else if (id == R.id.nav_memberchange) {
-            if(guestList == null) {
+            if (guestList == null) {
                 item.setEnabled(false);
                 Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
             } else {
@@ -261,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
 
     }
+
     @Override
     public void startDetailActivity(Post throwPost) {
 
@@ -272,26 +260,31 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     }
 
-//     글쓰기 FlotingButton
+    //     글쓰기 FlotingButton
     public void startWriteActivity(View view) {
+        if (guestList != null) {
+            Intent intent = new Intent(this, PostWriteActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "로그인 후 사용 가능합니다.", Toast.LENGTH_SHORT).show();
+        }
 
-        Intent intent = new Intent(this, PostWriteActivity.class);
-        startActivity(intent);
     }
+
     // 프로필 버튼을 Toolbar에 추가함
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.myprofile_menu, menu);
         return true;
     }
+
     // 아이콘 클릭에 대한 이벤트리스너(다이얼 로그띄움)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(guestList != null) {
+        if (guestList != null) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
-        }
-        else {
+        } else {
             Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
         }
         return true;

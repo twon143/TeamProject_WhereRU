@@ -114,7 +114,6 @@ public class PostMainFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // 여기서는 Detail 액티비티로 넘겨줘야함
-                    Toast.makeText(getActivity(), "실험 완료", Toast.LENGTH_SHORT).show();
                     Map<String,Object> taskMap = new HashMap<>();
                     int temp = viewCount +1;
                     String gId = throwPost.getGuestId();
