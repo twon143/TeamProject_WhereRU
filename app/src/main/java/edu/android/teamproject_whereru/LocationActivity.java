@@ -1,6 +1,8 @@
 package edu.android.teamproject_whereru;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -287,16 +289,23 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     public void stopLocationService(View view) {
-        stopService(intent);
+        if (isServiceRunning()) {
+            stopService(intent);
+        } else {
+            Toast.makeText(this, "모드가 동작하고 있지 않습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    public boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo serviceInfo : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (LocationCompareService.class.getName().equals(serviceInfo.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//
-//        stopService(intent);
-//    }
+    }
 
     //--------------------------- Google Direction API로 두 위치 사이의 경로를 표시하는 기능
     //-------------------------- but, 한국에서 경로를 표시하려면 권한(사업자 등록)을 해야한다고 한다. 개인 프로젝트에서 불가능함..

@@ -90,24 +90,6 @@ public class PostMainFragment extends Fragment {
 
             final FirebaseStorage storage = FirebaseStorage.getInstance();
 
-            /*new AsyncTask<PostViewHolder, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(PostViewHolder... postViewHolders) {
-
-                    StorageReference storageReference =
-                            storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/" + image);
-                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            GlideApp.with(getActivity()).load(uri).into(holder.imageView);
-                        }
-                    });
-
-                    return null;
-                }
-            }.execute(holder);*/
-
             StorageReference storageReference =
                     storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/" + image);
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
