@@ -68,7 +68,6 @@ public class DocumentAdapter extends BaseAdapter {
         textTitle_1.setText(post.getTitle());
 //        textDate_1.setText(post.getdCreated());
         textViews_1.setText(post.getViewCount());
-        textLike_1.setText(post.getRecommendation());
 
         /* (위젯에 대한 이벤트리스너를 지정하고 싶다면 여기에 작성하면된다..)  */
 
@@ -85,7 +84,6 @@ public class DocumentAdapter extends BaseAdapter {
         post.setTitle(Title_1);
 //        post.setdCreated(Date_1);
         post.setViewCount(Views_1);
-        post.setRecommendation(Like_1);
 
         /* pItems에 post을 추가한다.*/
         pItems.add(post);

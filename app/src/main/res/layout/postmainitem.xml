@@ -39,14 +39,6 @@
             android:text="조회수"
             android:textSize="18sp"/>
 
-        <TextView
-            android:id="@+id/textLikeCount"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="좋아요갯수"
-            android:textSize="18sp"/>
-
 
 
 

@@ -228,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getTitle());
 
         intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getViewCount());
-        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getRecommendation());
 
         startActivity(intent);
     }

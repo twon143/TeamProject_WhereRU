@@ -1,5 +1,6 @@
 package edu.android.teamproject_whereru;
 
+// 메인 화면 리스트에서 이미지나 아이템을 클릭했을 때 자세히 보여지는 화면
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -141,7 +142,6 @@ public class PostDetailActivity extends AppCompatActivity {
         text_id = findViewById(R.id.text_id);
         text_comment = findViewById(R.id.text_comment);
         editText = findViewById(R.id.editText);
-        imageHeart = findViewById(R.id.imageHeart);
         imageView = findViewById(R.id.imageView);
         listView_comment = findViewById(R.id.listView_comment);
         messages = new ArrayList<>();
@@ -164,13 +164,11 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-
-        textWriter.setText(throwPost.getGuestId());
-        textTitle.setText(throwPost.getTitle());
-        textDate.setText(throwPost.getToday());
-        textViews.setText(String.valueOf(throwPost.getViewCount()));
-        imageHeart.setImageResource(R.drawable.h1);
-        textContent.setText(throwPost.getContent());
+        textWriter.setText("작성자 : " + throwPost.getGuestId());
+        textTitle.setText("제목 : " + throwPost.getTitle());
+        textDate.setText("날짜 : " + throwPost.getToday());
+        textViews.setText("조회수 : " + String.valueOf(throwPost.getViewCount()));
+        textContent.setText("내용 : " + throwPost.getContent());
 
         Log.i("aaa", detailPost.getPostKey());
         databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
@@ -210,34 +208,6 @@ public class PostDetailActivity extends AppCompatActivity {
         databaseReference.addChildEventListener(childEventListener);
 
     }
- // 글에 관한 데이터설정, Adapter에 뿌려 ListView 구성함
-    public void changeImage(View view) {
-
-//        Intent intent = getIntent();
-//        Post post = (Post) intent.getSerializableExtra(MainActivity.START_DETAIL_ACTIVITY);
-//
-//        Map<String, Object> taskMap = new HashMap<>();
-//        String postKey = post.getPostKey();
-
-//        if (post.getPicture() == R.drawable.h2) {
-//            imageHeart.setImageResource(R.drawable.h1);
-//            post.setPicture(R.drawable.h1);
-//            Toast.makeText(this, "좋아요 취소", Toast.LENGTH_LONG).show();
-//            post.setRecommendation(post.getRecommendation() - 1);
-//        } else {
-//            imageHeart.setImageResource(R.drawable.h2);
-//            post.setPicture(R.drawable.h2);
-//            Toast.makeText(this, "좋아요", Toast.LENGTH_LONG).show();
-//            post.setRecommendation(post.getRecommendation() + 1);
-//        }
-
-//        taskMap.put(postKey, post);
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference recomenReference = database.getReference(TBL_POST);
-//        recomenReference.updateChildren(taskMap);
-
-    }
 
     // 버튼 클릭시 Firebase에 저장
     public void btnRegist(View view) {
@@ -248,8 +218,6 @@ public class PostDetailActivity extends AppCompatActivity {
         final Comment comment = new Comment(userName, text);
         databaseReference.push().setValue(comment);
         editText.setText("");
-
-
     }
     // 프로필 테이블의 KEY값을 리턴해주는메소드
     public void getProfileKey() {

@@ -1,5 +1,6 @@
 package edu.android.teamproject_whereru;
 
+// 글쓰기 작성하는 클래스
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -211,7 +212,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
     public void postCancel(View view) {
         // TODO : 취소버튼
-
+        finish();
     }
 
     public void postResult(View view) {
@@ -220,25 +221,33 @@ public class PostWriteActivity extends AppCompatActivity {
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
         String image = guestId + ".png" + " " + today;
-        StorageReference storageRef =
-                storage.getReferenceFromUrl(
-                        "gs://whereru-364b0.appspot.com")
-                        .child("images/" + image);
 
-        storageRef.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnCanceledListener(new OnCanceledListener() {
-            @Override
-            public void onCanceled() {
-                Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
-            }
-        });
+        try {
+            if (!guestId.equals("") || !title.equals("") || !content.equals("") || !image.equals("")) {
+                StorageReference storageRef =
+                        storage.getReferenceFromUrl(
+                                "gs://whereru-364b0.appspot.com")
+                                .child("images/" + image);
 
-        Post p = new Post(null, guestId, today, title, image, content);
-        writeReference.push().setValue(p);
+                storageRef.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Post p = new Post(null, guestId, today, title, image, content);
+                writeReference.push().setValue(p);
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(this, "빈칸없이 작성해 주시고 이미지를 넣어주세요", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

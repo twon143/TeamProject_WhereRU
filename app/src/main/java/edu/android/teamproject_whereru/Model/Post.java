@@ -28,14 +28,11 @@ public class Post implements Serializable {
     private String content;
     // 뷰 숫자
     private int viewCount;
-    // 추천수
-    private int recommendation;
 
 
     public Post(){}
 
-    // RecyclerView에 List로 보여주기 위해서 필요한 것들만 만듬
-    // Test 생성자 dummydata
+
     public Post(String guestId, String content) {
         this.guestId = guestId;
         this.content = content;
@@ -54,7 +51,7 @@ public class Post implements Serializable {
     }
     // PostMainFragment에 쓸 생성자
 
-    public Post(String postKey,String guestId, String today, String title, String image, String content, int viewCount, int recommendation) {
+    public Post(String postKey,String guestId, String today, String title, String image, String content, int viewCount) {
         this.postKey = postKey;
         this.guestId = guestId;
         this.today = today;
@@ -62,7 +59,6 @@ public class Post implements Serializable {
         this.image = image;
         this.content = content;
         this.viewCount = viewCount;
-        this.recommendation = recommendation;
     }
 
 
@@ -114,26 +110,16 @@ public class Post implements Serializable {
         this.viewCount = viewCount;
     }
 
-    public int getRecommendation() {
-        return recommendation;
-    }
-
-    public void setRecommendation(int recommendation) {
-        this.recommendation = recommendation;
-    }
-
     @Override
     public String toString() {
         return "Post{" +
-                "key="+ postKey+'\''+
-                "guestId='" + guestId + '\'' +
+                "postKey='" + postKey + '\'' +
+                ", guestId='" + guestId + '\'' +
                 ", today='" + today + '\'' +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", content='" + content + '\'' +
                 ", viewCount=" + viewCount +
-                ", recommendation=" + recommendation +
                 '}';
     }
-    
 }

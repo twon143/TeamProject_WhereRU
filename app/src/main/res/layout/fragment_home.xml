@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btnFloatingHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        tools:src="@android:drawable/ic_lock_power_off" />
-
     <ImageView
         android:id="@+id/imageHome"
         android:layout_width="match_parent"

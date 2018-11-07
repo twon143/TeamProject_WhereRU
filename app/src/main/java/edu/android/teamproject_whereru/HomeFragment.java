@@ -17,8 +17,6 @@ import android.widget.ImageView;
 public class HomeFragment extends Fragment {
 
     private ImageView imageHome;
-    private FloatingActionButton btnFloatingHome;
-
 
     public HomeFragment() {
         // Required empty public constructor
@@ -39,8 +37,6 @@ public class HomeFragment extends Fragment {
         imageHome = view.findViewById(R.id.imageHome);
 
         imageHome.setImageResource(R.drawable.main_image);
-
-        btnFloatingHome = view.findViewById(R.id.btnFloatingHome);
 
         return view;
     }

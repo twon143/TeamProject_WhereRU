@@ -1,6 +1,6 @@
 package edu.android.teamproject_whereru;
 
-
+// 메인화면에 커뮤니티 버튼에 리스트로 보여줄 화면
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -62,7 +62,6 @@ public class PostMainFragment extends Fragment {
                 imageView = itemView.findViewById(R.id.imageView);
                 textGuestName = itemView.findViewById(R.id.textGuestName);
                 textViewCount = itemView.findViewById(R.id.textViewCount);
-                textLikeCount = itemView.findViewById(R.id.textLikeCount);
             }
         }
 
@@ -95,9 +94,8 @@ public class PostMainFragment extends Fragment {
                     GlideApp.with(getActivity()).load(uri).into(holder.imageView);
                 }
             });
-                    holder.textGuestName.setText(p.getGuestId());
-                    holder.textViewCount.setText(String.valueOf(p.getViewCount()));
-                    holder.textLikeCount.setText(String.valueOf(p.getRecommendation()));
+                    holder.textGuestName.setText("작성자 : " + p.getGuestId());
+                    holder.textViewCount.setText("조회수 : " +String.valueOf(p.getViewCount()));
 
             final String postKey = p.getPostKey();
 
@@ -107,10 +105,9 @@ public class PostMainFragment extends Fragment {
             String selectImage = p.getImage();
             String content = p.getContent();
             final int viewCount = p.getViewCount();
-            int recommendation = p.getRecommendation();
 
 
-            final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount, recommendation);
+            final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount);
 
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +122,7 @@ public class PostMainFragment extends Fragment {
                     String t = throwPost.getTitle();
                     String sImage = throwPost.getImage();
                     String con = throwPost.getContent();
-                    int re = throwPost.getRecommendation();
-                    Post changePost = new Post(postKey,gId,d,t,sImage,con,temp,re);
+                    Post changePost = new Post(postKey,gId,d,t,sImage,con,temp);
                     taskMap.put(postKey,changePost);
                     postReference.updateChildren(taskMap);
                     // 콜백 메소드를 이용하여 모델클래스 저장
@@ -226,11 +222,7 @@ public class PostMainFragment extends Fragment {
                 String key = dataSnapshot.getKey();
                 int position = findViewCountById(key);
                 postlists.get(position).setViewCount(postlists.get(position).getViewCount()+1);
-
-                postlists.get(position).setRecommendation(postlists.get(position).getRecommendation());
-
                 adapter.notifyDataSetChanged();
-
             }
 
             @Override
