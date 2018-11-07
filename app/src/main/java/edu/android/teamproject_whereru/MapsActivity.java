@@ -1,10 +1,12 @@
 package edu.android.teamproject_whereru;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -22,10 +24,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -51,13 +55,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
+import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.ClusterRenderer;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+import com.google.maps.android.ui.IconGenerator;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -70,6 +78,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import edu.android.teamproject_whereru.Model.MyItem;
 import noman.googleplaces.NRPlaces;
@@ -876,9 +885,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mClusterManager = new ClusterManager<>(this, mMap);
 
         mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(this, mMap, mClusterManager) {
+
+            private SparseArray<BitmapDescriptor> mIcons = new SparseArray<>();
+            private IconGenerator mIconGenerator = new IconGenerator(MapsActivity.this);
+
+
             @Override
             protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
-                BitmapDrawable drawable = null;
                 if (item.getType().equals(PlaceType.HOSPITAL)) {
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
 
@@ -893,7 +906,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             protected void onBeforeClusterRendered(Cluster<MyItem> cluster, MarkerOptions markerOptions) {
-                super.onBeforeClusterRendered(cluster, markerOptions);
+//                super.onBeforeClusterRendered(cluster, markerOptions);
+//                mIconGenerator = new IconGenerator(MapsActivity.this);
+//                mIconGenerator.setContentView(makeCustomTextView(MapsActivity.this));
+                int bucket = getBucket(cluster);
+                BitmapDescriptor descriptor = mIcons.get(bucket);
+                if(descriptor == null){
+                    //TODO
+
+                }
+            }
+
+//            private View makeCustomTextView(Context context) {
+//                //TODO
+//            }
+
+            @Override
+            protected void onClusterRendered(Cluster<MyItem> cluster, Marker marker) {
+                super.onClusterRendered(cluster, marker);
             }
         });
 
@@ -919,4 +949,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnSearchCafe.setEnabled(flag);
         place_picker.setEnabled(flag);
     }
+
 }
