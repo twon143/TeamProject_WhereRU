@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     public static final String START_DETAIL_ACTIVITY = "detailActivity";
     public static final String START_MYDOCUMENTLIST_ACTIVITY = "myDocumentListActivity";
+    public static final String MY_DETAIL_ACTIVITY = "myDetailActivity";
 
     private Button btnMainLogin;
     private TextView textUserInfo;
@@ -209,14 +210,14 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         return true;
     }
 
+    // 내가 쓴 글 Activity실행
     private void startMyDocumentList() {
-        Post post = new Post();
-        Intent intent = new Intent(this, MyDocumentList.class);
-        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getTitle());
-
-        intent.putExtra(START_MYDOCUMENTLIST_ACTIVITY, post.getViewCount());
-
-        startActivity(intent);
+        if (guestList != null) {
+            Intent intent = new Intent(this, MyDocumentList.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Community PostFragment 실행

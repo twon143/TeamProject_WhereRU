@@ -166,6 +166,7 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 GlideApp.with(PostDetailActivity.this).load(uri).into(imageView);
+                Toast.makeText(PostDetailActivity.this, "이미지 다운 성공", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -214,7 +215,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     }
 
-    // 버튼 클릭시 Firebase에 저장
+    // 버튼 클릭시 Firebase에 작성한 댓글 저장
     public void btnRegist(View view) {
         if (MainActivity.guestList != null) {
             String text = editText.getText().toString();
