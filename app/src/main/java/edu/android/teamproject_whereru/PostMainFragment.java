@@ -54,7 +54,7 @@ public class PostMainFragment extends Fragment {
 
         class PostViewHolder extends RecyclerView.ViewHolder {
             private ImageView imageView;
-            private TextView textGuestName, textViewCount, textLikeCount;
+            private TextView textGuestName, textViewCount;
 
 
             public PostViewHolder(@NonNull View itemView) {
