@@ -38,6 +38,10 @@ import java.util.concurrent.Executor;
 
 import edu.android.teamproject_whereru.Model.LocationInfo;
 
+// ------------------------------ LocationActivity 에서 '산책모드 ON' 버튼을 클릭했을 때 발생하는 서비스로써
+// ------------------------------ 시간 단위로 주인과 동물의 거리 차를 비교하여 정해놓은 거리를 초과하였을 때
+// ------------------------------ 알림을 발생시키고, 해당 알림을 터치하였을 때 위치를 바로 보여줄 수 있도록하는 기능을 포함한다.
+
 public class LocationCompareService extends Service {
 
     private static final String TAG = "edu.android.and40";

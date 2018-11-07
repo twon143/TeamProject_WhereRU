@@ -3,14 +3,11 @@ package edu.android.teamproject_whereru;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,6 +34,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.android.teamproject_whereru.Model.LocationInfo;
+
+// ------------------------------ 프로젝트 - 위치 기능(주인과 동물 위치를 실시간으로 조회 및 일정 거리 범위 벗어났을 경우, 알림을 발생시켜
+// ------------------------------ 동물의 위치를 볼 수 있도록 함)을 포함하는 클래스
 
 public class LocationActivity extends FragmentActivity implements OnMapReadyCallback {
 

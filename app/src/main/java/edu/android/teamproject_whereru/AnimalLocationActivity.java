@@ -19,16 +19,16 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.android.teamproject_whereru.Model.LocationInfo;
+
+// ------------------------------ 동물 장치(장치가 없으므로 휴대폰으로 대체함.)에서 현재 위치 정보를 실시간으로 database에
+// ------------------------------ 저장하는 클래스 (프로젝트에서는 이 클래스를 사용하지 않음, 위치 정보 수집 목적)
 
 public class AnimalLocationActivity extends AppCompatActivity {
 

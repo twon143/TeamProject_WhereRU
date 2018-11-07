@@ -75,6 +75,7 @@ import noman.googleplaces.PlaceType;
 import noman.googleplaces.PlacesException;
 import noman.googleplaces.PlacesListener;
 
+// ------------------------------ 프로젝트 - 서비스 기능( 현재 위치 조회, 주변 장소 조회, 특정 장소 조회 등)을 포함하는 클래스
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, PlacesListener {
 
