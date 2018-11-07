@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#FFFFF0"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -105,10 +106,12 @@
 
         <Button
             android:id="@+id/btnCheckId"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="중복" />
+            android:text="중복"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -284,6 +287,7 @@
 
     <Button
         android:id="@+id/btnCheckPhone"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -291,6 +295,7 @@
         android:layout_marginBottom="8dp"
         android:onClick="authPhoneNumber"
         android:text="인증"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -300,6 +305,7 @@
 
     <Button
         android:id="@+id/btnCancel"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
@@ -307,6 +313,7 @@
         android:layout_marginBottom="8dp"
         android:onClick="cancel"
         android:text="취소"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
@@ -314,12 +321,14 @@
 
     <Button
         android:id="@+id/btnSignUp"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="가입"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5"

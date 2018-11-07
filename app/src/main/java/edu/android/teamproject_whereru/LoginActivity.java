@@ -117,9 +117,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 Toast.makeText(LoginActivity.this, "잘못된 비밀번호 입력!", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        else {
-                            Toast.makeText(LoginActivity.this, "아이디 잘못됨", Toast.LENGTH_SHORT).show();
-                        }
                     } // end OnchildAdded()
 
                     @Override
