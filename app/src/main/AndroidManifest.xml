@@ -46,7 +46,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".PostWriteActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".MyDocumentList" />
+        <activity android:name=".MyDocumentList"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
