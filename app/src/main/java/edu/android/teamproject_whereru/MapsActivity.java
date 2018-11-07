@@ -55,6 +55,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
@@ -877,24 +878,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(this, mMap, mClusterManager) {
             @Override
             protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
-//                super.onBeforeClusterItemRendered(item, markerOptions);
                 BitmapDrawable drawable = null;
                 if (item.getType().equals(PlaceType.HOSPITAL)) {
-//                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.hospital_marker);
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
 
                 } else if (item.getType().equals(PlaceType.BANK)) {
-//                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.bank_marker);
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank_small_marker));
 
                 } else if (item.getType().equals(PlaceType.CAFE)) {
-//                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.cafe_marker);
                     markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.cafe_small_marker));
 
                 }
-                /*Bitmap b = drawable.getBitmap();
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));*/
+            }
+
+            @Override
+            protected void onBeforeClusterRendered(Cluster<MyItem> cluster, MarkerOptions markerOptions) {
+                super.onBeforeClusterRendered(cluster, markerOptions);
             }
         });
 
