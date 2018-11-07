@@ -1,17 +1,12 @@
 package edu.android.teamproject_whereru;
 
 // 메인화면에 커뮤니티 버튼에 리스트로 보여줄 화면
+
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,12 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.android.teamproject_whereru.Controller.PostDao;
 import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Post;
 
@@ -49,6 +40,19 @@ import edu.android.teamproject_whereru.Model.Post;
  * A simple {@link Fragment} subclass.
  */
 public class PostMainFragment extends Fragment {
+
+    private FirebaseDatabase database;
+    private DatabaseReference postReference;
+    private ChildEventListener child;
+
+    private PostAdapter adapter;
+    private RecyclerView recyclerView;
+    private static final String TBL_POST = "post";
+
+    private Post post;
+
+    private List<Post> postlists = new ArrayList<>();
+    private PostMainCallback callback;
 
     class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -82,20 +86,39 @@ public class PostMainFragment extends Fragment {
             final PostViewHolder holder = (PostViewHolder) viewHolder;
             Post p = postlists.get(position);
 
-            String image = p.getImage();
+            final String image = p.getImage();
 
-            FirebaseStorage storage = FirebaseStorage.getInstance();
+            final FirebaseStorage storage = FirebaseStorage.getInstance();
+
+            /*new AsyncTask<PostViewHolder, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(PostViewHolder... postViewHolders) {
+
+                    StorageReference storageReference =
+                            storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/" + image);
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            GlideApp.with(getActivity()).load(uri).into(holder.imageView);
+                        }
+                    });
+
+                    return null;
+                }
+            }.execute(holder);*/
 
             StorageReference storageReference =
-                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/"+ image);
+                    storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com").child("images/" + image);
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
                     GlideApp.with(getActivity()).load(uri).into(holder.imageView);
                 }
             });
-                    holder.textGuestName.setText("작성자 : " + p.getGuestId());
-                    holder.textViewCount.setText("조회수 : " +String.valueOf(p.getViewCount()));
+
+            holder.textGuestName.setText("작성자 : " + p.getGuestId());
+            holder.textViewCount.setText("조회수 : " + String.valueOf(p.getViewCount()));
 
             final String postKey = p.getPostKey();
 
@@ -112,19 +135,19 @@ public class PostMainFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // 여기서는 Detail 액티비티로 넘겨줘야함
-                    Map<String,Object> taskMap = new HashMap<>();
-                    int temp = viewCount +1;
+                    Map<String, Object> taskMap = new HashMap<>();
+                    int temp = viewCount + 1;
                     String gId = throwPost.getGuestId();
                     String d = throwPost.getToday();
                     String t = throwPost.getTitle();
                     String sImage = throwPost.getImage();
                     String con = throwPost.getContent();
-                    Post changePost = new Post(postKey,gId,d,t,sImage,con,temp);
-                    taskMap.put(postKey,changePost);
+                    Post changePost = new Post(postKey, gId, d, t, sImage, con, temp);
+                    taskMap.put(postKey, changePost);
                     postReference.updateChildren(taskMap);
                     // 콜백 메소드를 이용하여 모델클래스 저장
                     callback.startDetailActivity(changePost);
-                    Log.i("ddd","DetailActivity ()");
+                    Log.i("ddd", "DetailActivity ()");
 
                 }
             });
@@ -137,28 +160,6 @@ public class PostMainFragment extends Fragment {
         }
 
     }
-
-    private FirebaseDatabase database;
-    private DatabaseReference postReference;
-    private ChildEventListener child;
-
-    private PostAdapter adapter;
-    private RecyclerView recyclerView;
-    private FloatingActionButton floatingActionButton;
-    private static final String TBL_POST = "post";
-
-    private Post post;
-
-    private List<Post> postlists =  new ArrayList<>();
-
-
-    public interface PostMainCallback {
-        void startDetailActivity(Post throwPost);
-    }
-
-
-    private PostMainCallback callback;
-
 
     public PostMainFragment() {
         // Required empty public constructor
@@ -180,9 +181,22 @@ public class PostMainFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        callback = null;
-        super.onDetach();
+    public void onStart() {
+        super.onStart();
+        View view = getView();
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new PostAdapter();
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setHasFixedSize(true);
+
+
     }
 
     @Override
@@ -202,7 +216,7 @@ public class PostMainFragment extends Fragment {
                 post = dataSnapshot.getValue(Post.class);
                 String id = dataSnapshot.getKey();
                 post.setPostKey(id);
-                Log.i("ddd",post.toString());
+                Log.i("ddd", post.toString());
                 /* down(image); */
 
                 postlists.add(post);
@@ -215,7 +229,7 @@ public class PostMainFragment extends Fragment {
                 Log.i("ddd", "뷰카운트 바꾸기 실행");
                 String key = dataSnapshot.getKey();
                 int position = findViewCountById(key);
-                postlists.get(position).setViewCount(postlists.get(position).getViewCount()+1);
+                postlists.get(position).setViewCount(postlists.get(position).getViewCount() + 1);
                 adapter.notifyDataSetChanged();
             }
 
@@ -242,35 +256,25 @@ public class PostMainFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        callback = null;
+        super.onDetach();
+    }
+
+    public interface PostMainCallback {
+        void startDetailActivity(Post throwPost);
+
+    }
+
     private int findViewCountById(String Id) {
         for (Post p : postlists) {
             if (Id.equals(p.getPostKey())) {
-                int  index = postlists.indexOf(p);
+                int index = postlists.indexOf(p);
                 return index;
             }
         }
         return -1;
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        View view = getView();
-
-        recyclerView = view.findViewById(R.id.recyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        adapter = new PostAdapter();
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.setHasFixedSize(true);
-
-
-    }
-
-
 
 }
