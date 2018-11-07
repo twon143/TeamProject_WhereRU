@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -72,6 +73,9 @@ public class PostWriteActivity extends AppCompatActivity {
     private Uri imagUri;
     private Button btnResult;
 
+    private StorageReference storageRef;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +102,7 @@ public class PostWriteActivity extends AppCompatActivity {
         writeReference = database.getReference(TBL_NAME);
 
         storage = FirebaseStorage.getInstance();
+
     }
 
 
@@ -229,33 +234,62 @@ public class PostWriteActivity extends AppCompatActivity {
         String image = guestId + ".png" + " " + today;
 
         try {
-            if (!guestId.equals("") || !title.equals("") || !content.equals("") || !image.equals("")) {
-                StorageReference storageRef =
+            if (!guestId.equals("") && !title.equals("") && !content.equals("") && !image.equals("")) {
+                storageRef =
                         storage.getReferenceFromUrl(
                                 "gs://whereru-364b0.appspot.com")
                                 .child("images/" + image);
-                Toast.makeText(this, "저장중 입니다.", Toast.LENGTH_SHORT).show();
-                btnResult.setEnabled(false);
-                storageRef.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
-                        onBackPressed();
-                    }
-                }).addOnCanceledListener(new OnCanceledListener() {
-                    @Override
-                    public void onCanceled() {
-                        Toast.makeText(PostWriteActivity.this, "실패", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                Post p = new Post(null, guestId, today, title, image, content);
-                writeReference.push().setValue(p);
+                StorePostTask task = new StorePostTask();
+                task.execute(imagUri);
             }
         } catch (Exception e) {
             Toast.makeText(this, "빈칸없이 작성해 주시고 이미지를 넣어주세요", Toast.LENGTH_SHORT).show();
             btnResult.setEnabled(true);
         }
+
+    }
+
+//    --------------------------------------------------------------------------------------------------------------------
+
+    class StorePostTask extends AsyncTask<Uri, Void, Void> {
+
+        private Toast toast;
+
+        @Override
+        protected void onPreExecute() {
+            btnResult.setEnabled(false);
+            toast = Toast.makeText(PostWriteActivity.this, "Storing Post...", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+        @Override
+        protected Void doInBackground(Uri... uris) {
+
+            storageRef.putFile(uris[0]);
+
+            Post p = new Post(null,
+                    MainActivity.guestList.getGuestId(),
+                    today,
+                    editTitle.getText().toString(),
+                    MainActivity.guestList.getGuestId() + ".png" + " " + today,
+                    editBody.getText().toString());
+
+            writeReference.push().setValue(p);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            toast.cancel();
+            Toast.makeText(PostWriteActivity.this, "Success Uploading Post", Toast.LENGTH_SHORT).show();
+            onBackPressed();
+        }
+
 
     }
 

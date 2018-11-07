@@ -1,11 +1,12 @@
 package edu.android.teamproject_whereru;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,14 +23,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
     private View nav_header_view;
 
+    private BackPressCloseHandler backPressCloseHandler;
+
+
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
     private static final String GUEST_DATA = "guestData";
 
@@ -68,8 +65,12 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                     startHomeFragment();
                     return true;
                 case R.id.menuitem_bottombar_location:
-                    Intent intent1 = new Intent(MainActivity.this, LocationActivity.class);
-                    startActivity(intent1);
+                    if(guestList == null) {
+                        Toast.makeText(MainActivity.this, "로그인 후 사용 가능 합니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent1 = new Intent(MainActivity.this, LocationActivity.class);
+                        startActivity(intent1);
+                    }
                     return true;
                 case R.id.menuitem_bottombar_community:
                     startPostFragment();
@@ -92,11 +93,13 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        postNumberList = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         postNumberList = new ArrayList<>();
         startHomeFragment();
+
+        // 뒤로가기 핸들러
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
         if (sharedPreferences == null) {
@@ -152,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            backPressCloseHandler.onBackPressed();
         }
     }
 
@@ -290,4 +293,43 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         }
         return true;
     }
+
+    public class BackPressCloseHandler {
+        private long backKeyPressedTime = 0;
+        private Toast toast;
+
+        private Activity activity;
+
+        public BackPressCloseHandler(Activity context) {
+            this.activity = context;
+        }
+
+        public void onBackPressed() {
+            if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+                backKeyPressedTime = System.currentTimeMillis();
+                showGuide();
+                return;
+            }
+            if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+                toast.cancel();
+
+                Intent t = new Intent(activity, MainActivity.class);
+                activity.startActivity(t);
+
+                activity.moveTaskToBack(true);
+                activity.finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        }
+
+        public void showGuide() {
+            toast = Toast.makeText(activity, "'뒤로'버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+    }
+
+
+
+
 }
