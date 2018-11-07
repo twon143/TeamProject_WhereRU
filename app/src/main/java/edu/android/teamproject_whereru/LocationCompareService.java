@@ -181,6 +181,43 @@ public class LocationCompareService extends Service {
                             if (distance > radius) {
                                 Log.i(TAG, "거리 초과");
 
+                                //TODO: 알림음, 알림진동과 단말기 상태표시줄에 알림을 띄우고, 그 알림을 터치했을 때 진행하는 프로젝트 어플리케이션을 실행하는 Notification builder 를 생성하고 실행
+
+                                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                String channelId = "channel";
+                                String channelName = "Channel Name";
+                                int importance = NotificationManager.IMPORTANCE_HIGH;
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+                                    notificationManager.createNotificationChannel(channel);
+                                }
+
+                                Bitmap mLargeIconForNoti =
+                                        BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_large_);
+
+                                Intent intent = new Intent(LocationCompareService.this, LocationActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(LocationCompareService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                Context context = LocationCompareService.this;
+                                NotificationCompat.Builder builder =
+                                        new NotificationCompat.Builder(context, channelId)
+                                                .setSmallIcon(R.drawable.notification_icon_)
+                                                .setContentTitle("동물과 거리가 멀어짐")
+                                                .setContentText("알림을 클릭하여 반려동물의 위치를 확인하세요.")
+                                                .setDefaults(Notification.DEFAULT_ALL)
+                                                .setLargeIcon(mLargeIconForNoti)
+//                        .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(mLargeIconForNoti).bigLargeIcon(null))
+                                                .setPriority(NotificationCompat.PRIORITY_MAX)
+                                                .setAutoCancel(true)
+                                                .setWhen(System.currentTimeMillis())
+                                                .setContentIntent(pendingIntent)
+                                                .setVibrate(new long[]{500, 500, 500, 500});
+
+
+                                notificationManager.notify(0, builder.build());
+
                                 stopSelf();
                                 throw new InterruptedException();
                             }
@@ -217,44 +254,6 @@ public class LocationCompareService extends Service {
     public void onDestroy() {
         locationClient.removeLocationUpdates(locationCallback);
         t.interrupt();
-
-        //TODO: 알림음, 알림진동과 단말기 상태표시줄에 알림을 띄우고, 그 알림을 터치했을 때 진행하는 프로젝트 어플리케이션을 실행하는 Notification builder 를 생성하고 실행
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        String channelId = "channel";
-        String channelName = "Channel Name";
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel(channelId,channelName,importance);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        Bitmap mLargeIconForNoti =
-                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_large_);
-
-        Intent intent = new Intent(LocationCompareService.this, LocationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Context context = LocationCompareService.this;
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context,channelId)
-                        .setSmallIcon(R.drawable.notification_icon_)
-                        .setContentTitle("동물과 거리가 멀어짐")
-                        .setContentText("알림을 클릭하여 반려동물의 위치를 확인하세요.")
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setLargeIcon(mLargeIconForNoti)
-//                        .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(mLargeIconForNoti).bigLargeIcon(null))
-                        .setPriority(NotificationCompat.PRIORITY_MAX)
-                        .setAutoCancel(true)
-                        .setWhen(System.currentTimeMillis())
-                        .setContentIntent(pendingIntent)
-                        .setVibrate(new long[]{500,500,500,500});
-
-
-
-        notificationManager.notify(0, builder.build());
 
         Log.i(TAG, "Service onDestroy() 호출");
         Log.i(TAG, "Service 종료됨...");
