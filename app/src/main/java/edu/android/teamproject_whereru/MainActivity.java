@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             } else {
                 item.setEnabled(true);
                 CheckPasswordDialog cp = new CheckPasswordDialog(MainActivity.this, "비밀번호 인증",
-                        "비밀번호를 입력하세요", guestList.getGuestPw());
+                        "비밀번호를 입력하세요", MainActivity.guestList.getGuestPw());
                 cp.show();
 
 

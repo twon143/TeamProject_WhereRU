@@ -1,5 +1,6 @@
 package edu.android.teamproject_whereru;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -64,6 +65,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private Gson gson;
     private static final String SAVED_GUEST_DATA = "WhereRU_Guest_Data";
     private static final String GUEST_DATA = "guestData";
+    private SharedPreferences sharedPreferences;
 
 
     public LoginActivity() {
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             if(dataSnapshot.child(FIREBASE_GUEST_PW).getValue().toString().equals(log_pw)) {
                                 MainActivity.guestList = dataSnapshot.getValue(Guest.class);
                                 MainActivity.guestList.setGuestId(log_id);
-                                onSaveGuestData();
+                                onSaveGuestData(MainActivity.guestList, getApplicationContext());
                                 Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
@@ -226,10 +228,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         startActivity(intent);
     }
 
-    private void onSaveGuestData() {
+    public void onSaveGuestData(Guest guest, Context context) {
         gson = new Gson();
-        String guestToGson = gson.toJson(MainActivity.guestList, Guest.class);
-        SharedPreferences sharedPreferences = getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
+        Log.i("aaa", "guestGson값: " + guest.toString());
+        String guestToGson = gson.toJson(guest, Guest.class);
+        sharedPreferences = context.getSharedPreferences(GUEST_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SAVED_GUEST_DATA, guestToGson);
         editor.commit();

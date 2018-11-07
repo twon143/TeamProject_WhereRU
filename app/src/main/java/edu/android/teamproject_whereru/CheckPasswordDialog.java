@@ -13,17 +13,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.android.teamproject_whereru.Model.Guest;
 
 
 public class CheckPasswordDialog extends Dialog {
+
 
     private String title;
     private String content;
     private String guestPw;
     private Context context;
+    private Guest guest;
 
 
     public CheckPasswordDialog(@NonNull Context context, String title, String content, String guestPw) {
+
         super(context);
         this.title = title;
         this.content = content;

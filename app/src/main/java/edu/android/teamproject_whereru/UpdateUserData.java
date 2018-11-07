@@ -24,12 +24,15 @@ public class UpdateUserData extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference reference;
     private static final String TBL_GUEST = "guest";
-    private static final String GUEST_DATA = "guestData";
+    private ChildEventListener childEventListener;
+    private LoginActivity log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_user_data);
+
+        log = new LoginActivity();
         editGetGuestEmail = findViewById(R.id.editGetGuestEmail);
         editGetGuestPassword = findViewById(R.id.editGetGuestPw);
         editGetGuestPhoneNo = findViewById(R.id.editGuestPhoneNo);
@@ -37,31 +40,40 @@ public class UpdateUserData extends AppCompatActivity {
         editGetGuestEmail.setText(MainActivity.guestList.getGuestEmail());
         editGetGuestPassword.setText(MainActivity.guestList.getGuestPw());
         editGetGuestPhoneNo.setText(MainActivity.guestList.getPhoneNo());
+
+        Log.i("aaa", MainActivity.guestList.getGuestId());
+
+
     }
 
     public void SaveUserData(View view) {
+        Log.i("aaa", "MGuest: " + MainActivity.guestList.toString());
         Toast.makeText(this, "회원정보 변경 성공", Toast.LENGTH_SHORT).show();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference(TBL_GUEST);
         String changePhone = editGetGuestPhoneNo.getText().toString();
         String changeEmail = editGetGuestEmail.getText().toString();
-        final String changePw = editGetGuestPassword.getText().toString();
+        String changePw = editGetGuestPassword.getText().toString();
+
+
+
         Guest guest =  new Guest(MainActivity.guestList.getGuestName(), changePw, changePhone, changeEmail);
         reference.child(MainActivity.guestList.getGuestId()).setValue(guest);
-        ChildEventListener childEventListener = new ChildEventListener() {
+        guest.setGuestId(MainActivity.guestList.getGuestId());
+        log.onSaveGuestData(guest, getApplicationContext());
+
+
+
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i("aaa", "실행 ");
+
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.i("aaa", "비번: " + MainActivity.guestList.getGuestPw());
                 String id = dataSnapshot.getKey();
-                if(id.equals(MainActivity.guestList.getGuestId())) {
-                    String newPw = MainActivity.guestList.getGuestPw();
-                    MainActivity.guestList.setGuestPw(newPw);
-                }
+                Log.i("aaa", "들어오는가?");
             }
 
             @Override
@@ -91,6 +103,7 @@ public class UpdateUserData extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 
 
 }
