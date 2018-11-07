@@ -63,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String WOMAN = "여자";
     private ChildEventListener child;
     private Puppy puppy;
+    private boolean alertResult = false;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         checkBoxWhetherNeutral = findViewById(R.id.checkBoxWhetherNeutral);
         radioBtnMan = findViewById(R.id.radioBtnMan);
         radioBtnWoman = findViewById(R.id.radioBtnWoman);
+        radioBtnMan.setChecked(true);
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
         profileReference = database.getReference(TBL_PROFILE);
@@ -93,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            imagUri = uri;
                             GlideApp.with(ProfileActivity.this).load(uri).into(imagePuppy);
 
                         }
@@ -101,11 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
                     editPuppyAge.setText(puppy.getPuppyAgeOfMonth());
                     editPuppyKind.setText(puppy.getPuppyKind());
                     checkBoxWhetherNeutral.setChecked(puppy.getPuppyWhetherNeutral());
-                    if(puppy.getPuppyGender() == null) {
-                        radioBtnWoman.setChecked(false);
-                        radioBtnMan.setChecked(false);
-                    }
-                    else if(puppy.getPuppyGender().equals(MAN)) {
+                    if(puppy.getPuppyGender().equals(MAN)) {
                         radioBtnMan.setChecked(true);
                     }
                     else if(puppy.getPuppyGender().equals(WOMAN)) {
@@ -239,10 +238,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void savePuppyProfile(View view) {
-        String puppyName = editPuppyName.getText().toString();
-        String puppyAge = editPuppyAge.getText().toString();
-        String puppyKind = editPuppyKind.getText().toString();
-        boolean puppyWhetherNeutral = checkBoxWhetherNeutral.isChecked();
+        final String puppyName = editPuppyName.getText().toString();
+        final String puppyAge = editPuppyAge.getText().toString();
+        final String puppyKind = editPuppyKind.getText().toString();
+        final boolean puppyWhetherNeutral = checkBoxWhetherNeutral.isChecked();
         if(puppyName == "") {
             puppy.setPuppyName("");
         }
@@ -252,12 +251,10 @@ public class ProfileActivity extends AppCompatActivity {
         if(puppyKind == "") {
             puppy.setPuppyKind("");
         }
-
         if(radioBtnMan.isChecked() == false && radioBtnWoman.isChecked() == false ) {
             puppy.setPuppyGender(null);
         }
         if(imagUri == null) {
-            puppy.setPuppyProfileImage(null);
         }
 
 
@@ -268,32 +265,83 @@ public class ProfileActivity extends AppCompatActivity {
             puppyGender = WOMAN;
         }
 
-        String KEY = MainActivity.guestList.getGuestId();
-        String puppyProfileImage = KEY + ".png";
-        if(imagUri != null) {
-            StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
-                    .child("profiles/" + puppyProfileImage);
-            storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+        if(puppyName.equals("") || puppyAge.equals("") || puppyKind.equals("") ||
+                imagUri == null
+                ) {
+            // 관련 이벤트처리
+            AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+            builder.setMessage("비어있는 양식이 있습니다. 이대로 저장하시겠습니까?");
+            builder.setTitle("알림");
+            builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                public void onClick(DialogInterface dialog, int which) {
+                    String KEY = MainActivity.guestList.getGuestId();
+                    String puppyProfileImage = KEY + ".png";
+                    if (imagUri != null) {
+                        StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
+                                .child("profiles/" + puppyProfileImage);
+                        storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                }
-            }).addOnCanceledListener(new OnCanceledListener() {
-                @Override
-                public void onCanceled() {
-                    Toast.makeText(ProfileActivity.this, "사진 저장실패", Toast.LENGTH_SHORT).show();
-                }
-            });
+                            }
+                        }).addOnCanceledListener(new OnCanceledListener() {
+                            @Override
+                            public void onCanceled() {
+                                Toast.makeText(ProfileActivity.this, "사진 저장실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-        }
+                    }
 
-                Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
+                    Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
 //            profileReference.child(KEY).setValue(puppy);
 //            Toast.makeText(this, "저장성공!", Toast.LENGTH_SHORT).show();
 //            Intent intent = new Intent(this, MainActivity.class);
 //            startActivity(intent);
 //            finish();
-                register(puppy);
+                    register(puppy);
+                }
+            });
+            builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertResult = false;
+                }
+            });
+
+            // AlertDialog를 생성
+            AlertDialog dlg = builder.create();
+            // AlertDialog를 화면에 보여줌
+            dlg.show();
+
+        } // end if
+
+        else {
+            String KEY = MainActivity.guestList.getGuestId();
+            String puppyProfileImage = KEY + ".png";
+            if (imagUri != null) {
+                StorageReference storageReference = storage.getReferenceFromUrl("gs://whereru-364b0.appspot.com")
+                        .child("profiles/" + puppyProfileImage);
+                storageReference.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    }
+                }).addOnCanceledListener(new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Toast.makeText(ProfileActivity.this, "사진 저장실패", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+            Puppy puppy = new Puppy(puppyName, puppyGender, puppyAge, puppyKind, puppyProfileImage, puppyWhetherNeutral);
+            register(puppy);
+            alertResult = false;
+        }
 
 
 
