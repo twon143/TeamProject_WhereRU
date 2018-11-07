@@ -106,9 +106,7 @@ public class PostMainFragment extends Fragment {
             String content = p.getContent();
             final int viewCount = p.getViewCount();
 
-
             final Post throwPost = new Post(postKey, guestId, day, title, selectImage, content, viewCount);
-
 
             holder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -138,10 +136,7 @@ public class PostMainFragment extends Fragment {
             return postlists.size();
         }
 
-
     }
-
-
 
     private FirebaseDatabase database;
     private DatabaseReference postReference;
