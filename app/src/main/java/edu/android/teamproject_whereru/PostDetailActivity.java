@@ -143,13 +143,7 @@ public class PostDetailActivity extends AppCompatActivity {
         messages = new ArrayList<>();
         profileKeys = new ArrayList<>();
 
-        /*editText.setFocusable(false);
-        editText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.setFocusable(true);
-            }
-        });*/
+
         // 필요한 UI들 찾음
 
 
@@ -166,7 +160,6 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 GlideApp.with(PostDetailActivity.this).load(uri).into(imageView);
-                Toast.makeText(PostDetailActivity.this, "이미지 다운 성공", Toast.LENGTH_SHORT).show();
             }
         });
 
