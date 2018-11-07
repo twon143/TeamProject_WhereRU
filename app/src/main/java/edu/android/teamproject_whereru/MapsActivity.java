@@ -175,7 +175,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         LatLng latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
 
-                        MyItem item = new MyItem(latLng.latitude, latLng.longitude, location.getName(), location.getAddress(), "hospital");
+                        MyItem item = new MyItem(latLng.latitude, latLng.longitude, location.getName(), location.getAddress(), PlaceType.HOSPITAL);
                         publishProgress(item);
 
                     }
@@ -880,18 +880,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                super.onBeforeClusterItemRendered(item, markerOptions);
                 BitmapDrawable drawable = null;
                 if (item.getType().equals(PlaceType.HOSPITAL)) {
-                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.hospital_marker);
+//                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.hospital_marker);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
+
                 } else if (item.getType().equals(PlaceType.BANK)) {
-                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.bank_marker);
+//                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.bank_marker);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank_small_marker));
+
                 } else if (item.getType().equals(PlaceType.CAFE)) {
-                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.cafe_marker);
+//                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.cafe_marker);
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.cafe_small_marker));
+
                 }
-                Bitmap b = drawable.getBitmap();
+                /*Bitmap b = drawable.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-
-
-//                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));*/
             }
         });
 
