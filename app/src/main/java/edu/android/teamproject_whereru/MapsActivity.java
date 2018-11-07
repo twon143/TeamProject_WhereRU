@@ -754,6 +754,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onPlacesStart() {
 
         setButtonEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -766,7 +767,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void run() {
 
                 mClusterManager.clearItems();
-                progressBar.setVisibility(View.VISIBLE);
 
                 for (noman.googleplaces.Place place : places) {
 

@@ -72,14 +72,14 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                         startActivity(intent1);
                         overridePendingTransition(0,0);
                     }
-                    return true;
+                    return false;
                 case R.id.menuitem_bottombar_community:
                     startPostFragment();
                     return true;
                 case R.id.menuitem_bottombar_service:
                     Intent intent2 = new Intent(MainActivity.this, MapsActivity.class);
                     startActivity(intent2);
-                    return true;
+                    return false;
             }
             return false;
         }
