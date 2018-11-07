@@ -181,11 +181,10 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
             } else {
                 item.setEnabled(true);
-                FragmentManager manager = getSupportFragmentManager();
-                Fragment fragment = manager.findFragmentById(R.id.mainFragment);
-                if (fragment != null) {
-                    manager.beginTransaction().replace(R.id.mainFragment, new BlankFragment()).commit();
-                }
+                CheckPasswordDialog cp = new CheckPasswordDialog(MainActivity.this, "비밀번호 인증",
+                        "비밀번호를 입력하세요", guestList.getGuestPw());
+                cp.show();
+
 
             }
         } else if (id == R.id.nav_logout) {

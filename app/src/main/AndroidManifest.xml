@@ -82,10 +82,8 @@
             android:name=".LocationCompareService"
             android:exported="false" />
 
-        <activity android:name=".AnimalLocationActivity">
-
-
-        </activity>
+        <activity android:name=".AnimalLocationActivity"></activity>
+        <activity android:name=".UpdateUserData"></activity>
     </application>
 
 </manifest>
