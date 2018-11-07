@@ -20,7 +20,13 @@ import edu.android.teamproject_whereru.Model.Guest;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+/**
+ * 정보 수정 할 때 프래그먼트로 만들었음
+ */
 public class BlankFragment extends Fragment {
+
+
 
     private View v;
     private Button btnUpdate;

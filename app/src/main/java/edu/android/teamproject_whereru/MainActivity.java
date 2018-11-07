@@ -181,8 +181,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
             } else {
 
             }
-        } else if (id == R.id.nav_gpsinfo) {
-
         } else if (id == R.id.nav_mydocument) {
             startMyDocumentList();
 
@@ -200,6 +198,10 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
 
             }
         } else if (id == R.id.nav_logout) {
+            /**
+             * 정보 수정 프래그먼트
+             */
+
             if (guestList == null) {
                 Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
             } else if (guestList != null) {
@@ -213,8 +215,6 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                 textUserInfo.setText("로그인 하면 정보가 보입니다");
             }
 
-        } else if(id==R.id.nav_animal){
-            //애니멀에 대한 이벤트
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

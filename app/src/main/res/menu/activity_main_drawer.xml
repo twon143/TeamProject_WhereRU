@@ -7,9 +7,7 @@
         <item
             android:id="@+id/nav_gps"
             android:title="GPS 등록" />
-        <item
-            android:id="@+id/nav_gpsinfo"
-            android:title="GPS 등록현황" />
+
         <item
             android:id="@+id/nav_mydocument"
             android:title="내가 쓴 글" />
@@ -20,9 +18,7 @@
             android:id="@+id/nav_logout"
             android:title="로그아웃"
             />
-        <item
-            android:id="@+id/nav_animal"
-            android:title="반려동물"/>
+
     </group>
 
 
