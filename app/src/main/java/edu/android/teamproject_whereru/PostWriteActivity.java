@@ -233,19 +233,19 @@ public class PostWriteActivity extends AppCompatActivity {
         String content = editBody.getText().toString();
         String image = guestId + ".png" + " " + today;
 
-        try {
-            if (!guestId.equals("") && !title.equals("") && !content.equals("") && !image.equals("")) {
-                storageRef =
-                        storage.getReferenceFromUrl(
-                                "gs://whereru-364b0.appspot.com")
-                                .child("images/" + image);
-                StorePostTask task = new StorePostTask();
-                task.execute(imagUri);
-            }
-        } catch (Exception e) {
+
+        if (!guestId.equals("") && !title.equals("") && !content.equals("") && !image.equals("")) {
+            storageRef =
+                    storage.getReferenceFromUrl(
+                            "gs://whereru-364b0.appspot.com")
+                            .child("images/" + image);
+            StorePostTask task = new StorePostTask();
+            task.execute(imagUri);
+        } else {
             Toast.makeText(this, "빈칸없이 작성해 주시고 이미지를 넣어주세요", Toast.LENGTH_SHORT).show();
-            btnResult.setEnabled(true);
+
         }
+
 
     }
 

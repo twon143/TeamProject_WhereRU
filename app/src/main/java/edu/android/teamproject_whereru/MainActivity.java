@@ -38,13 +38,12 @@ import edu.android.teamproject_whereru.Model.Post;
 public class MainActivity extends AppCompatActivity implements PostMainFragment.PostMainCallback, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String START_DETAIL_ACTIVITY = "detailActivity";
-    public static final String START_MYDOCUMENTLIST_ACTIVITY = "myDocumentListActivity";
-    public static final String MY_DETAIL_ACTIVITY = "myDetailActivity";
 
     private Button btnMainLogin;
     private TextView textUserInfo;
     public static List<String> postNumberList;
     public static Guest guestList;
+
 
     private View nav_header_view;
 
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
                     } else {
                         Intent intent1 = new Intent(MainActivity.this, LocationActivity.class);
                         startActivity(intent1);
+                        overridePendingTransition(0,0);
                     }
                     return true;
                 case R.id.menuitem_bottombar_community:
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         if (guestList != null) {
             Intent intent = new Intent(this, MyDocumentList.class);
             startActivity(intent);
+            overridePendingTransition(0,0);
         } else {
             Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
         }
@@ -261,6 +262,8 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         intent.putExtra(START_DETAIL_ACTIVITY, throwPost);
 
         startActivity(intent);
+        // 화면 넘어갈때 오른쪽에서 왼쪽으로 이동하는 애니메이션 없앰
+        overridePendingTransition(0,0);
 
     }
 
@@ -269,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         if (guestList != null) {
             Intent intent = new Intent(this, PostWriteActivity.class);
             startActivity(intent);
+            overridePendingTransition(0,0);
         } else {
             Toast.makeText(this, "로그인 후 사용 가능합니다.", Toast.LENGTH_SHORT).show();
         }
@@ -288,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         if (guestList != null) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(0,0);
         } else {
             Toast.makeText(this, "로그인을 먼저하세요", Toast.LENGTH_SHORT).show();
         }
@@ -328,8 +333,5 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
         }
 
     }
-
-
-
 
 }

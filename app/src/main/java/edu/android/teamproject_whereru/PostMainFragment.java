@@ -186,6 +186,7 @@ public class PostMainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_main, container, false);
+
         database = FirebaseDatabase.getInstance();
 
         postReference = database.getReference(TBL_POST);
