@@ -60,7 +60,7 @@ public class UpdateUserData extends AppCompatActivity {
         Guest guest =  new Guest(MainActivity.guestList.getGuestName(), changePw, changePhone, changeEmail);
         reference.child(MainActivity.guestList.getGuestId()).setValue(guest);
         guest.setGuestId(MainActivity.guestList.getGuestId());
-        
+
         log.onSaveGuestData(guest, getApplicationContext());
 
 
