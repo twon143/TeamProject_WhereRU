@@ -34,6 +34,7 @@ import edu.android.teamproject_whereru.Controller.GuestDao;
 import edu.android.teamproject_whereru.Model.Guest;
 
 public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog.PhoneAuthDialogCallback {
+    // 회원가입과 관련된 기능처리
     private TextView textIdResilt, textPwResult, textEmailPhoneResult;
     private Button btnSignUp, btnCheckId, btnCheckEmail;
     private List<String> list = new ArrayList<>();

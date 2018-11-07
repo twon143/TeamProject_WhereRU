@@ -44,6 +44,7 @@ import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Puppy;
 
 public class ProfileActivity extends AppCompatActivity {
+    // 프로필 정보를 등록하는 클래스
 
     private static final int REQ_CODE = 10;
     private static final int GALLERY_CODE = 111;

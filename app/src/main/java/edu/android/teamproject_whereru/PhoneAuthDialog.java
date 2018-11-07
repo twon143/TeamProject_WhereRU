@@ -16,6 +16,7 @@ import android.widget.Toast;
 import edu.android.teamproject_whereru.Controller.GuestDao;
 
 public class PhoneAuthDialog {
+    // 휴대폰 인증과 관련된 다이얼로그
     interface PhoneAuthDialogCallback  {
         void requestCode(int requestCode);
     }

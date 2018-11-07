@@ -20,6 +20,7 @@ import edu.android.teamproject_whereru.LoginActivity;
 import edu.android.teamproject_whereru.Model.Guest;
 
 public class GuestDao {
+    // 회원과 관련된 기능을 구현한 클래스
     private static final GuestDao ourInstance = new GuestDao();
     private DatabaseReference mReference;
     private static final String TBL_GUEST = "guest";

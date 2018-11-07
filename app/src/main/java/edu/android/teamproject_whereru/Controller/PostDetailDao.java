@@ -17,6 +17,7 @@ import edu.android.teamproject_whereru.Model.Comment;
 
 
 public class PostDetailDao {
+    // 댓글목록들을 리턴해주는 클래스
     private static PostDetailDao instance = null;
     private List<Comment> commentList;
 

@@ -41,15 +41,8 @@ import java.util.List;
 
 import edu.android.teamproject_whereru.Model.Guest;
 
+// 로그인관련 기능을 처리하는 클래스
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-//    // 로그인 햇을때 얻은 유저정보를 필요한곳에서 호출하면 전달하는 콜백메소드
-//    public interface GuestLoginInfoCallback {
-//        void getGuestData(Guest guest, String id);
-//    }
-//    // 콜백 변수
-//    private GuestLoginInfoCallback callback;
-//    // 버튼
-
 
     private Button btnSignUp, btnLogin, btnGoogle_Login, btnFaceBook_Login;
     private EditText editLogId, editLogPw;

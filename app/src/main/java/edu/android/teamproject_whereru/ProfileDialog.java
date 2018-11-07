@@ -25,6 +25,7 @@ import edu.android.teamproject_whereru.Model.GlideApp;
 import edu.android.teamproject_whereru.Model.Puppy;
 
 public class ProfileDialog {
+    // 타인의 프로필 정보를 보여주는 기능 구현(다이얼로그로)
 
     private Context context;
     private FirebaseDatabase database;

@@ -13,6 +13,8 @@ import edu.android.teamproject_whereru.Model.Guest;
 
 public class CheckingSignupForm {
 
+    // 회원가입 정규식 관련 클래스
+
     public static final Pattern VALID_ID_REGEX = Pattern.compile("^[a-zA-z]{1}[a-zA-z0-9]*$", Pattern.CASE_INSENSITIVE);
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
