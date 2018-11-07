@@ -56,6 +56,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -174,7 +175,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         LatLng latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
 
-                        MyItem item = new MyItem(latLng.latitude, latLng.longitude, location.getName(), location.getAddress());
+                        MyItem item = new MyItem(latLng.latitude, latLng.longitude, location.getName(), location.getAddress(), "hospital");
                         publishProgress(item);
 
                     }
@@ -773,7 +774,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LatLng latLng = new LatLng(place.getLatitude(), place.getLongitude());
                     String markerSnippet = getCurrentAddress(latLng);
 
-                    mClusterManager.addItem(new MyItem(latLng.latitude, latLng.longitude, place.getName(), markerSnippet));
+                    mClusterManager.addItem(new MyItem(latLng.latitude, latLng.longitude, place.getName(), markerSnippet, place.getTypes()[0]));
 
                 }
 
@@ -871,7 +872,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
-        mClusterManager = new ClusterManager<MyItem>(this, mMap);
+        mClusterManager = new ClusterManager<>(this, mMap);
+
+        mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(this, mMap, mClusterManager) {
+            @Override
+            protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
+//                super.onBeforeClusterItemRendered(item, markerOptions);
+                BitmapDrawable drawable = null;
+                if (item.getType().equals(PlaceType.HOSPITAL)) {
+                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.hospital_marker);
+                } else if (item.getType().equals(PlaceType.BANK)) {
+                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.bank_marker);
+                } else if (item.getType().equals(PlaceType.CAFE)) {
+                    drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.cafe_marker);
+                }
+                Bitmap b = drawable.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
+
+//                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            }
+        });
 
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
