@@ -1,6 +1,7 @@
 package edu.android.teamproject_whereru;
 
 // 글쓰기 작성하는 클래스
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +41,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +70,7 @@ public class PostWriteActivity extends AppCompatActivity {
     private String today;
     private Bitmap bitmap;
     private Uri imagUri;
+    private Button btnResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,7 @@ public class PostWriteActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.editTitle);
         editBody = findViewById(R.id.editBody);
         imageWrite = findViewById(R.id.imageWrite);
+        btnResult = findViewById(R.id.btnResult);
 
         writeGuestName = findViewById(R.id.writeGuestName);
         writeToday = findViewById(R.id.writeToday);
@@ -217,6 +222,7 @@ public class PostWriteActivity extends AppCompatActivity {
 
     public void postResult(View view) {
         // TODO : 확인버튼
+
         String guestId = MainActivity.guestList.getGuestId();
         String title = editTitle.getText().toString();
         String content = editBody.getText().toString();
@@ -228,11 +234,13 @@ public class PostWriteActivity extends AppCompatActivity {
                         storage.getReferenceFromUrl(
                                 "gs://whereru-364b0.appspot.com")
                                 .child("images/" + image);
-
+                Toast.makeText(this, "저장중 입니다.", Toast.LENGTH_SHORT).show();
+                btnResult.setEnabled(false);
                 storageRef.putFile(imagUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Toast.makeText(PostWriteActivity.this, "성공", Toast.LENGTH_SHORT).show();
+                        onBackPressed();
                     }
                 }).addOnCanceledListener(new OnCanceledListener() {
                     @Override
@@ -244,10 +252,11 @@ public class PostWriteActivity extends AppCompatActivity {
                 Post p = new Post(null, guestId, today, title, image, content);
                 writeReference.push().setValue(p);
             }
-
         } catch (Exception e) {
             Toast.makeText(this, "빈칸없이 작성해 주시고 이미지를 넣어주세요", Toast.LENGTH_SHORT).show();
+            btnResult.setEnabled(true);
         }
+
     }
 
 

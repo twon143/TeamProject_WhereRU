@@ -1,6 +1,7 @@
 package edu.android.teamproject_whereru;
 
 // 메인 화면 리스트에서 이미지나 아이템을 클릭했을 때 자세히 보여지는 화면
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -65,15 +66,15 @@ public class PostDetailActivity extends AppCompatActivity {
 
     private String userName;
     private boolean hasProfileKey;
+
     public void showProfile(View view) {
         final String writerIds = detailPost.getGuestId();
         final String postIds = detailPost.getPostKey();
         hasProfileKey = hasProfile(writerIds);
-        if(hasProfileKey == true) {
+        if (hasProfileKey == true) {
             ProfileDialog profileDialog = new ProfileDialog(this);
             profileDialog.callFunction(writerIds, postIds);
-        }
-        else {
+        } else {
             Toast.makeText(PostDetailActivity.this, "프로필 정보가 없는 유저입니다", Toast.LENGTH_SHORT).show();
         }
     }
@@ -83,11 +84,10 @@ public class PostDetailActivity extends AppCompatActivity {
         final String commentIds = comment.getCommentId();
         final String postIds = detailPost.getPostKey();
         hasProfileKey = hasProfile(commentIds);
-        if(hasProfileKey == true) {
+        if (hasProfileKey == true) {
             ProfileDialog profileDialog = new ProfileDialog(this);
             profileDialog.callFunction(commentIds, postIds);
-        }
-        else {
+        } else {
             Toast.makeText(PostDetailActivity.this, "프로필 정보가 없는 유저입니다", Toast.LENGTH_SHORT).show();
         }
     }
@@ -150,7 +150,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 editText.setFocusable(true);
             }
         });*/
-    // 필요한 UI들 찾음
+        // 필요한 UI들 찾음
 
 
         // PostMainFragment 에서 클릭한 아이템을 PostDetailActivity 에서 화면 보여주기
@@ -218,16 +218,21 @@ public class PostDetailActivity extends AppCompatActivity {
     public void btnRegist(View view) {
         if (MainActivity.guestList != null) {
             String text = editText.getText().toString();
-            userName = MainActivity.guestList.getGuestId();
-            Log.i("test", "UserName : " + userName);
-            databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
-            final Comment comment = new Comment(userName, text);
-            databaseReference.push().setValue(comment);
-            editText.setText("");
+            if (!text.equals("")) {
+                userName = MainActivity.guestList.getGuestId();
+                Log.i("test", "UserName : " + userName);
+                databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
+                final Comment comment = new Comment(userName, text);
+                databaseReference.push().setValue(comment);
+                editText.setText("");
+            } else {
+                Toast.makeText(this, "댓글이 없습니다.", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, "로그인 후 사용 가능 합니다.", Toast.LENGTH_SHORT).show();
         }
     }
+
     // 프로필 테이블의 KEY값을 리턴해주는메소드
     public void getProfileKey() {
         DatabaseReference dr = FirebaseDatabase.getInstance().getReference(TBL_PROFILE);
@@ -262,7 +267,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
     public boolean hasProfile(String id) {
         boolean hasProfile = false;
-        if(profileKeys != null) {
+        if (profileKeys != null) {
             for (String profileKey : profileKeys) {
                 if (!profileKey.equals(detailPost.getGuestId())) {
                     hasProfile = false;
