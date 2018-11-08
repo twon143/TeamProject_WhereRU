@@ -262,6 +262,7 @@ public class SignUpActivity extends AppCompatActivity implements PhoneAuthDialog
                     String pw = editPw.getText().toString();
                     String phone = editPhone.getText().toString();
                     String email = editEmail.getText().toString();
+
                     dao.signUp(id, name, pw, phone, email);
 
                     Toast.makeText(SignUpActivity.this, "회원가입 성공!", Toast.LENGTH_SHORT).show();

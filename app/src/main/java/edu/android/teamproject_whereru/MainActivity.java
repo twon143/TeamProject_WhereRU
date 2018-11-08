@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     public static Guest guestList;
 
 
+
     private View nav_header_view;
 
     private BackPressCloseHandler backPressCloseHandler;
