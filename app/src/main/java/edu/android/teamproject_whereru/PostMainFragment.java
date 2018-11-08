@@ -108,7 +108,7 @@ public class PostMainFragment extends Fragment {
             String guestId = p.getGuestId();
             String day = p.getToday();
             String title = p.getTitle();
-            
+
             String selectImage = p.getImage();
             String content = p.getContent();
             final int viewCount = p.getViewCount();

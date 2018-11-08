@@ -307,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements PostMainFragment.
     }
 
     public class BackPressCloseHandler {
+        
         private long backKeyPressedTime = 0;
         private Toast toast;
 
