@@ -904,27 +904,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
 
-            @Override
+            /*@Override
             protected void onBeforeClusterRendered(Cluster<MyItem> cluster, MarkerOptions markerOptions) {
-//                super.onBeforeClusterRendered(cluster, markerOptions);
-//                mIconGenerator = new IconGenerator(MapsActivity.this);
-//                mIconGenerator.setContentView(makeCustomTextView(MapsActivity.this));
+                super.onBeforeClusterRendered(cluster, markerOptions);
+                mIconGenerator = new IconGenerator(MapsActivity.this);
+                mIconGenerator.setContentView(makeCustomTextView(MapsActivity.this));
                 int bucket = getBucket(cluster);
                 BitmapDescriptor descriptor = mIcons.get(bucket);
                 if(descriptor == null){
                     //TODO
 
                 }
-            }
+            }*/
 
-//            private View makeCustomTextView(Context context) {
-//                //TODO
-//            }
 
-            @Override
-            protected void onClusterRendered(Cluster<MyItem> cluster, Marker marker) {
-                super.onClusterRendered(cluster, marker);
-            }
         });
 
         // Point the map's listeners at the listeners implemented by the cluster
