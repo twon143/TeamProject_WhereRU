@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.module.AppGlideModule;
 import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
@@ -234,15 +235,18 @@ public class PostWriteActivity extends AppCompatActivity {
         String image = guestId + ".png" + " " + today;
 
 
-        if (!guestId.equals("") && !title.equals("") && !content.equals("") && !image.equals("")) {
+        if (!guestId.equals("") && !title.equals("") && !content.equals("") && imagUri != null) {
             storageRef =
                     storage.getReferenceFromUrl(
                             "gs://whereru-364b0.appspot.com")
                             .child("images/" + image);
             StorePostTask task = new StorePostTask();
+
             task.execute(imagUri);
+
+
         } else {
-            Toast.makeText(this, "빈칸없이 작성해 주시고 이미지를 넣어주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "빈칸없이 작성해 주시고 이미지를 넣어주세요.", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -266,7 +270,6 @@ public class PostWriteActivity extends AppCompatActivity {
         protected Void doInBackground(Uri... uris) {
 
             storageRef.putFile(uris[0]);
-
             Post p = new Post(null,
                     MainActivity.guestList.getGuestId(),
                     today,
@@ -277,6 +280,7 @@ public class PostWriteActivity extends AppCompatActivity {
             writeReference.push().setValue(p);
             return null;
         }
+
 
         @Override
         protected void onProgressUpdate(Void... values) {
