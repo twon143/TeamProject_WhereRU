@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.ArcShape;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -26,6 +30,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -66,6 +71,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.ClusterRenderer;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
+import com.google.maps.android.ui.SquareTextView;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -95,8 +101,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private static final String TAG = "edu.android.maps";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int UPDATE_INTERVAL_MS = 10 * 1000;  // 10초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 5000; // 5초
+    private static final int UPDATE_INTERVAL_MS = 3000;  // 10초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 1500; // 5초
 
     // onRequestPermissionsResult에서 수신된 결과에서 ActivityCompat.requestPermissions를 사용한 퍼미션 요청을 구별하기 위해 사용됩니다.
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -903,41 +909,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // (Activity extends context, so we can pass 'this' in the constructor.)
         mClusterManager = new ClusterManager<>(this, mMap);
 
-        mClusterManager.setRenderer(new DefaultClusterRenderer<MyItem>(this, mMap, mClusterManager) {
-
-            private SparseArray<BitmapDescriptor> mIcons = new SparseArray<>();
-            private IconGenerator mIconGenerator = new IconGenerator(MapsActivity.this);
-
-
-            @Override
-            protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
-                if (item.getType().equals(PlaceType.HOSPITAL)) {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
-
-                } else if (item.getType().equals(PlaceType.BANK)) {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank_small_marker));
-
-                } else if (item.getType().equals(PlaceType.CAFE)) {
-                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.cafe_small_marker));
-
-                }
-            }
-
-            /*@Override
-            protected void onBeforeClusterRendered(Cluster<MyItem> cluster, MarkerOptions markerOptions) {
-                super.onBeforeClusterRendered(cluster, markerOptions);
-                mIconGenerator = new IconGenerator(MapsActivity.this);
-                mIconGenerator.setContentView(makeCustomTextView(MapsActivity.this));
-                int bucket = getBucket(cluster);
-                BitmapDescriptor descriptor = mIcons.get(bucket);
-                if(descriptor == null){
-                    //TODO
-
-                }
-            }*/
-
-
-        });
+        mClusterManager.setRenderer(new CustomClusterRenderer(this, mMap, mClusterManager));
 
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
@@ -960,6 +932,80 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnSearchHospital.setEnabled(flag);
         btnSearchCafe.setEnabled(flag);
         place_picker.setEnabled(flag);
+    }
+
+    class CustomClusterRenderer extends DefaultClusterRenderer<MyItem> {
+
+        private final GoogleMap mMap;
+        private final IconGenerator mIconGenerator;
+        private final ClusterManager<MyItem> mClusterManager;
+        private final float mDensity;
+
+        private final SparseArray<BitmapDescriptor> mIcons = new SparseArray<>();
+
+        private ShapeDrawable mColoredBackground;
+
+        public CustomClusterRenderer(Context context, GoogleMap map, ClusterManager<MyItem> clusterManager) {
+            super(context, map, clusterManager);
+            mMap = map;
+            mDensity = context.getResources().getDisplayMetrics().density;
+            mIconGenerator = new IconGenerator(context);
+            /*//TODO: 아이콘 제너레이터에서 내가 사용할 클러스터 아이콘을 제작해야 한다.
+            mIconGenerator.setContentView(makeSquareTextView(context));
+            mIconGenerator.setTextAppearance(R.style.amu_Bubble_TextAppearance_Light);
+            mIconGenerator.setBackground(makeClusterBackground());*/
+
+            mClusterManager = clusterManager;
+        }
+
+        @Override
+        protected void onBeforeClusterItemRendered(MyItem item, MarkerOptions markerOptions) {
+            if (item.getType().equals(PlaceType.HOSPITAL)) {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
+
+            } else if (item.getType().equals(PlaceType.BANK)) {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank_small_marker));
+
+            } else if (item.getType().equals(PlaceType.CAFE)) {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.cafe_small_marker));
+
+            }
+        }
+
+        /*@Override
+        protected void onBeforeClusterRendered(Cluster<MyItem> cluster, MarkerOptions markerOptions) {
+//            super.onBeforeClusterRendered(cluster, markerOptions);
+            int bucket = getBucket(cluster);
+            BitmapDescriptor descriptor = mIcons.get(bucket);
+            if(descriptor == null) {
+                mColoredBackground.getPaint().setColor(getColor(bucket));
+                descriptor = BitmapDescriptorFactory.fromBitmap(mIconGenerator.makeIcon(getClusterText(bucket)));
+                mIcons.put(bucket, descriptor);
+            }
+            markerOptions.icon(descriptor);
+
+        }*/
+
+        /*private SquareTextView makeSquareTextView(Context context) {
+            SquareTextView squareTextView = new SquareTextView(context);
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            squareTextView.setLayoutParams(layoutParams);
+            squareTextView.setId(R.id.text);
+            int twelveDpi = (int) (12 * mDensity);
+            squareTextView.setPadding(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
+            return squareTextView;
+        }*/
+
+        /*private LayerDrawable makeClusterBackground() {
+            mColoredBackground = new ShapeDrawable(new ArcShape(0, 360));
+            ShapeDrawable outline = new ShapeDrawable(new ArcShape(0, 360));
+            outline.getPaint().setColor(0x80ffffff); // Transparent white.
+            LayerDrawable background = new LayerDrawable(new Drawable[]{outline, mColoredBackground});
+            int strokeWidth = (int) (mDensity * 3);
+            background.setLayerInset(1, strokeWidth, strokeWidth, strokeWidth, strokeWidth);
+            return background;
+        }*/
+
     }
 
 }
