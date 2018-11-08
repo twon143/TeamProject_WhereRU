@@ -113,6 +113,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap = null;
     private Marker currentMarker = null;
+    private Marker certainMarker = null;
 
     // 위치 정보(최근 위치, 주기적 업데이트 시작/취소)와 관련된 클래스
     private FusedLocationProviderClient locationClient;
@@ -253,7 +254,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 location.setLatitude(place.getLatLng().latitude);
                 location.setLongitude(place.getLatLng().longitude);
 
-                setCurrentLocation(location, place.getName().toString(), place.getAddress().toString());
+                setCertainMarker(location, place.getName().toString(), place.getAddress().toString());
             }
 
             @Override
@@ -420,10 +421,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         markerOptions.title(markerTitle);
         markerOptions.snippet(markerSnippet);
 
-        BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.marker);
+        /*BitmapDrawable drawable = (BitmapDrawable) getResources().getDrawable(R.drawable.marker);
         Bitmap b = drawable.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 150, 150, false);
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 150, 150, false);*/
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.human_marker));
 
         markerOptions.draggable(true);
 
@@ -437,6 +438,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 //        mMap.animateCamera(cameraUpdate);
 
+    }
+
+    public void setCertainMarker(Location location, String markerTitle, String markerSnippet) {
+        if (certainMarker != null) {
+            certainMarker.remove();
+        }
+
+        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLatLng);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+
+        certainMarker = mMap.addMarker(markerOptions);
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+        mMap.moveCamera(cameraUpdate);
     }
 
     public boolean checkLocationServicesStatus() {
@@ -591,18 +610,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                if (certainMarker != null) {
+                    certainMarker.remove();
+                }
+                return false;
+            }
+        });
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//
-//            @Override
-//            public void onMapClick(LatLng latLng) {
-//
-//                Log.d(TAG, "onMapClick :");
-//            }
-//        });
 
         setUpClusterer();
 
@@ -785,11 +804,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     String markerSnippet = getCurrentAddress(latLng);
 
                     mClusterManager.addItem(new MyItem(latLng.latitude, latLng.longitude, place.getName(), markerSnippet, place.getTypes()[0]));
+                    mClusterManager.cluster();
 
                 }
 
                 Toast.makeText(MapsActivity.this, "loading complete", Toast.LENGTH_SHORT).show();
-                mClusterManager.cluster();
 
             }
 
