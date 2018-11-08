@@ -48,10 +48,11 @@ public class PostDetailActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
     private Comment comment;
+    
     private Post detailPost;
     // 테이블 이름
     private static final String TBL_POST_DETAIL = "post_detail";
-    
+
     private static final String TBL_PROFILE = "profile";
     // UI들
     private TextView textTitle, textWriter, textDate, textViews, textContent,
