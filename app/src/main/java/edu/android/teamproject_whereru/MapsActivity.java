@@ -964,7 +964,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (item.getType().equals(PlaceType.HOSPITAL)) {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
 
-            } else if (item.getType().equals(PlaceType.)) {
+            } else if (item.getType().equals(PlaceType.BANK)) {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank_small_marker));
 
             } else if (item.getType().equals(PlaceType.CAFE)) {
