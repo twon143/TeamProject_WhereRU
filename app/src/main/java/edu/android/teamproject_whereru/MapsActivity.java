@@ -68,6 +68,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
 import com.google.maps.android.clustering.view.ClusterRenderer;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
@@ -963,7 +964,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (item.getType().equals(PlaceType.HOSPITAL)) {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital_small_marker));
 
-            } else if (item.getType().equals(PlaceType.BANK)) {
+            } else if (item.getType().equals(PlaceType.)) {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bank_small_marker));
 
             } else if (item.getType().equals(PlaceType.CAFE)) {
