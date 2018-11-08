@@ -55,44 +55,11 @@ public class UpdateUserData extends AppCompatActivity {
         String changeEmail = editGetGuestEmail.getText().toString();
         String changePw = editGetGuestPassword.getText().toString();
 
-
-
         Guest guest =  new Guest(MainActivity.guestList.getGuestName(), changePw, changePhone, changeEmail);
         reference.child(MainActivity.guestList.getGuestId()).setValue(guest);
         guest.setGuestId(MainActivity.guestList.getGuestId());
 
         log.onSaveGuestData(guest, getApplicationContext());
-
-
-
-        childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String id = dataSnapshot.getKey();
-                Log.i("aaa", "들어오는가?");
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        reference.addChildEventListener(childEventListener);
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

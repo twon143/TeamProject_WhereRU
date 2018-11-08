@@ -87,7 +87,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
                 }
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.pet_marker));
 
                 currentAnimalMarker = mMap.addMarker(markerOptions);
 
@@ -253,7 +253,7 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
 
         if (currentMarker != null) currentMarker.remove();
 
-        currentMarker = mMap.addMarker(new MarkerOptions().position(latLng));
+        currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.human_marker)));
 
         /*if(currentMarker != null && currentAnimalMarker != null){
             if(polyline != null){
