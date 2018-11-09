@@ -284,8 +284,12 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     public void startLocationService(View view) {
-        intent = new Intent(LocationActivity.this, LocationCompareService.class);
-        startService(intent);
+        if(!isServiceRunning()){
+            intent = new Intent(LocationActivity.this, LocationCompareService.class);
+            startService(intent);
+        } else {
+            Toast.makeText(this, "산책 모드가 동작 중 입니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void stopLocationService(View view) {

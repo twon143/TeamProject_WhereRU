@@ -176,7 +176,7 @@ public class LocationCompareService extends Service {
                             Log.i(TAG, "personLocation(" + personLatLng.latitude + ", " + personLatLng.longitude + ") animalLocation(" + animalLatLng.latitude + ", " + animalLatLng.longitude + ")");
                             Log.i(TAG, "사람과 동물 사이의 거리: " + SphericalUtil.computeDistanceBetween(personLatLng, animalLatLng) + "m");
 
-                            double radius = 5;
+                            double radius = 50;     // 50m
                             double distance = SphericalUtil.computeDistanceBetween(personLatLng, animalLatLng);
                             if (distance > radius) {
                                 Log.i(TAG, "거리 초과");
