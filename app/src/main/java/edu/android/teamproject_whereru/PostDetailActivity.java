@@ -3,12 +3,14 @@ package edu.android.teamproject_whereru;
 // 메인 화면 리스트에서 이미지나 아이템을 클릭했을 때 자세히 보여지는 화면
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -48,8 +51,8 @@ public class PostDetailActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
     private Comment comment;
-
     private Post detailPost;
+    private String commentKey;
     // 테이블 이름
     private static final String TBL_POST_DETAIL = "post_detail";
 
@@ -112,16 +115,77 @@ public class PostDetailActivity extends AppCompatActivity {
                 convertView = inflater.inflate(R.layout.comment_item,
                         parent, false);
             }
+
+            Button btnDeleteComment = convertView.findViewById(R.id.btnDeleteComment);
             TextView text_id = convertView.findViewById(R.id.text_id);
             TextView text_comment = convertView.findViewById(R.id.text_comment);
 
-            Comment comment = getItem(position);
-            Log.i("test", "getItem :  " + getItem(position));
-            Log.i("test", "comment : " + comment.toString());
-            Log.i("test", "CommentID : " + comment.getCommentId());
+            final Comment comment = getItem(position);
 
             text_id.setText(comment.getCommentId());
             text_comment.setText(comment.getContent());
+            if (!comment.getCommentId().equals(MainActivity.guestList.getGuestId())){
+                btnDeleteComment.setVisibility(View.INVISIBLE);
+            } else if (comment.getCommentId().equals(MainActivity.guestList.getGuestId())) {
+                btnDeleteComment.setVisibility(View.VISIBLE);
+                btnDeleteComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
+                        builder.setTitle("삭제 하시겠습니까?");
+                        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                    if (MainActivity.guestList.getGuestId().equals(comment.getCommentId())) {
+                                        databaseReference = FirebaseDatabase.getInstance()
+                                                .getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
+                                        childEventListener = new ChildEventListener() {
+                                            @Override
+                                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                                if (comment.getCommentNumber().equals(dataSnapshot.getKey())){
+                                                    Log.i("test", "test: " + comment.getCommentNumber());
+                                                    databaseReference.child(comment.getCommentNumber()).removeValue();
+                                                    messages.remove(comment);
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        };
+                                        databaseReference.addChildEventListener(childEventListener);
+
+                                    }
+                            }
+                        });
+                        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog dlg = builder.create();
+                        dlg.show();
+                    }
+                });
+            }
 
             return convertView;
         }
@@ -182,6 +246,7 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 comment = dataSnapshot.getValue(Comment.class);
+                comment.setCommentNumber(dataSnapshot.getKey());
                 messages.add(comment);
                 adapter.notifyDataSetChanged();
             }
@@ -219,7 +284,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 userName = MainActivity.guestList.getGuestId();
                 Log.i("test", "UserName : " + userName);
                 databaseReference = FirebaseDatabase.getInstance().getReference(TBL_POST_DETAIL).child(detailPost.getPostKey());
-                final Comment comment = new Comment(userName, text);
+                final Comment comment = new Comment(null, userName, text);
                 databaseReference.push().setValue(comment);
                 editText.setText("");
             } else {
