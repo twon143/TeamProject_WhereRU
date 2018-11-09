@@ -11,6 +11,14 @@ public class Comment implements Serializable {
 
     public Comment() {}
 
+    public String getCommentNumber() {
+        return commentNumber;
+    }
+
+    public void setCommentNumber(String commentNumber) {
+        this.commentNumber = commentNumber;
+    }
+
     public Comment(String commentId, String content) {
         this.commentId = commentId;
         this.content = content;
@@ -64,7 +72,8 @@ public class Comment implements Serializable {
     @Override
     public String toString() {
         return "Comment{" +
-                "commentId='" + commentId + '\'' +
+                "commentNumber='" + commentNumber + '\'' +
+                ", commentId='" + commentId + '\'' +
                 ", content='" + content + '\'' +
                 '}';
     }
